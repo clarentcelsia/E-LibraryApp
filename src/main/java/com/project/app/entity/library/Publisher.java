@@ -5,15 +5,15 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "subject_book")
-public class Subject {
+@Table(name = "publisher")
+public class Publisher {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
     @Column(nullable = false)
-    private String subjectName;
+    private String name;
 
     public String getId() {
         return id;
@@ -23,19 +23,19 @@ public class Subject {
         this.id = id;
     }
 
-    public String getSubjectName() {
-        return subjectName;
+    public String getName() {
+        return name;
     }
 
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Subject() {
+    public Publisher() {
     }
 
-    public Subject(String id, String subjectName) {
+    public Publisher(String id, String name) {
         this.id = id;
-        this.subjectName = subjectName;
+        this.name = name;
     }
 }

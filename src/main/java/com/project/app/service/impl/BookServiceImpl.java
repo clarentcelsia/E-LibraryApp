@@ -11,8 +11,11 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    public BookServiceImpl() {
+    }
+
     @Override
     public Book createBook(Book book) {
-        return null;
+        return bookRepository.save(book);
     }
 }
