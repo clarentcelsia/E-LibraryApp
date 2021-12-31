@@ -1,4 +1,4 @@
-package Request;
+package naufandi.Request;
 
 public class LoginRequest {
 

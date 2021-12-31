@@ -1,8 +1,8 @@
 package naufandi.service;
 
 import naufandi.entity.Role;
+import naufandi.entity.User;
 import naufandi.response.UserResponse;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Set;
