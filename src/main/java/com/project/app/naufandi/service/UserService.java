@@ -1,8 +1,8 @@
-package naufandi.service;
+package com.project.app.naufandi.service;
 
-import naufandi.entity.Role;
-import naufandi.entity.User;
-import naufandi.response.UserResponse;
+import com.project.app.naufandi.entity.Role;
+import com.project.app.naufandi.entity.User;
+import com.project.app.naufandi.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Set;

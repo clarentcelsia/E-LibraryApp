@@ -1,4 +1,4 @@
-package naufandi.entity;
+package com.project.app.naufandi.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;

@@ -1,4 +1,4 @@
-package naufandi.util;
+package com.project.app.naufandi.util;
 
 public class WebResponse<T> {
     private String message;

@@ -1,7 +1,7 @@
-package naufandi.repository;
+package com.project.app.naufandi.repository;
 
-import naufandi.entity.Role;
-import naufandi.entity.UserRole;
+import com.project.app.naufandi.entity.Role;
+import com.project.app.naufandi.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package naufandi.response;
+package com.project.app.naufandi.response;
 
 import java.util.Set;
 

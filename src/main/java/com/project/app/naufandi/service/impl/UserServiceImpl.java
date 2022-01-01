@@ -1,12 +1,12 @@
-package naufandi.service.impl;
+package com.project.app.naufandi.service.impl;
 
-import naufandi.entity.Role;
-import naufandi.entity.User;
-import naufandi.entity.UserDetailImpl;
-import naufandi.repository.UserRepository;
-import naufandi.response.UserResponse;
-import naufandi.service.RoleService;
-import naufandi.service.UserService;
+import com.project.app.naufandi.entity.Role;
+import com.project.app.naufandi.entity.User;
+import com.project.app.naufandi.entity.UserDetailImpl;
+import com.project.app.naufandi.response.UserResponse;
+import com.project.app.naufandi.service.RoleService;
+import com.project.app.naufandi.service.UserService;
+import com.project.app.naufandi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

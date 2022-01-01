@@ -1,4 +1,4 @@
-package naufandi.Request;
+package com.project.app.naufandi.request;
 
 public class LoginRequest {
 
