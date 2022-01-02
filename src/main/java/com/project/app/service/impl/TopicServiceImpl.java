@@ -1,7 +1,9 @@
 package com.project.app.service.impl;
 
+import com.project.app.entity.Post;
 import com.project.app.entity.Topic;
 import com.project.app.exception.NotFoundException;
+import com.project.app.repository.PostRepository;
 import com.project.app.repository.TopicRepository;
 import com.project.app.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,4 @@ public class TopicServiceImpl implements TopicService {
         return String.format("Topic with ID %s has been deleted", id);
     }
 
-    @Override
-    public Topic update(Topic topic) {
-        return topicRepository.save(topic);
-    }
 }

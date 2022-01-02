@@ -10,5 +10,4 @@ public interface TopicService {
 
     public Topic create(Topic topic);
     public String deleteById(String id);
-    public Topic update(Topic topic);
 }

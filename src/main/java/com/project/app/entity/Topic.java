@@ -1,11 +1,13 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +34,10 @@ public class Topic {
     @ManyToOne (targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",nullable = false,foreignKey = @ForeignKey(name = "fk_user_id"), updatable = false)
     private User user;
+
+    @OneToMany (targetEntity = Post.class, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Post> posts;
 
     @CreatedDate
     @Column(updatable = false)
