@@ -16,34 +16,34 @@ public class User {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    @Column(name = "identity_number", nullable = false)
+    @Column(name = "identity_number")
     private String identityNumber;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     private String birthDate;
 
-    @Column(name = "photo", nullable = false)
+    @Column(name = "photo")
     private String photo;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
 
     private Boolean isDeleted;
@@ -66,6 +66,7 @@ public class User {
     public void createdDate(){
         if (createdAt == null) createdAt = new Date();
         if (updatedAt == null) updatedAt = new Date();
+        if (isDeleted == null) isDeleted = false;
     }
 
     @PreUpdate

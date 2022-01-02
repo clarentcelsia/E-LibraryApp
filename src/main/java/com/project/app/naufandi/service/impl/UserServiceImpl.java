@@ -1,6 +1,7 @@
 package com.project.app.naufandi.service.impl;
 
 import com.project.app.naufandi.dto.UserDTO;
+import com.project.app.naufandi.entity.Files;
 import com.project.app.naufandi.entity.Role;
 import com.project.app.naufandi.entity.User;
 import com.project.app.naufandi.entity.UserDetailImpl;
@@ -17,6 +18,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -73,7 +76,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user, MultipartFile photo) {
+        String originalFilename = StringUtils.cleanPath(photo.getOriginalFilename());
+        Files files = new Files()
         return (User) this.userRepository.save(user);
     }
 

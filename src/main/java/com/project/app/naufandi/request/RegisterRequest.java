@@ -1,22 +1,106 @@
 package com.project.app.naufandi.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Column;
 import java.util.Set;
 
 public class RegisterRequest {
+
+    private String identityNumber;
+
+    private String name;
+
+    private String address;
+
+    private String email;
+
+    private String phoneNumber;
+
+    private String birthDate;
+
+    @JsonIgnore
+    private String photo;
 
     private String username;
 
     private String password;
 
+    private String status;
+
     private Set<String> roles;
 
-    public RegisterRequest(String username, String password, Set<String> roles) {
+    public RegisterRequest(String identityNumber, String name, String address, String email, String phoneNumber, String birthDate, String photo, String username, String password, String status, Set<String> roles) {
+        this.identityNumber = identityNumber;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+        this.photo = photo;
         this.username = username;
         this.password = password;
+        this.status = status;
         this.roles = roles;
     }
 
     public RegisterRequest() {
+    }
+
+    public String getIdentityNumber() {
+        return identityNumber;
+    }
+
+    public void setIdentityNumber(String identityNumber) {
+        this.identityNumber = identityNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getUsername() {
@@ -33,6 +117,14 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Set<String> getRoles() {

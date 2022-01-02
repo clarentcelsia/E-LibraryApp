@@ -6,7 +6,9 @@ import com.project.app.naufandi.exception.NotFoundException;
 import com.project.app.naufandi.service.RoleService;
 import com.project.app.naufandi.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -15,7 +17,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role create(String strRole) {
         if (strRole == null) {
-            if (!roleRepository.existByRole(UserRole.USER_ROLE)) {
+            if (!roleRepository.existsByRole(UserRole.USER_ROLE)) {
                 Role userRole = new Role(UserRole.USER_ROLE);
                 return roleRepository.save(userRole);
             }
@@ -23,14 +25,14 @@ public class RoleServiceImpl implements RoleService {
                     .orElseThrow(() -> new NotFoundException("Role Not Found"));
         } else {
             if (strRole.equalsIgnoreCase("admin")) {
-                if (!roleRepository.existByRole(UserRole.ADMIN_ROLE)) {
+                if (!roleRepository.existsByRole(UserRole.ADMIN_ROLE)) {
                     Role adminRole = new Role(UserRole.ADMIN_ROLE);
                     return roleRepository.save(adminRole);
                 }
                 return roleRepository.findByRole(UserRole.ADMIN_ROLE)
                         .orElseThrow(() -> new NotFoundException("Role Not Found"));
             } else {
-                if (!roleRepository.existByRole(UserRole.USER_ROLE)) {
+                if (!roleRepository.existsByRole(UserRole.USER_ROLE)) {
                     Role userRole = new Role(UserRole.USER_ROLE);
                     return roleRepository.save(userRole);
                 }

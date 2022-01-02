@@ -12,27 +12,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 
 @RestController
-@RequestMapping({"/customers"})
-public class UserController {
+@RequestMapping("/users")
+public class UserController  {
 
     @Autowired
     private UserService userService;
 
-    public UserController() {
-    }
-
-    public ResponseEntity<WebResponse<User>> createUser(@RequestBody User request){
-        User user = this.userService.create(request);
+    @PostMapping//lihat yg kak rifqi
+    public ResponseEntity<WebResponse<User>> createUser(@RequestPart("user") User request, @RequestPart("photo") MultipartFile photo){
+        User user = this.userService.create(request, photo);
         WebResponse<User> webResponse = new WebResponse<>("Successfully created new user", user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(webResponse);
     }
 
-    @GetMapping({"/{userId}"})
+    @GetMapping("/{userId}")
     public ResponseEntity<WebResponse<User>> getById(@PathVariable("userId") String id){
         User user = userService.getActiveUser(id);
         WebResponse<User> response = new WebResponse<>(String.format("User with id %s found", id), user);
@@ -75,7 +74,7 @@ public class UserController {
                 .body(webResponse);
     }
 
-    @DeleteMapping({"/{userId}"})
+    @DeleteMapping("/{userId}")
 //    @RolesAllowed("ADMIN_ROLE")
     public ResponseEntity<WebResponse<String>> deleteUserById(@PathVariable("userId") String id){
         String message = this.userService.delete(id);

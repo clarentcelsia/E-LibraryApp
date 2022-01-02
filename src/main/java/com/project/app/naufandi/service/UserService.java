@@ -7,6 +7,7 @@ import com.project.app.naufandi.response.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ public interface UserService extends UserDetailsService {
 
     UserResponse create(User user, Set<Role> roles);
 
-    User create(User user);
+    User create(User user, MultipartFile photo);
 
     User get(String id);
 
