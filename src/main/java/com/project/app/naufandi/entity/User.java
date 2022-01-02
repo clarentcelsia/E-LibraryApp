@@ -46,6 +46,8 @@ public class User {
     @Column(name = "status", nullable = false)
     private String status;
 
+    private Boolean isDeleted;
+
     @CreatedDate
     private Date createdAt;
 
@@ -71,7 +73,7 @@ public class User {
         updatedAt = new Date();
     }
 
-    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, String birthDate, String photo, String username, String password, String status, Date createdAt, Date updatedAt, Set<Role> roles) {
+    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, String birthDate, String photo, String username, String password, String status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -83,6 +85,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.status = status;
+        this.isDeleted = isDeleted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.roles = roles;
@@ -177,6 +180,14 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Date getCreatedAt() {
