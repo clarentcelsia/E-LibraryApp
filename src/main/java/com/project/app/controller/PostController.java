@@ -26,8 +26,6 @@ public class PostController {
 
     @PostMapping
     public Post createPost(@RequestBody Post post){
-        System.out.println("data");
-        System.out.println(post.toString());
         return postService.create(post);
     }
 
@@ -36,8 +34,8 @@ public class PostController {
         return postService.create(post);
     }
 
-    @DeleteMapping("/{PostId}")
-    public String deletePostById(@PathVariable(value = "PostId") String id){
+    @DeleteMapping("/{postId}")
+    public String deletePostById(@PathVariable(value = "postId") String id){
         return postService.deleteById(id);
     }
 }

@@ -1,7 +1,6 @@
 package com.project.app.service;
 
 import com.project.app.entity.Post;
-import com.project.app.entity.Post;
 
 import java.util.List;
 

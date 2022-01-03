@@ -1,6 +1,7 @@
 package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -36,9 +38,9 @@ public class Post {
     @JsonBackReference
     private Topic topic;
 
-//    @ManyToOne(targetEntity = Topic.class, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "topic_id", foreignKey = @ForeignKey(name = "fk_Post_topic_id"))
-//    private Topic topic;
+    @OneToMany(targetEntity = Reply.class)
+    @JsonManagedReference
+    private List<Reply> reply;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id",nullable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_post_user_id"))
