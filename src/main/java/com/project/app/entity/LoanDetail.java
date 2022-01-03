@@ -1,9 +1,7 @@
 package com.project.app.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -22,6 +20,7 @@ public class LoanDetail {
 
     @ManyToOne(targetEntity = Loan.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "loan_id", updatable = false)
+    @JsonBackReference
     private Loan loan;
 
     @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
@@ -30,4 +29,13 @@ public class LoanDetail {
 
     @Column(nullable = false)
     private Integer qty;
+
+    @Override
+    public String toString() {
+        return "LoanDetail{" +
+                "id='" + id + '\'' +
+                ", book=" + book +
+                ", qty=" + qty +
+                '}';
+    }
 }

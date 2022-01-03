@@ -1,15 +1,14 @@
 package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,6 +32,10 @@ public class Loan {
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
+    @OneToMany(targetEntity = LoanDetail.class, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<LoanDetail> loanDetail;
+
     @CreatedDate
     @Column(updatable = false)
     private Date dateBorrow;
@@ -46,5 +49,18 @@ public class Loan {
     public void beforePersist(){
         if (dateBorrow == null) dateBorrow = new Date();
         if (returnStatus == null) returnStatus = false;
+    }
+
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "id='" + id + '\'' +
+                ", totalQty=" + totalQty +
+                ", returnStatus=" + returnStatus +
+                ", user=" + user +
+                ", loanDetail=" + loanDetail +
+                ", dateBorrow=" + dateBorrow +
+                ", dateDue=" + dateDue +
+                '}';
     }
 }

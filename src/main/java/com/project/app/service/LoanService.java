@@ -10,4 +10,6 @@ public interface LoanService {
     public String deleteById(String id);
     public Loan getById(String id);
     public List<Loan> getAll();
+
+    public Loan createTransaction(Loan loan);
 }

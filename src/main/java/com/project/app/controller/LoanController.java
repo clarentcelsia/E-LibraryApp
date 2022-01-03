@@ -37,4 +37,9 @@ public class LoanController {
     public String deleteLoan(@PathVariable("loanId") String id){
         return loanService.deleteById(id);
     }
+
+    @PostMapping("/transaction")
+    public Loan createTransactionLoan(@RequestBody Loan loan){
+        return loanService.createTransaction(loan);
+    }
 }
