@@ -24,9 +24,9 @@ public class LoanDetail {
     @JoinColumn(name = "loan_id", updatable = false)
     private Loan loan;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", updatable = false)
-    private User user;
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id", updatable = false)
+    private Book book;
 
     @Column(nullable = false)
     private Integer qty;
