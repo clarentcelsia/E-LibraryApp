@@ -23,7 +23,7 @@ public class UserDetailImpl implements UserDetails {
 
     private String phoneNumber;
 
-    private String birthDate;
+    private Date birthDate;
 
     private String photo;
 
@@ -31,7 +31,7 @@ public class UserDetailImpl implements UserDetails {
 
     private String password;
 
-    private String status;
+    private Boolean status;
 
     private Date createdAt;
 
@@ -62,7 +62,7 @@ public class UserDetailImpl implements UserDetails {
         );
     }
 
-    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, String birthDate, String photo, String username, String password, String status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -79,7 +79,7 @@ public class UserDetailImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public UserDetailImpl() {
+    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Date createdAt, Date updatedAt, List<GrantedAuthority> authorities) {
     }
 
     public String getId() {
@@ -130,11 +130,11 @@ public class UserDetailImpl implements UserDetails {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -154,11 +154,11 @@ public class UserDetailImpl implements UserDetails {
         this.password = password;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

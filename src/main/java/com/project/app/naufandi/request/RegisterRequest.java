@@ -2,7 +2,7 @@ package com.project.app.naufandi.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
+import java.util.Date;
 import java.util.Set;
 
 public class RegisterRequest {
@@ -17,7 +17,7 @@ public class RegisterRequest {
 
     private String phoneNumber;
 
-    private String birthDate;
+    private Date birthDate;
 
     @JsonIgnore
     private String photo;
@@ -26,11 +26,11 @@ public class RegisterRequest {
 
     private String password;
 
-    private String status;
+    private Boolean status;
 
     private Set<String> roles;
 
-    public RegisterRequest(String identityNumber, String name, String address, String email, String phoneNumber, String birthDate, String photo, String username, String password, String status, Set<String> roles) {
+    public RegisterRequest(String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Set<String> roles) {
         this.identityNumber = identityNumber;
         this.name = name;
         this.address = address;
@@ -87,11 +87,11 @@ public class RegisterRequest {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -119,11 +119,11 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

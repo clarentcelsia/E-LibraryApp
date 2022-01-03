@@ -32,7 +32,7 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "birth_date")
-    private String birthDate;
+    private Date birthDate;
 
     @Column(name = "photo")
     private String photo;
@@ -44,7 +44,7 @@ public class User {
     private String password;
 
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
     private Boolean isDeleted;
 
@@ -74,7 +74,7 @@ public class User {
         updatedAt = new Date();
     }
 
-    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, String birthDate, String photo, String username, String password, String status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
+    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -143,11 +143,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -175,11 +175,11 @@ public class User {
         this.password = password;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

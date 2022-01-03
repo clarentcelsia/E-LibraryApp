@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username Not Found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         return UserDetailImpl.build(user);
     }
 
@@ -116,7 +116,6 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User not found");
         }
         user.setDeleted(true);
-
         userRepository.save(user);
         return "User deleted";
     }
