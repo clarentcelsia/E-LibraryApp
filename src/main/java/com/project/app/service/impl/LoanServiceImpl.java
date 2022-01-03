@@ -19,6 +19,8 @@ public class LoanServiceImpl implements LoanService {
         // tambahin validasi date due lebih dari min sehari dari hari peminjaman.
         // loan.getDateDue();
 
+        // tambahin validasi, user hanya bisa membuat 1 pinjaman aktif
+
         return loanRepository.save(loan);
     }
 
