@@ -3,6 +3,7 @@ package com.project.app.hadiyankp.util;
 import java.util.List;
 
 public class PageResponse <T>{
+
     List<T> content;
 
     private Long count;
@@ -13,7 +14,7 @@ public class PageResponse <T>{
 
     private Integer size;
 
-    public PageResponse(List<T> content, Long count, Integer totalPage, Integer page, Integer size, String sortBy) {
+    public PageResponse(List<T> content, Long count, Integer totalPage, Integer page, Integer size) {
         this.content = content;
         this.count = count;
         this.totalPage = totalPage;

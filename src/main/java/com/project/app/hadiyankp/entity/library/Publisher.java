@@ -13,29 +13,29 @@ public class Publisher {
     private String id;
 
     @Column(nullable = false)
-    private String name;
+    private String publisher;
 
     public String getId() {
         return id;
+    }
+
+    public Publisher() {
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
-    public Publisher() {
-    }
-
-    public Publisher(String id, String name) {
+    public Publisher(String id, String publisher) {
         this.id = id;
-        this.name = name;
+        this.publisher = publisher;
     }
 }

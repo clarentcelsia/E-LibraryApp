@@ -3,6 +3,7 @@ package com.project.app.hadiyankp.controller;
 import com.project.app.hadiyankp.dto.AuthorDTO;
 import com.project.app.hadiyankp.entity.library.Author;
 import com.project.app.hadiyankp.service.AuthorService;
+import com.project.app.hadiyankp.util.PageResponse;
 import com.project.app.hadiyankp.util.WebResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public class AuthorController {
 
     @PostMapping
     public ResponseEntity<WebResponse<Author>> createCategory(@RequestBody Author author) {
-        Author createAuthor = authorService.createAuthor(author);
+        Author createAuthor = this.authorService.createAuthor(author);
         WebResponse<Author> response = new WebResponse<>("Data Author Has Been Created", createAuthor);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -29,12 +30,13 @@ public class AuthorController {
 
     @GetMapping("/{authorId}")
     public ResponseEntity<WebResponse<Author>> getCustomerById(@PathVariable("authorId") String id) {
-        Author author = authorService.getById(id);
+        Author author = authorService.getActiveAuthor(id);
         WebResponse<Author> response = new WebResponse<>(String.format("Author with id %s found", id), author);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
     @GetMapping
     public ResponseEntity<WebResponse<Page<Author>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
@@ -43,11 +45,17 @@ public class AuthorController {
             @RequestParam(name = "middleName", required = false) String middleName,
             @RequestParam(name = "lastName", required = false) String lastName
     ) {
-        Pageable pageable =PageRequest.of(page,size);
-        AuthorDTO authorDTO = new AuthorDTO(firstName,middleName,lastName);
-        Page<Author> authors = authorService.listWithPage(pageable, authorDTO);
-        WebResponse<Page<Author>> response = new WebResponse<>("Success", authors);
+        Pageable pageable = PageRequest.of(page, size);
+        AuthorDTO authorDTO = new AuthorDTO(firstName, middleName, lastName);
+        Page<Author> authors = this.authorService.listWithPage(pageable, authorDTO);
+        PageResponse<Author> pageResponse = new PageResponse<>(
+                authors.getContent(),
+                authors.getTotalElements(),
+                authors.getTotalPages(),
+                page, size
+        );
 
+        WebResponse<Page<Author>> response = new WebResponse<>("Success Get Data Author ", authors);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
@@ -55,8 +63,8 @@ public class AuthorController {
 
     @DeleteMapping("/{authorId}")
     public ResponseEntity<WebResponse<String>> deleteSubjectById(@PathVariable("authorId") String id) {
-        String delete = authorService.deleteAuthor(id);
-        WebResponse<String> responseDelete = new WebResponse<>("Deleted", delete);
+        String delete = this.authorService.deleteAuthor(id);
+        WebResponse<String> responseDelete = new WebResponse<>(delete,id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);

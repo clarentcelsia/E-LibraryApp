@@ -12,6 +12,8 @@ public interface AuthorService {
 
     Author getById(String id);
 
+    Author getActiveAuthor(String id);
+
     Page<Author> listWithPage(Pageable pageable, AuthorDTO authorDTO);
 
     Author updateAuthor(Author author);
