@@ -15,7 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "topic")
+@Table(
+        name = "topic",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_topic", columnNames = {"topicSubject", "subTopic"})
+        }
+)
 public class Topic {
     @Id
     @GenericGenerator(name = "uuid-generator", strategy = "uuid")

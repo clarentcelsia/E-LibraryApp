@@ -15,12 +15,18 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "post")
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@Entity
+@Table(
+        name = "post",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_title", columnNames = "title")
+        }
+)
 public class Post {
     @Id
     @GenericGenerator(name = "uuid-generator", strategy = "uuid")
@@ -34,7 +40,7 @@ public class Post {
     private String body;
 
     @ManyToOne(targetEntity = Topic.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id", foreignKey = @ForeignKey(name = "fk_Post_topic_id"))
+    @JoinColumn(name = "topic_id", nullable = false, updatable = true, foreignKey = @ForeignKey(name = "fk_Post_topic_id"))
     @JsonBackReference
     private Topic topic;
 
