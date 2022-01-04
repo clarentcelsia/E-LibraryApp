@@ -2,6 +2,7 @@ package com.project.app.service.impl;
 
 import com.project.app.entity.Loan;
 import com.project.app.entity.LoanDetail;
+import com.project.app.exception.NotFoundException;
 import com.project.app.repository.LoanRepository;
 import com.project.app.service.LoanDetailService;
 import com.project.app.service.LoanService;
@@ -49,7 +50,7 @@ public class LoanServiceImpl implements LoanService {
             return optionalLoan.get();
         }
         // tambahin exception
-        return null;
+        throw new NotFoundException(String.format("Loan with Id %s not found", id));
     }
 
     @Override

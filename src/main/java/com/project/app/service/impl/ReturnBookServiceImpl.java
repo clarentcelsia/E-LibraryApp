@@ -4,6 +4,7 @@ import com.project.app.entity.Loan;
 import com.project.app.entity.LoanDetail;
 import com.project.app.entity.ReturnBook;
 import com.project.app.entity.ReturnBookDetail;
+import com.project.app.exception.NotFoundException;
 import com.project.app.repository.ReturnBookRepository;
 import com.project.app.service.LoanService;
 import com.project.app.service.ReturnBookDetailService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReturnBookServiceImpl implements ReturnBookService {
@@ -81,5 +83,14 @@ public class ReturnBookServiceImpl implements ReturnBookService {
     @Override
     public List<ReturnBook> getReturnBooks() {
         return repository.findAll();
+    }
+
+    @Override
+    public ReturnBook loadReturnBookByLoan(Loan loan) {
+        Optional<ReturnBook> returnBook = repository.findByLoan(loan);
+        if (returnBook.isPresent()){
+            return returnBook.get();
+        }
+        throw new NotFoundException(String.format("There is no ReturnInfo with Loan Id %s ", loan.getId()));
     }
 }
