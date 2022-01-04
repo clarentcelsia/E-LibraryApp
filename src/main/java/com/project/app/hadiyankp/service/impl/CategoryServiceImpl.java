@@ -2,12 +2,16 @@ package com.project.app.hadiyankp.service.impl;
 
 import com.project.app.hadiyankp.dto.CategoryDTO;
 import com.project.app.hadiyankp.entity.library.Category;
+import com.project.app.hadiyankp.entity.library.Publisher;
 import com.project.app.hadiyankp.exception.NotFoundException;
 import com.project.app.hadiyankp.repository.CategoryRepository;
 import com.project.app.hadiyankp.service.CategoryService;
+import com.project.app.hadiyankp.specification.CategorySpecification;
+import com.project.app.hadiyankp.specification.PublisherSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,7 +38,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<Category> listWithPage(Pageable pageable, CategoryDTO categoryDTO) {
-        return null;
+        Specification<Category> specification = CategorySpecification.getSpecification(categoryDTO);
+        return categoryRepository.findAll(specification,pageable);
     }
 
     @Override
