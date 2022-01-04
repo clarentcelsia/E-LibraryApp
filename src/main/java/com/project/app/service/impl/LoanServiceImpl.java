@@ -6,10 +6,13 @@ import com.project.app.exception.NotFoundException;
 import com.project.app.repository.LoanRepository;
 import com.project.app.service.LoanDetailService;
 import com.project.app.service.LoanService;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +64,13 @@ public class LoanServiceImpl implements LoanService {
     @Override
     @Transactional
     public Loan createTransaction(Loan loan){
+        //validasi dateDue < DateBorrow
+        LocalDateTime dateDue = loan.getDateDue();
+        LocalDateTime dateBorrow = LocalDateTime.now();
+        Duration duration = Duration.between(dateBorrow, dateDue);
+        if (duration.toDays() < 1 ){
+            throw new RuntimeException("Masukkan tanggal pengembalian dengan durasi minimal 1 hari dari tanggal pinjam");
+        }
 
         Integer totalQty = 0;
         for(LoanDetail loanDetail: loan.getLoanDetail()){

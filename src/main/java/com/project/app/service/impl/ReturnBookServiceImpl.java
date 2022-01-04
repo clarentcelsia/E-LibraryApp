@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,39 +34,49 @@ public class ReturnBookServiceImpl implements ReturnBookService {
     @Override
     @Transactional
     public ReturnBook createTransaction(ReturnBook returnBook) {
-        // validasi, if book is returned then reject this request.
-
         Integer totalQty = 0;
         Integer totalPenaltyFee = 0;
+        Integer overdueDuration = 0;
         Integer overdueFee = returnBook.getOverdueFee();
 
         Loan loan = loanService.getById(returnBook.getLoan().getId());
-        System.out.println(returnBook);
+
+        // validasi, if book is returned then reject this request.
+        if (loan.getReturnStatus()){
+            throw new RuntimeException("Book has been returned");
+        }
 
 
-        for (int i = 0; i < returnBook.getReturnBookDetails().size(); i++) {
+        for (int i = 0; i < loan.getLoanDetail().size(); i++) {
             ReturnBookDetail returnBookDetail = returnBook.getReturnBookDetails().get(i);
             LoanDetail loanDetail = loan.getLoanDetail().get(i);
+
+            // Tambahin Validasi, jumlah pengembalian tidak lebih dari jumlah peminjaman.
+            Integer lostBook = loanDetail.getQty() - returnBookDetail.getQty();
+            if (lostBook < 0){
+                throw new RuntimeException("Buku yang dikembalikan lebih dari Jumlah buku yang dipinjam");
+            }
+
 
             // Tambahkan Stock buku perpus sesuai jumlah pengembalian;
 
 
-
             // isi info returnBookDetail ( isi penalty fee ).
-
-            // returnBookDetail.setReturnBook(returnBook);
-            // penaltyFee = overdue_fee * (dateReturn - date borrow ) + BookPrice * lostBook ;
-
             // TAMBAHIN - logic jumlah hari keterlambatan;
-            Integer overdueDuration = 0;
+            LocalDateTime dateDue = loan.getDateDue();
+//            LocalDateTime dateReturn = LocalDateTime.now();
+            LocalDateTime dateReturn = LocalDateTime.of(LocalDate.of(2022,2,1), LocalTime.now());
+            Duration duration = Duration.between(dateDue, dateReturn);
+            if (duration.toDays() < 1 ){
+                overdueDuration = 0;
+            } else {
+                overdueDuration = Math.toIntExact(duration.toDays());
+            }
+
+            // bookPrice nanti ganti sesuai harga buku.
             Integer bookPrice = 50000;
-            // Tambahin Validasi, jumlah pengembalian tidak lebih dari jumlah peminjaman.
-            Integer lostBook = loanDetail.getQty() - returnBookDetail.getQty();
-
-
             Integer penaltyFee = overdueFee * overdueDuration + bookPrice * lostBook;
             returnBookDetail.setPenaltyFee(penaltyFee);
-
             returnBookDetailService.create(returnBookDetail);
 
             totalPenaltyFee += penaltyFee;
