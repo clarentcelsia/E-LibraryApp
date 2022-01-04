@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/subjects")
 public class SubjectController {
@@ -60,6 +62,8 @@ public class SubjectController {
                 .body(responseDelete);
 //        return customerService.deleteCustomer(id);
     }
+
+
     @PutMapping
     public ResponseEntity<WebResponse<Subject>> updateCustomerById(@RequestBody Subject subject) {
         Subject updateSubject = subjectService.updateSubject(subject);
