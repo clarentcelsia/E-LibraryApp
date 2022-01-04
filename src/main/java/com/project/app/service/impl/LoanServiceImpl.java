@@ -39,7 +39,7 @@ public class LoanServiceImpl implements LoanService {
     public String deleteById(String id) {
         Loan loan = getById(id);
         loanRepository.delete(loan);
-        return String.format("Loan with %id is deleted", id);
+        return String.format("Loan with %s is deleted", id);
     }
 
     @Override
