@@ -34,16 +34,6 @@ public class LoanController {
         return returnBookService.loadReturnBookByLoan(loan);
     }
 
-    @PutMapping
-    public Loan updateLoan(@RequestBody Loan loan){
-        return loanService.update(loan);
-    }
-
-    @PostMapping
-    public Loan createLoan(@RequestBody Loan loan){
-        return loanService.create(loan);
-    }
-
     @DeleteMapping("/{loanId}")
     public String deleteLoan(@PathVariable("loanId") String id){
         return loanService.deleteById(id);

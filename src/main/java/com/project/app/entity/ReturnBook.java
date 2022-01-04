@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class ReturnBook {
     private Integer totalQty;
 
     @Column (nullable = false)
-    private Date dateReturn;
+    private LocalDateTime dateReturn;
 
     @Column (nullable = false)
     private Integer totalPenaltyFee;
@@ -43,7 +44,7 @@ public class ReturnBook {
 
     @PrePersist
     public void createdAt(){
-        if (dateReturn == null) dateReturn = new Date();
+        if (dateReturn == null) dateReturn = LocalDateTime.now();
     }
 
     @Override

@@ -25,21 +25,6 @@ public class LoanServiceImpl implements LoanService {
     private LoanDetailService loanDetailService;
 
     @Override
-    public Loan create(Loan loan) {
-        // tambahin validasi date due lebih dari min sehari dari hari peminjaman.
-        // loan.getDateDue();
-
-        // tambahin validasi, user hanya bisa membuat 1 pinjaman aktif
-        return loanRepository.save(loan);
-    }
-
-    @Override
-    public Loan update(Loan loan) {
-        getById(loan.getId());
-        return loanRepository.save(loan);
-    }
-
-    @Override
     public String deleteById(String id) {
         Loan loan = getById(id);
         loanRepository.delete(loan);
@@ -84,5 +69,10 @@ public class LoanServiceImpl implements LoanService {
         loan.setTotalQty(totalQty);
         Loan savedloan = loanRepository.save(loan);
         return savedloan;
+    }
+
+    @Override
+    public Loan update(Loan loan) {
+        return loanRepository.save(loan);
     }
 }
