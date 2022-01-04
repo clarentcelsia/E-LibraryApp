@@ -31,9 +31,8 @@ public class TopicController {
 
     @PutMapping
     public Topic updateTopic(@RequestBody Topic topic){
-        return topicService.create(topic);
+        return topicService.update(topic);
     }
-
 
     @DeleteMapping("/{topicId}")
     public String deleteTopicById(@PathVariable(value = "topicId") String id){

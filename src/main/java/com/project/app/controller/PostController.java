@@ -29,11 +29,6 @@ public class PostController {
         return postService.create(post);
     }
 
-    @PutMapping
-    public Post updatePost(@RequestBody Post post){
-        return postService.create(post);
-    }
-
     @DeleteMapping("/{postId}")
     public String deletePostById(@PathVariable(value = "postId") String id){
         return postService.deleteById(id);

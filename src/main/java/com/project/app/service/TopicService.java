@@ -9,5 +9,6 @@ public interface TopicService {
     public List<Topic> getAll();
 
     public Topic create(Topic topic);
+    public Topic update(Topic topic);
     public String deleteById(String id);
 }

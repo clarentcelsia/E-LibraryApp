@@ -8,5 +8,6 @@ public interface PostService {
     public Post getById(String id);
     public List<Post> getAll();
     public Post create(Post post);
+    public Post update(Post post);
     public String deleteById(String id);
 }

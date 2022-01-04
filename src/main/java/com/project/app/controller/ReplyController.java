@@ -29,11 +29,6 @@ public class ReplyController {
         return replyService.create(reply);
     }
 
-    @PutMapping
-    public Reply updateReply(@RequestBody Reply reply){
-        return replyService.create(reply);
-    }
-
     @DeleteMapping("/{ReplyId}")
     public String deleteReplyById(@PathVariable(value = "ReplyId") Integer id){
         return replyService.deleteById(id);

@@ -39,12 +39,12 @@ public class Post {
     @Column(nullable = false)
     private String body;
 
-    @ManyToOne(targetEntity = Topic.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id", nullable = false, updatable = true, foreignKey = @ForeignKey(name = "fk_Post_topic_id"))
+    @ManyToOne(targetEntity = Topic.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "topic_id", nullable = false, foreignKey = @ForeignKey(name = "fk_Post_topic_id"))
     @JsonBackReference
     private Topic topic;
 
-    @OneToMany(targetEntity = Reply.class)
+    @OneToMany(targetEntity = Reply.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Reply> reply;
 

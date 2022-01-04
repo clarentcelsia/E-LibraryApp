@@ -9,6 +9,7 @@ import com.project.app.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +39,17 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public Topic update(Topic topic) {
+        Topic topicGet = getById(topic.getId());
+        topic.setPosts(topicGet.getPosts());
+        return topicRepository.save(topic);
+    }
+
+    @Override
+    @Transactional
     public String deleteById(String id) {
-        topicRepository.delete(getById(id));
+        Topic topic = getById(id);
+        topicRepository.delete(topic);
         return String.format("Topic with ID %s has been deleted", id);
     }
 
