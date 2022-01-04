@@ -14,7 +14,9 @@ public interface ProductionBookService {
 
     ProductionBook getById(String id);
 
-    ProductionBook update(ProductionBook productionBook, MultipartFile...multipartFiles);
+    ProductionBook updateWithMultipart(ProductionBook productionBook, MultipartFile...multipartFiles);
+
+    ProductionBook update(ProductionBook productionBook);
 
     void deleteById(String id);
 }

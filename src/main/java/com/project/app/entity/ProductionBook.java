@@ -2,6 +2,7 @@ package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.app.files.Files;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -23,7 +24,6 @@ public class ProductionBook {
     private String title;
     private String subtitle;
     private String description;
-    @Column(nullable = false)
     private String previewLink;
     private String downloadedLink;
     private Integer price;
@@ -31,12 +31,13 @@ public class ProductionBook {
     private Boolean onSale;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
-    @OneToMany(targetEntity = Files.class, fetch = FetchType.LAZY)
-    private Set<Files> userFiles;
+//    @JsonIgnore
+//    @OneToMany(targetEntity = Files.class, fetch = FetchType.LAZY)
+//    private Set<Files> userFiles;
 
     @CreatedDate
     @Column(updatable = false)
@@ -166,11 +167,31 @@ public class ProductionBook {
         this.user = user;
     }
 
-    public Set<Files> getUserFiles() {
-        return userFiles;
-    }
+//    public Set<Files> getUserFiles() {
+//        return userFiles;
+//    }
+//
+//    public void setUserFiles(Set<Files> userFiles) {
+//        this.userFiles = userFiles;
+//    }
 
-    public void setUserFiles(Set<Files> userFiles) {
-        this.userFiles = userFiles;
+
+    @Override
+    public String toString() {
+        return "ProductionBook{" +
+                "productionBookId='" + productionBookId + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", description='" + description + '\'' +
+                ", previewLink='" + previewLink + '\'' +
+                ", downloadedLink='" + downloadedLink + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", onSale=" + onSale +
+                ", user=" + user +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

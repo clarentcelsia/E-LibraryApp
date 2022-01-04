@@ -1,14 +1,11 @@
 package com.project.app.service;
 
 import com.project.app.entity.User;
-import com.project.app.files.Files;
+import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.UserRepository;
 import com.project.app.service.impl.FileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Service
 public class UserService {
@@ -17,9 +14,24 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
+    CustomerServiceImpl customerService;
+
+    @Autowired
     FileServiceImpl fileService;
 
     public User create(User user) {
-        return userRepository.save(user);
+        User save = userRepository.save(user);
+
+        Customer customer = new Customer();
+        customer.setName(save.getName());
+        customer.setUserId(save.getUserId());
+        customerService.createCustomer(customer);
+
+        return save ;
+    }
+
+    public User getUserById(String id) {
+        return userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException("user id not found"));
     }
 }

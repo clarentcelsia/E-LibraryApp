@@ -17,6 +17,8 @@ public class UserController {
     public User create(
             @RequestBody User user
     ){
-        return userService.create(user);
+        User save = userService.create(user);
+        return save;
+
     }
 }

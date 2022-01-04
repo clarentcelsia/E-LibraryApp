@@ -31,18 +31,18 @@ public class ProductionBookServiceImpl implements ProductionBookService {
 
     @Override
     public ProductionBook save(ProductionBook productionBook, MultipartFile... multipartFiles) {
-        Set<Files> filesSet = new HashSet<>();
+//        Set<Files> filesSet = new HashSet<>();
         List<String> strings = new ArrayList<>();
         for (MultipartFile file : multipartFiles) {
             Files files = service.saveMultipartFile(file);
-            filesSet.add(files);
+//            filesSet.add(files);
 
             String url = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/files/" + files.getFileId())
                     .toUriString();
             strings.add(url);
         }
-        productionBook.setUserFiles(filesSet);
+//        productionBook.setUserFiles(filesSet);
 
         if (strings.size() == 2) {
             productionBook.setImageUrl(strings.get(0));
@@ -71,7 +71,7 @@ public class ProductionBookServiceImpl implements ProductionBookService {
     }
 
     @Override
-    public ProductionBook update(ProductionBook productionBook, MultipartFile... multipartFiles) {
+    public ProductionBook updateWithMultipart(ProductionBook productionBook, MultipartFile... multipartFiles) {
         ProductionBook book = getById(productionBook.getProductionBookId());
         //"http://localhost:8080/files/4028e4867e1ecabf017e1ecafab10000"
 
@@ -93,6 +93,13 @@ public class ProductionBookServiceImpl implements ProductionBookService {
 
         return save(productionBook, multipartFiles);
     }
+
+    @Override
+    public ProductionBook update(ProductionBook productionBook) {
+        ProductionBook book = getById(productionBook.getProductionBookId());
+        return productionBookRepository.save(book);
+    }
+
 
     @Override
     public void deleteById(String id) {

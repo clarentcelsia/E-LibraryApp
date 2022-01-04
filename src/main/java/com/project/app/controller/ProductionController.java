@@ -103,7 +103,7 @@ public class ProductionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Response<>(
                         "Success: getProductionBookById successfully!",
-                        productionBookService.update(productionBook, image, preview, download)));
+                        productionBookService.updateWithMultipart(productionBook, image, preview, download)));
     }
 
     @DeleteMapping("/{id}")
