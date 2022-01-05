@@ -2,8 +2,10 @@ package com.project.app.service.impl;
 
 import com.project.app.entity.Room;
 import com.project.app.entity.RoomMember;
+import com.project.app.entity.RoomMessage;
 import com.project.app.repository.RoomRepository;
 import com.project.app.service.RoomMemberService;
+import com.project.app.service.RoomMessageService;
 import com.project.app.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private RoomMemberService roomMemberService;
+
+    @Autowired
+    private RoomMessageService roomMessageService;
 
     @Override
     @Transactional
@@ -93,5 +98,23 @@ public class RoomServiceImpl implements RoomService {
 
         room.getRoomMember().add(savedMember);
         return room;
+    }
+
+    @Override
+    @Transactional
+    public Room addMessageToRoom(String roomId, RoomMessage roomMessage) {
+        Room room = getRoomById(roomId);
+
+        roomMessage.setRoom(room);
+        roomMessageService.create(roomMessage);
+        room.getRoomMessage().add(roomMessage);
+
+        return room;
+    }
+
+    @Override
+    public List<RoomMessage> getRoomMessages(String id) {
+        Room room = getRoomById(id);
+        return room.getRoomMessage();
     }
 }

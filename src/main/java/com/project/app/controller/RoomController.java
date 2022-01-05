@@ -2,6 +2,7 @@ package com.project.app.controller;
 
 import com.project.app.entity.Room;
 import com.project.app.entity.RoomMember;
+import com.project.app.entity.RoomMessage;
 import com.project.app.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,11 @@ public class RoomController {
         return roomService.getRoomMembers(id);
     }
 
+    @GetMapping("/{roomId}/messages")
+    public List<RoomMessage> getRoomMessages(@PathVariable("roomId") String id){
+        return roomService.getRoomMessages(id);
+    }
+
     @PostMapping
     public Room createRoom(@RequestBody Room room){
         return roomService.create(room);
@@ -54,5 +60,13 @@ public class RoomController {
             @RequestBody RoomMember roomMember
     ){
         return roomService.removeMemberFromRoom(id,roomMember);
+    }
+
+    @PostMapping("/{roomId}/messages")
+    public Room addMessage(
+            @PathVariable("roomId") String id,
+            @RequestBody RoomMessage roomMessage
+            ){
+        return roomService.addMessageToRoom(id,roomMessage);
     }
 }
