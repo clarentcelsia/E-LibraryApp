@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/rooms")
@@ -24,6 +25,11 @@ public class RoomController {
         return roomService.getRoomById(id);
     }
 
+    @GetMapping("/{roomId}/members")
+    public Set<RoomMember> getRoomMembers(@PathVariable("roomId") String id){
+        return roomService.getRoomMembers(id);
+    }
+
     @PostMapping
     public Room createRoom(@RequestBody Room room){
         return roomService.create(room);
@@ -34,11 +40,19 @@ public class RoomController {
         return roomService.deleteRoomById(id);
     }
 
-    @PostMapping("/{roomId}")
-    public Room createRoom(
+    @PostMapping("/{roomId}/members")
+    public Room addMember(
             @PathVariable("roomId") String id,
             @RequestBody RoomMember roomMember
             ){
         return roomService.addMemberToRoom(id,roomMember);
+    }
+
+    @DeleteMapping("/{roomId}/members")
+    public Room removeMember(
+            @PathVariable("roomId") String id,
+            @RequestBody RoomMember roomMember
+    ){
+        return roomService.removeMemberFromRoom(id,roomMember);
     }
 }

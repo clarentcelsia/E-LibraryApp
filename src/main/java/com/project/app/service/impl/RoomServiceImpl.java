@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -47,6 +46,23 @@ public class RoomServiceImpl implements RoomService {
     public String deleteRoomById(String id) {
         repository.delete(getRoomById(id));
         return String.format("Room with id %s Deleted", id);
+    }
+
+    @Override
+    @Transactional
+    public Room removeMemberFromRoom(String roomId, RoomMember roomMember) {
+        Room room = getRoomById(roomId);
+        RoomMember member = roomMemberService.getRoomMemberById(roomMember.getId());
+        roomMemberService.deleteRoomMemberById(roomMember.getId());
+
+        room.getRoomMember().remove(member);
+        return room;
+    }
+
+    @Override
+    public Set<RoomMember> getRoomMembers(String id) {
+        Room room = getRoomById(id);
+        return room.getRoomMember();
     }
 
     @Override
