@@ -5,8 +5,11 @@ import com.project.app.entity.Book;
 import com.project.app.entity.Review;
 import com.project.app.entity.Users;
 import com.project.app.service.ReviewService;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,11 +69,17 @@ class ReviewControllerTest {
 
     @Test
     public void whenGetReviewsByIdSucceed_thenReturn200() throws Exception {
+        Book book = new Book("B01", "Finding Nemo");
+        Users users = new Users("U01", "Moana");
+        Review review = new Review("R01", book, users, "title", "content", 4, 3);
+
+        when(service.getReviewById(review.getReviewId())).thenReturn(review);
 
         mockMvc.perform(get("/api/v6/reviews/{id}", "R01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Succeed: data get successfully!"));
+                .andExpect(jsonPath("$.message").value("Succeed: data get successfully!"))
+                .andExpect(jsonPath("$.['data'].['reviewId']", Matchers.is(review.getReviewId())));
     }
 
     @Test
@@ -87,9 +97,16 @@ class ReviewControllerTest {
 
     @Test
     public void whenReviewDeleted_thenReturn200() throws Exception {
-        mockMvc.perform(delete("/api/v6/reviews/{id}", "R01"))
+        Book book = new Book("B01", "Finding Nemo");
+        Users users = new Users("U01", "Moana");
+        Review review = new Review("R01", book, users, "title", "content", 4, 3);
+
+        when(service.createReview(review)).thenReturn(review);
+
+        mockMvc.perform(delete("/api/v6/reviews/{id}", review.getReviewId()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Succeed: data deleted successfully!"));
+                .andExpect(jsonPath("$.message").value("Succeed: data deleted successfully!"))
+                .andExpect(jsonPath("$.data").value(review.getReviewId()));
     }
 }
