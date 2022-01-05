@@ -19,8 +19,6 @@ public class UserResponse {
 
     private Date birthDate;
 
-    private String photo;
-
     private String username;
 
     private String password;
@@ -33,7 +31,7 @@ public class UserResponse {
 
     private Set<String> roles;
 
-    public UserResponse(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Date createdAt, Date updatedAt, Set<String> roles) {
+    public UserResponse(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Date createdAt, Date updatedAt, Set<String> roles) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -41,7 +39,6 @@ public class UserResponse {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
-        this.photo = photo;
         this.username = username;
         this.password = password;
         this.status = status;
@@ -107,14 +104,6 @@ public class UserResponse {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public String getUsername() {

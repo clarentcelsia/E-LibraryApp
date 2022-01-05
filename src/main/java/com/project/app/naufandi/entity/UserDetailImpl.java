@@ -25,8 +25,6 @@ public class UserDetailImpl implements UserDetails {
 
     private Date birthDate;
 
-    private String photo;
-
     private String username;
 
     private String password;
@@ -52,7 +50,6 @@ public class UserDetailImpl implements UserDetails {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getBirthDate(),
-                user.getPhoto(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getStatus(),
@@ -62,7 +59,7 @@ public class UserDetailImpl implements UserDetails {
         );
     }
 
-    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String userUsername, String username, Boolean status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -70,7 +67,6 @@ public class UserDetailImpl implements UserDetails {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
-        this.photo = photo;
         this.username = username;
         this.password = password;
         this.status = status;
@@ -136,14 +132,6 @@ public class UserDetailImpl implements UserDetails {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public void setUsername(String username) {

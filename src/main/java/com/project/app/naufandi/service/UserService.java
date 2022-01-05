@@ -16,7 +16,7 @@ public interface UserService extends UserDetailsService {
 
     UserResponse create(User user, Set<Role> roles);
 
-    User create(User user, MultipartFile photo);
+    User create(User user);
 
     User get(String id);
 

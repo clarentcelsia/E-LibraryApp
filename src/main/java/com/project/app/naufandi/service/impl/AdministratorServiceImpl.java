@@ -62,6 +62,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
+    public Administrator create(Administrator administrator) {
+        return (Administrator) this.administratorRepository.save(administrator);
+    }
+
+    @Override
     public Administrator get(String id) {
         return this.findByIdOrThrowNotFound(id);
     }

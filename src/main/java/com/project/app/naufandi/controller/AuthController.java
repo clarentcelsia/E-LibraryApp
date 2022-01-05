@@ -58,7 +58,6 @@ public class AuthController {
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setBirthDate(request.getBirthDate());
-        user.setPhoto(request.getPhoto());
         user.setStatus(request.getStatus());
 
         Set<Role> roleSet = new HashSet<>();

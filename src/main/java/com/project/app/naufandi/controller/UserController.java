@@ -12,9 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/users")
@@ -23,11 +20,10 @@ public class UserController  {
     @Autowired
     private UserService userService;
 
-    @PostMapping//lihat yg kak rifqi
-    public ResponseEntity<WebResponse<User>> createUser(@RequestPart("user") User request, @RequestPart("photo") MultipartFile photo){
-        User user = this.userService.create(request, photo);
+    @PostMapping
+    public ResponseEntity<WebResponse<User>> createUser(@RequestBody User request){
+        User user = this.userService.create(request);
         WebResponse<User> webResponse = new WebResponse<>("Successfully created new user", user);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(webResponse);
     }
 
@@ -56,22 +52,15 @@ public class UserController  {
                 page,
                 size
         );
-
         WebResponse<PageResponse<User>> response = new WebResponse<>("Successfully get data user", pageResponse);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping
     public ResponseEntity<WebResponse<User>> updateUserById(@RequestBody User request){
         User update = this.userService.update(request);
         WebResponse<User> webResponse = new WebResponse<>("Successfully update user", update);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(webResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(webResponse);
     }
 
     @DeleteMapping("/{userId}")
@@ -79,9 +68,6 @@ public class UserController  {
     public ResponseEntity<WebResponse<String>> deleteUserById(@PathVariable("userId") String id){
         String message = this.userService.delete(id);
         WebResponse<String> webResponse = new WebResponse<>(message, id);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(webResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(webResponse);
     }
 }

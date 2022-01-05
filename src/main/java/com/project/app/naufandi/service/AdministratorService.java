@@ -15,6 +15,8 @@ public interface AdministratorService extends UserDetailsService {
 
     AdministratorResponse create(Administrator administrator, Set<Role> roles);
 
+    Administrator create(Administrator administrator);
+
     Administrator get(String id);
 
     Administrator getActiveAdministrator(String id);

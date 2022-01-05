@@ -1,5 +1,7 @@
 package com.project.app.naufandi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -31,11 +33,9 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birth_date")
     private Date birthDate;
-
-    @Column(name = "photo")
-    private String photo;
 
     @Column(name = "username")
     private String username;
@@ -74,7 +74,7 @@ public class User {
         updatedAt = new Date();
     }
 
-    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
+    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -82,7 +82,6 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
-        this.photo = photo;
         this.username = username;
         this.password = password;
         this.status = status;
@@ -149,14 +148,6 @@ public class User {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public String getUsername() {
