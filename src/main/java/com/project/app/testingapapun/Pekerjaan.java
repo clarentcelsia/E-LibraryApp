@@ -1,5 +1,7 @@
 package com.project.app.testingapapun;
 
+import java.util.Objects;
+
 public class Pekerjaan {
     private String nama;
 
@@ -20,5 +22,18 @@ public class Pekerjaan {
         return "Pekerjaan{" +
                 "nama='" + nama + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pekerjaan pekerjaan = (Pekerjaan) o;
+        return Objects.equals(nama, pekerjaan.nama);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nama);
     }
 }

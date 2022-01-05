@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -38,4 +39,18 @@ public class RoomMember {
     public void init(){
         if (createdAt == null) createdAt = new Date();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoomMember that = (RoomMember) o;
+        return Objects.equals(room, that.room) && Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(room, user);
+    }
+
 }
