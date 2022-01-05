@@ -2,6 +2,7 @@ package com.project.app.service.impl;
 
 import com.project.app.entity.Post;
 import com.project.app.entity.Reply;
+import com.project.app.entity.Topic;
 import com.project.app.exception.NotFoundException;
 import com.project.app.repository.PostRepository;
 import com.project.app.repository.ReplyRepository;
@@ -52,7 +53,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    @Transactional
     public String deleteById(Integer id) {
+        Reply reply = getById(id);
+        Post post = postService.getById(reply.getPost().getId());
+        post.getReply().remove(reply);
+
         replyRepository.delete(getById(id));
         return String.format("Reply with ID %s has been deleted", id);
     }

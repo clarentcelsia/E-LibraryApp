@@ -20,7 +20,7 @@ public class Reply {
     private Integer id;
 
 
-    @ManyToOne (targetEntity = Post.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne (targetEntity = Post.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false, updatable = false)
     @JsonBackReference
     private Post post;

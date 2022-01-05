@@ -40,7 +40,7 @@ public class Topic {
     @JoinColumn(name = "user_id",nullable = false,foreignKey = @ForeignKey(name = "fk_user_id"), updatable = false)
     private User user;
 
-    @OneToMany (targetEntity = Post.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany (targetEntity = Post.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference
     private List<Post> posts;
 

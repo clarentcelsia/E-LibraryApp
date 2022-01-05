@@ -57,7 +57,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public String deleteById(String id) {
+        Post post = getById(id);
+        Topic topic = topicService.getById(post.getTopic().getId());
+        topic.getPosts().remove(post);
+
         postRepository.delete(getById(id));
         return String.format("Post with ID %s has been deleted", id);
     }
