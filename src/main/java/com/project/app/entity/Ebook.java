@@ -7,9 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "mst_ebook")
@@ -22,10 +20,17 @@ public class Ebook {
     private String ebookCode;
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
+    @JoinTable(
+            name = "tb_ebook_authors",
+            joinColumns = @JoinColumn(name = "ebook_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
     @JsonManagedReference
-    private Set<EbookAuthor> authors;
+    private List<EbookAuthor> authors = new ArrayList<>();
 
     private String publishedDate;
     private String publisher;
@@ -46,7 +51,7 @@ public class Ebook {
         if (this.createdAt == null) this.createdAt = new Date();
         if (this.updatedAt == null) this.updatedAt = new Date();
         if (this.isDeleted == null) isDeleted = false;
-        authors = new HashSet<>();
+        authors = new ArrayList<>();
     }
 
     @PreUpdate
@@ -60,6 +65,17 @@ public class Ebook {
     public Ebook(String ebookCode, String title, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
         this.ebookCode = ebookCode;
         this.title = title;
+        this.publishedDate = publishedDate;
+        this.publisher = publisher;
+        this.description = description;
+        this.imageLinks = imageLinks;
+        this.webReaderLink = webReaderLink;
+    }
+
+    public Ebook(String ebookCode, String title, List<EbookAuthor> authors, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
+        this.ebookCode = ebookCode;
+        this.title = title;
+        this.authors = authors;
         this.publishedDate = publishedDate;
         this.publisher = publisher;
         this.description = description;
@@ -92,11 +108,11 @@ public class Ebook {
         this.title = title;
     }
 
-    public Set<EbookAuthor> getAuthors() {
+    public List<EbookAuthor> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<EbookAuthor> authors) {
+    public void setAuthors(List<EbookAuthor> authors) {
         this.authors = authors;
     }
 
@@ -164,6 +180,7 @@ public class Ebook {
         isDeleted = deleted;
     }
 
+
     @Override
     public String toString() {
         return "Ebook{" +
@@ -181,4 +198,6 @@ public class Ebook {
                 ", isDeleted=" + isDeleted +
                 '}';
     }
+
+
 }

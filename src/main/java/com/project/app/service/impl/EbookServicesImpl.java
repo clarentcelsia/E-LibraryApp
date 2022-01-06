@@ -1,6 +1,5 @@
 package com.project.app.service.impl;
 
-import com.project.app.dto.EbookAuthorDTO;
 import com.project.app.dto.EbookDTO;
 import com.project.app.dto.ebook.Item;
 import com.project.app.dto.ebook.Root;
@@ -11,7 +10,6 @@ import com.project.app.repository.EbookRepository;
 import com.project.app.request.EbookAPI;
 import com.project.app.service.EbookAuthorService;
 import com.project.app.service.EbookService;
-import com.project.app.specification.EbookAuthorSpecification;
 import com.project.app.specification.EbookSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -37,7 +33,8 @@ public class EbookServicesImpl implements EbookService {
 
     @Override
     public Ebook saveEbookToDB(EbookAPI ebookAPI) {
-        // Create ebook
+        //EBOOK API == EBOOK REQUEST
+        //CREATE EBOOK MASUKIN DATANYA DARI EBOOK API
         Ebook ebook = new Ebook(
                 ebookAPI.getEbookCode(),
                 ebookAPI.getTitle(),
@@ -47,43 +44,38 @@ public class EbookServicesImpl implements EbookService {
                 ebookAPI.getImageLinks(),
                 ebookAPI.getWebReaderLink()
         );
-        repository.save(ebook);
 
-        //Get authors
-        Set<EbookAuthor> authorSet = new HashSet<>();
+        //SAVE EBOOK KE DB (KONDISI AUTHOR KOSONG MASIH)
+        Ebook ebook1 = repository.save(ebook);
+
+        //KARENA DARI API AUTHOR AK BENTUKNYA STRING[NAMA] JADI AKU LAKUKAN PERULANGAN UNTUK DAPATIN AUTHOR (STRING) DIDALAM ARRAY
+        List<EbookAuthor> authorSet = new ArrayList<>();
         for (String strAuthor : ebookAPI.getAuthors()) {
-            EbookAuthor author = new EbookAuthor(); //a1
-            author.setName(strAuthor); //n1
-            ebookAuthorService.saveAuthor(author); //1
 
-            System.out.println(author);
-//            author.getEbooks().add(ebook);
+            //CREATE AUTHOR ISINYA HANYA NAMA AUTHORNYA
+            //KARENA AUTHOR DI TABLE AKU FIELDNY CUMA NAMA
+            EbookAuthor author = new EbookAuthor(strAuthor);
 
-            authorSet.add(author);
+            //SAVE KE DATABASE AUTHOR
+            EbookAuthor ebookAuthor = ebookAuthorService.saveAuthor(author);
+
+            //EBOOK YG SUDAH DISIMPAN DI DB TADI (KAN BELUM ADA LIST AUTHOR==0)
+            //JADI AK GET AUTHORS(YANG KONDISINYA NULL), TAMBAHKAN AUTHORNY
+            ebook1.getAuthors().add(ebookAuthor);
+
+            //author.getEbooks().add(ebook1);
+            //authorSet.add(author);
         }
 
-//        ebook.getAuthors().add(list);
-
-        ebook.setAuthors(authorSet);
-        return ebook;
+        //TRS SDH DPT AUTHOR EBOOK, UPDATE EBOOK1
+        Ebook save = repository.save(ebook1);
+        return save;
     }
 
     @Override
-    public Page<Ebook> getSavedEbooks(Pageable pageable) {
-
-        return repository.findAll(pageable);
-    }
-
-    @Override
-    public Page<Ebook> getSavedEbookByTitle(EbookDTO ebookDTO, Pageable pageable) {
+    public Page<Ebook> getSavedEbooks(EbookDTO ebookDTO, Pageable pageable) {
         Specification<Ebook> ebookSpecification = EbookSpecification.getSpecification(ebookDTO);
         return repository.findAll(ebookSpecification, pageable);
-    }
-
-    @Override
-    public Page<EbookAuthor> getSavedEbookByAuthor(EbookAuthorDTO ebookAuthorDTO, Pageable pageable) {
-        Specification<EbookAuthor> ebookSpecification = EbookAuthorSpecification.getSpecification(ebookAuthorDTO);
-        return ebookAuthorService.filter(ebookSpecification, pageable);
     }
 
     @Override

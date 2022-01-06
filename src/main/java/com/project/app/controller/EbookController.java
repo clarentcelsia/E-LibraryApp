@@ -1,11 +1,9 @@
 package com.project.app.controller;
 
-import com.project.app.dto.EbookAuthorDTO;
 import com.project.app.dto.EbookDTO;
 import com.project.app.dto.ebook.Item;
 import com.project.app.dto.ebook.Root;
 import com.project.app.entity.Ebook;
-import com.project.app.entity.EbookAuthor;
 import com.project.app.request.EbookAPI;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,12 +51,13 @@ public class EbookController {
 
     @GetMapping
     public ResponseEntity<Response<PageResponse<Ebook>>> getSavedEbooks(
+            @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "5") Integer size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-
-        Page<Ebook> ebooks = ebookService.getSavedEbooks(pageable);
+        EbookDTO ebookDTO = new EbookDTO(title);
+        Page<Ebook> ebooks = ebookService.getSavedEbooks(ebookDTO, pageable);
 
         PageResponse<Ebook> response = new PageResponse<>(
                 ebooks.getContent(),
@@ -75,26 +73,6 @@ public class EbookController {
                         response
                 )
         );
-    }
-
-    @GetMapping("/title")
-    public ResponseEntity<Response<PageResponse<Ebook>>> getSavedEbookByTitle(
-            @RequestParam(name = "q") String title,
-            @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "size", defaultValue = "5") Integer size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        EbookDTO ebookDTO = new EbookDTO(title);
-        Page<Ebook> ebook = ebookService.getSavedEbookByTitle(ebookDTO, pageable);
-        PageResponse<Ebook> response = new PageResponse<>(
-                ebook.getContent(),
-                ebook.getTotalElements(),
-                ebook.getTotalPages(),
-                page,
-                size
-        );
-        return ResponseEntity.ok(new Response<>(
-                "Success: get data successfully!", response));
     }
 
     @DeleteMapping("/{id}")

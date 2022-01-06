@@ -1,14 +1,11 @@
 package com.project.app.service;
 
 
-import com.project.app.dto.EbookAuthorDTO;
 import com.project.app.dto.EbookDTO;
 import com.project.app.dto.ebook.Item;
 import com.project.app.dto.ebook.Root;
 import com.project.app.entity.Ebook;
-import com.project.app.entity.EbookAuthor;
 import com.project.app.request.EbookAPI;
-import com.project.app.response.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,11 +19,7 @@ public interface EbookService {
 
     Ebook saveEbookToDB(EbookAPI ebook);
 
-    Page<Ebook> getSavedEbooks(Pageable pageable);
-
-    Page<Ebook> getSavedEbookByTitle(EbookDTO ebookDTO, Pageable pageable);
-
-    Page<EbookAuthor> getSavedEbookByAuthor(EbookAuthorDTO ebookAuthorDTO, Pageable pageable);
+    Page<Ebook> getSavedEbooks(EbookDTO ebookDTO, Pageable pageable);
 
     Ebook getSavedEbookById(String id);
 

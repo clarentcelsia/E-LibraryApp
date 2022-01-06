@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,11 +18,18 @@ public class EbookAuthor {
 
     private String name;
 
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors", cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
     @JsonBackReference
-    private Set<Ebook> ebooks;
+    private List<Ebook> ebooks = new ArrayList<>();
 
     public EbookAuthor() {
+    }
+
+    public EbookAuthor(String name) {
+        this.name = name;
     }
 
     public String getEbookAuthorId() {
@@ -39,11 +48,19 @@ public class EbookAuthor {
         this.name = name;
     }
 
-//    public Set<Ebook> getEbooks() {
-//        return ebooks;
-//    }
-//
-//    public void setEbooks(Set<Ebook> ebooks) {
-//        this.ebooks = ebooks;
-//    }
+    public List<Ebook> getEbooks() {
+        return ebooks;
+    }
+
+    public void setEbooks(List<Ebook> ebooks) {
+        this.ebooks = ebooks;
+    }
+
+    @Override
+    public String toString() {
+        return "EbookAuthor{" +
+                "ebookAuthorId='" + ebookAuthorId + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
