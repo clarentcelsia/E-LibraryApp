@@ -15,6 +15,11 @@ public class EbookAPI {
     public EbookAPI() {
     }
 
+    public EbookAPI(String ebookCode, String title) {
+        this.ebookCode = ebookCode;
+        this.title = title;
+    }
+
     public EbookAPI(String ebookCode, String title, List<String> authors, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
         this.ebookCode = ebookCode;
         this.title = title;

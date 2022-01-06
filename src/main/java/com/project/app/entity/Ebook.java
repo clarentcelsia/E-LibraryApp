@@ -62,6 +62,12 @@ public class Ebook {
     public Ebook() {
     }
 
+    public Ebook(String ebookId, String ebookCode, String title) {
+        this.ebookId = ebookId;
+        this.ebookCode = ebookCode;
+        this.title = title;
+    }
+
     public Ebook(String ebookCode, String title, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
         this.ebookCode = ebookCode;
         this.title = title;

@@ -49,6 +49,18 @@ public class EbookController {
                 .body(response);
     }
 
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Response<Ebook>> getSavedEbookById(
+            @PathVariable("id") String id
+    ) {
+        return ResponseEntity.ok(
+                new Response<>(
+                        "Success: get data successfully!",
+                        ebookService.getSavedEbookById(id)
+                )
+        );
+    }
+
     @GetMapping
     public ResponseEntity<Response<PageResponse<Ebook>>> getSavedEbooks(
             @RequestParam(name = "title", required = false) String title,
@@ -69,7 +81,7 @@ public class EbookController {
 
         return ResponseEntity.ok(
                 new Response<>(
-                        "Success: data saved successfully!",
+                        "Success: get data successfully!",
                         response
                 )
         );
@@ -100,7 +112,7 @@ public class EbookController {
         //Json to JavaObject
         Item ebooks = restTemplate.getForObject(url, Item.class);
         Response<EbookAPI> response = new Response<>(
-                "Succeed: requested ebook by id " + code + " successfully!",
+                "Succeed: requested ebook by code " + code + " successfully!",
                 ebookService.mapEbookAPIByCode(ebooks)
         );
 
