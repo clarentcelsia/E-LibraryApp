@@ -14,19 +14,10 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
-    CustomerServiceImpl customerService;
-
-    @Autowired
     FileServiceImpl fileService;
 
     public User create(User user) {
         User save = userRepository.save(user);
-
-        Customer customer = new Customer();
-        customer.setName(save.getName());
-        customer.setUserId(save.getUserId());
-        customerService.createCustomer(customer);
-
         return save ;
     }
 

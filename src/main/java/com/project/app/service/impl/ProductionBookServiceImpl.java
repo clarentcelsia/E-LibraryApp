@@ -47,12 +47,12 @@ public class ProductionBookServiceImpl implements ProductionBookService {
         if (strings.size() == 2) {
             productionBook.setImageUrl(strings.get(0));
             productionBook.setDownloadedLink(strings.get(1));
-        }else {
-            if(strings.size() == 3){
+        } else {
+            if (strings.size() == 3) {
                 productionBook.setImageUrl(strings.get(0));
                 productionBook.setPreviewLink(strings.get(1));
                 productionBook.setDownloadedLink(strings.get(2));
-            }else{
+            } else {
                 System.out.println("Error: data is not detected");
             }
         }
@@ -84,20 +84,21 @@ public class ProductionBookServiceImpl implements ProductionBookService {
         url.add(preview);
         url.add(download);
 
-        for (String str : url){
+        for (String str : url) {
             String localhost = str.substring(7);
             String[] urls = localhost.trim().split("/");
             String id = urls[urls.length - 1];
             service.deleteFileById(id);
         }
 
+        productionBook.setUser(book.getUser());
         return save(productionBook, multipartFiles);
     }
 
     @Override
     public ProductionBook update(ProductionBook productionBook) {
-        ProductionBook book = getById(productionBook.getProductionBookId());
-        return productionBookRepository.save(book);
+        getById(productionBook.getProductionBookId());
+        return productionBookRepository.save(productionBook);
     }
 
 

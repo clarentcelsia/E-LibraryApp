@@ -20,9 +20,9 @@ public class TransactionDetail {
     private Transactions transaction;
 
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @ManyToOne(targetEntity = ProductionBook.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "production_book_id")
-    private ProductionBook productionBook;
+    @ManyToOne(targetEntity = BookSale.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_sale_id")
+    private BookSale book;
 
     private Integer price;
     private Integer subtotal;
@@ -47,12 +47,12 @@ public class TransactionDetail {
         this.transaction = transaction;
     }
 
-    public ProductionBook getProductionBook() {
-        return productionBook;
+    public BookSale getBook() {
+        return book;
     }
 
-    public void setProductionBook(ProductionBook productionBook) {
-        this.productionBook = productionBook;
+    public void setBook(BookSale book) {
+        this.book = book;
     }
 
     public Integer getPrice() {
@@ -84,7 +84,7 @@ public class TransactionDetail {
         return "TransactionDetail{" +
                 "transactionDetailId='" + transactionDetailId + '\'' +
                 ", transaction=" + transaction +
-                ", productionBook=" + productionBook +
+                ", book=" + book +
                 ", price=" + price +
                 ", subtotal=" + subtotal +
                 ", qty=" + qty +
