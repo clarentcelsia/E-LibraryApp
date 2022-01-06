@@ -1,13 +1,17 @@
 package com.project.app.naufandi.controller;
 
+import com.project.app.naufandi.entity.Administrator;
 import com.project.app.naufandi.entity.Role;
 import com.project.app.naufandi.entity.User;
 import com.project.app.naufandi.entity.UserDetailImpl;
+import com.project.app.naufandi.request.AdminRegisterRequest;
 import com.project.app.naufandi.request.LoginRequest;
-import com.project.app.naufandi.request.RegisterRequest;
+import com.project.app.naufandi.request.UserRegisterRequest;
+import com.project.app.naufandi.response.AdministratorResponse;
 import com.project.app.naufandi.response.LoginResponse;
 import com.project.app.naufandi.response.UserResponse;
 import com.project.app.naufandi.security.jwt.JwtUtils;
+import com.project.app.naufandi.service.AdministratorService;
 import com.project.app.naufandi.service.RoleService;
 import com.project.app.naufandi.service.UserService;
 import com.project.app.naufandi.util.WebResponse;
@@ -39,6 +43,9 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
+    private AdministratorService administratorService;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -47,8 +54,8 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("/register")
-    public ResponseEntity<WebResponse<?>> register(@RequestBody RegisterRequest request){
+    @PostMapping("/registeruser")
+    public ResponseEntity<WebResponse<?>> registeruser(@RequestBody UserRegisterRequest request){
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -68,7 +75,31 @@ public class AuthController {
         }
 
         UserResponse userResponse = userService.create(user, roleSet);
-        WebResponse<?> response = new WebResponse<>("Successfully created new user", userResponse);
+        WebResponse<?> response = new WebResponse<>("New User Created", userResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/registeradmin")
+    public ResponseEntity<WebResponse<?>> registeradmin(@RequestBody AdminRegisterRequest request){
+        Administrator administrator = new Administrator();
+        administrator.setUsername(request.getUsername());
+        administrator.setPassword(request.getPassword());
+        administrator.setName(request.getName());
+        administrator.setIdentityNumber(request.getIdentityNumber());
+        administrator.setAddress(request.getAddress());
+        administrator.setEmail(request.getEmail());
+        administrator.setPhoneNumber(request.getPhoneNumber());
+        administrator.setStatus(request.getStatus());
+
+        Set<Role> roleSet = new HashSet<>();
+        Set<String> roles = request.getRoles();
+        for (String role : roles){
+            Role role1 = roleService.create(role);
+            roleSet.add(role1);
+        }
+
+        AdministratorResponse administratorResponse = administratorService.create(administrator, roleSet);
+        WebResponse<?> response = new WebResponse<>("New Administrator Created", administratorResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import java.util.Set;
 
-public class RegisterRequest {
+public class UserRegisterRequest {
 
     private String identityNumber;
 
@@ -19,9 +19,6 @@ public class RegisterRequest {
 
     private Date birthDate;
 
-    @JsonIgnore
-    private String photo;
-
     private String username;
 
     private String password;
@@ -30,21 +27,20 @@ public class RegisterRequest {
 
     private Set<String> roles;
 
-    public RegisterRequest(String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Set<String> roles) {
+    public UserRegisterRequest(String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Set<String> roles) {
         this.identityNumber = identityNumber;
         this.name = name;
         this.address = address;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
-        this.photo = photo;
         this.username = username;
         this.password = password;
         this.status = status;
         this.roles = roles;
     }
 
-    public RegisterRequest() {
+    public UserRegisterRequest() {
     }
 
     public String getIdentityNumber() {
@@ -93,14 +89,6 @@ public class RegisterRequest {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public String getUsername() {

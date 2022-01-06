@@ -18,7 +18,7 @@ public interface UserService extends UserDetailsService {
 
     User create(User user);
 
-    User get(String id);
+    User getById(String id);
 
     User getActiveUser(String id);
 
