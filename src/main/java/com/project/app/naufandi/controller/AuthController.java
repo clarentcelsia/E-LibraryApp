@@ -1,9 +1,6 @@
 package com.project.app.naufandi.controller;
 
-import com.project.app.naufandi.entity.Administrator;
-import com.project.app.naufandi.entity.Role;
-import com.project.app.naufandi.entity.User;
-import com.project.app.naufandi.entity.UserDetailImpl;
+import com.project.app.naufandi.entity.*;
 import com.project.app.naufandi.request.AdminRegisterRequest;
 import com.project.app.naufandi.request.LoginRequest;
 import com.project.app.naufandi.request.UserRegisterRequest;
@@ -103,8 +100,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<WebResponse<?>> login(@RequestBody LoginRequest request) {
+    @PostMapping("/userlogin")
+    public ResponseEntity<WebResponse<?>> userlogin(@RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -117,6 +114,29 @@ public class AuthController {
         UserDetailImpl userDetail = (UserDetailImpl) authentication.getPrincipal();
         Set<String> roles = new HashSet<>();
         for (GrantedAuthority authority : userDetail.getAuthorities()){
+            roles.add(authority.getAuthority());
+        }
+        LoginResponse loginResponse = new LoginResponse(jwt, roles);
+
+        WebResponse<?> response = new WebResponse<>("Login success", loginResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/adminlogin")
+    public ResponseEntity<WebResponse<?>> adminlogin(@RequestBody LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        AdministratorDetailImpl administratorDetail = (AdministratorDetailImpl) authentication.getPrincipal();
+        Set<String> roles = new HashSet<>();
+        for (GrantedAuthority authority : administratorDetail.getAuthorities()){
             roles.add(authority.getAuthority());
         }
         LoginResponse loginResponse = new LoginResponse(jwt, roles);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
-    private RoleRepository roleRepository;
+    RoleRepository roleRepository;
 
     @Override
     public Role create(String strRole) {

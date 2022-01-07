@@ -3,7 +3,7 @@ package com.project.app.naufandi.entity;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "role")
+@Table(name = "role")
 public class Role {
 
     @Id

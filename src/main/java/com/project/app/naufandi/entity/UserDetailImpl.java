@@ -59,7 +59,7 @@ public class UserDetailImpl implements UserDetails {
         );
     }
 
-    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String userUsername, String username, Boolean status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -75,7 +75,7 @@ public class UserDetailImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String photo, String username, String password, Boolean status, Date createdAt, Date updatedAt, List<GrantedAuthority> authorities) {
+    public UserDetailImpl() {
     }
 
     public String getId() {

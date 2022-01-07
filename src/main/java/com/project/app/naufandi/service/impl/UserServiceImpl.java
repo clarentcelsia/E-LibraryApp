@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         findByIdOrThrowNotFound(user.getId());
-        return userRepository.save(user);
+        return create(user);
     }
 
     @Override

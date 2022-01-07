@@ -67,7 +67,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                         "/webjars/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/files/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/").permitAll()
-                        .antMatchers(HttpMethod.POST, "/users").permitAll()
+                        .antMatchers(HttpMethod.POST, "/**").permitAll()
                         .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
