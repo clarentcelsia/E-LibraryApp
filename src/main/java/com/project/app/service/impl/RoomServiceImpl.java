@@ -1,5 +1,6 @@
 package com.project.app.service.impl;
 
+import com.project.app.dto.RoomDTO;
 import com.project.app.entity.Room;
 import com.project.app.entity.RoomMember;
 import com.project.app.entity.RoomMessage;
@@ -7,13 +8,18 @@ import com.project.app.repository.RoomRepository;
 import com.project.app.service.RoomMemberService;
 import com.project.app.service.RoomMessageService;
 import com.project.app.service.RoomService;
+import com.project.app.specification.RoomSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -34,17 +40,18 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room getRoomById(String id) {
+    public Room getRoomById(String id){
         Optional<Room> room = repository.findById(id);
         if (room.isPresent()){
             return room.get();
         }
-        throw new RuntimeException(String.format("Room with id %s not Found", id));
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Room with id %s not found", id));
     }
 
     @Override
-    public List<Room> getRooms() {
-        return repository.findAll();
+    public Page<Room> getPagedRooms(RoomDTO roomDTO, Pageable pageable) {
+        Specification<Room> specification = RoomSpecification.getSpecification(roomDTO);
+        return repository.findAll(specification, pageable);
     }
 
     @Override
@@ -65,9 +72,25 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Set<RoomMember> getRoomMembers(String id) {
-        Room room = getRoomById(id);
-        return room.getRoomMember();
+    public Page<RoomMember> getRoomMembers(String id, Pageable pageable) {
+        Set<RoomMember> roomMembers = getRoomById(id).getRoomMember();
+        List<RoomMember> memberList = new ArrayList<>(roomMembers);
+
+        Integer total = roomMembers.size();
+        Integer start = Math.toIntExact(pageable.getOffset());
+        Integer end = Math.min((start + pageable.getPageSize()), total);
+
+        List<RoomMember> output = new ArrayList<>();
+
+        if (start <= end) {
+            output = memberList.subList(start, end);
+        }
+
+        return new PageImpl<>(
+                output,
+                pageable,
+                total
+        );
     }
 
     @Override
@@ -78,22 +101,12 @@ public class RoomServiceImpl implements RoomService {
         roomMember.setRoom(room);
         RoomMember savedMember = roomMemberService.create(roomMember);
 
-
-//        System.out.println("testing areea================");
-        // USER KUPAKE EQUAL DENGAN ID KARENA SAVEDMEMBER BELUM PERSIST ( NAMA USER MASIH NULL )
-//        System.out.println(savedMember.getUser().equals(room.getUser()));
-//        System.out.println(savedMember);
-//        System.out.println(room.getRoomMember());
-//
-//        System.out.println(room.getRoomMember().contains(savedMember));
-
-        // tambahin validasi untuk member yang sama
         if (savedMember.getUser().equals(room.getUser())){
-            throw new RuntimeException("Tidak bisa add member pembuat room");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tidak bisa add member pembuat room");
         }
 
         if (room.getRoomMember().contains(savedMember)){
-            throw new RuntimeException("Tidak bisa add member yang sama");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tidak bisa add member yang sama");
         }
 
         room.getRoomMember().add(savedMember);
@@ -113,8 +126,23 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomMessage> getRoomMessages(String id) {
-        Room room = getRoomById(id);
-        return room.getRoomMessage();
+    public Page<RoomMessage> getPagedRoomMessages(String id, Pageable pageable) {
+        List<RoomMessage> roomMessage = getRoomById(id).getRoomMessage();
+
+        Integer total = roomMessage.size();
+        Integer start = Math.toIntExact(pageable.getOffset());
+        Integer end = Math.min((start + pageable.getPageSize()), total);
+
+        List<RoomMessage> output = new ArrayList<>();
+
+        if (start <= end) {
+            output = roomMessage.subList(start, end);
+        }
+
+        return new PageImpl<>(
+                output,
+                pageable,
+                total
+        );
     }
 }
