@@ -1,6 +1,8 @@
 package com.project.app.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -9,6 +11,8 @@ import java.util.Objects;
 
 @Entity
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Table(name = "master_user")
 public class User {

@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/java/com/project/app/testingapapun/
+/src/main/resources/application-test.properties

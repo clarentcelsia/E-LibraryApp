@@ -57,7 +57,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public String deleteRoomById(String id) {
         repository.delete(getRoomById(id));
-        return String.format("Room with id %s Deleted", id);
+        return String.format("room with id %s deleted", id);
     }
 
     @Override
