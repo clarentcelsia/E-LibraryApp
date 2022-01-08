@@ -13,7 +13,9 @@ public class Item {
     public Item() {
     }
 
-    public Item(VolumeInfo volumeInfo, AccessInfo accessInfo) {
+
+    public Item(String id, VolumeInfo volumeInfo, AccessInfo accessInfo) {
+        this.id = id;
         this.volumeInfo = volumeInfo;
         this.accessInfo = accessInfo;
     }

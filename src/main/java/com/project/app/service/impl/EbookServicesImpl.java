@@ -21,6 +21,8 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
+
 @Service
 @Transactional
 public class EbookServicesImpl implements EbookService {
@@ -33,8 +35,6 @@ public class EbookServicesImpl implements EbookService {
 
     @Override
     public Ebook saveEbookToDB(EbookAPI ebookAPI) {
-        //EBOOK API == EBOOK REQUEST
-        //CREATE EBOOK MASUKIN DATANYA DARI EBOOK API
         Ebook ebook = new Ebook(
                 ebookAPI.getEbookCode(),
                 ebookAPI.getTitle(),
@@ -45,29 +45,18 @@ public class EbookServicesImpl implements EbookService {
                 ebookAPI.getWebReaderLink()
         );
 
-        //SAVE EBOOK KE DB (KONDISI AUTHOR KOSONG MASIH)
         Ebook ebook1 = repository.save(ebook);
 
-        //KARENA DARI API AUTHOR AK BENTUKNYA STRING[NAMA] JADI AKU LAKUKAN PERULANGAN UNTUK DAPATIN AUTHOR (STRING) DIDALAM ARRAY
         List<EbookAuthor> authorSet = new ArrayList<>();
         for (String strAuthor : ebookAPI.getAuthors()) {
 
-            //CREATE AUTHOR ISINYA HANYA NAMA AUTHORNYA
-            //KARENA AUTHOR DI TABLE AKU FIELDNY CUMA NAMA
             EbookAuthor author = new EbookAuthor(strAuthor);
 
-            //SAVE KE DATABASE AUTHOR
             EbookAuthor ebookAuthor = ebookAuthorService.saveAuthor(author);
 
-            //EBOOK YG SUDAH DISIMPAN DI DB TADI (KAN BELUM ADA LIST AUTHOR==0)
-            //JADI AK GET AUTHORS(YANG KONDISINYA NULL), TAMBAHKAN AUTHORNY
             ebook1.getAuthors().add(ebookAuthor);
-
-            //author.getEbooks().add(ebook1);
-            //authorSet.add(author);
         }
 
-        //TRS SDH DPT AUTHOR EBOOK, UPDATE EBOOK1
         Ebook save = repository.save(ebook1);
         return save;
     }
@@ -81,7 +70,7 @@ public class EbookServicesImpl implements EbookService {
     @Override
     public Ebook getSavedEbookById(String id) {
         return repository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("NotFoundException: Ebook with id " + id + " not found")
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id))
         );
     }
 

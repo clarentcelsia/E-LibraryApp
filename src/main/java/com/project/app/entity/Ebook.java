@@ -44,13 +44,10 @@ public class Ebook {
     @LastModifiedDate
     private Date updatedAt;
 
-    private Boolean isDeleted;
-
     @PrePersist
     private void prePersist() {
         if (this.createdAt == null) this.createdAt = new Date();
         if (this.updatedAt == null) this.updatedAt = new Date();
-        if (this.isDeleted == null) isDeleted = false;
         authors = new ArrayList<>();
     }
 
@@ -60,12 +57,6 @@ public class Ebook {
     }
 
     public Ebook() {
-    }
-
-    public Ebook(String ebookId, String ebookCode, String title) {
-        this.ebookId = ebookId;
-        this.ebookCode = ebookCode;
-        this.title = title;
     }
 
     public Ebook(String ebookCode, String title, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
@@ -78,7 +69,8 @@ public class Ebook {
         this.webReaderLink = webReaderLink;
     }
 
-    public Ebook(String ebookCode, String title, List<EbookAuthor> authors, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
+    public Ebook(String ebookId, String ebookCode, String title, List<EbookAuthor> authors, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
+        this.ebookId = ebookId;
         this.ebookCode = ebookCode;
         this.title = title;
         this.authors = authors;
@@ -88,7 +80,6 @@ public class Ebook {
         this.imageLinks = imageLinks;
         this.webReaderLink = webReaderLink;
     }
-
 
     public String getEbookId() {
         return ebookId;
@@ -178,15 +169,6 @@ public class Ebook {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-
-
     @Override
     public String toString() {
         return "Ebook{" +
@@ -201,7 +183,6 @@ public class Ebook {
                 ", webReaderLink='" + webReaderLink + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", isDeleted=" + isDeleted +
                 '}';
     }
 

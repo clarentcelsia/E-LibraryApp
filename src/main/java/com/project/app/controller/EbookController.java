@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Properties;
 
+import static com.project.app.util.Utility.*;
+
 @RestController
 @RequestMapping("/api/v5/ebooks")
 public class EbookController {
@@ -40,7 +42,7 @@ public class EbookController {
             @RequestBody EbookAPI ebookAPI
     ) {
         Response<Ebook> response = new Response<>(
-                "Success: Data saved successfully!",
+                RESPONSE_CREATE_SUCCESS,
                 ebookService.saveEbookToDB(ebookAPI)
         );
 
@@ -55,7 +57,7 @@ public class EbookController {
     ) {
         return ResponseEntity.ok(
                 new Response<>(
-                        "Success: get data successfully!",
+                        RESPONSE_GET_SUCCESS,
                         ebookService.getSavedEbookById(id)
                 )
         );
@@ -81,7 +83,7 @@ public class EbookController {
 
         return ResponseEntity.ok(
                 new Response<>(
-                        "Success: get data successfully!",
+                        RESPONSE_GET_SUCCESS,
                         response
                 )
         );
@@ -93,7 +95,7 @@ public class EbookController {
     ) {
         ebookService.deleteSavedEbook(id);
 
-        Response<String> response = new Response<>("Success: deleted successfully!", id);
+        Response<String> response = new Response<>(RESPONSE_DELETE_SUCCESS, id);
         return ResponseEntity.ok(response);
     }
 
@@ -112,27 +114,11 @@ public class EbookController {
         //Json to JavaObject
         Item ebooks = restTemplate.getForObject(url, Item.class);
         Response<EbookAPI> response = new Response<>(
-                "Succeed: requested ebook by code " + code + " successfully!",
+                RESPONSE_GET_SUCCESS,
                 ebookService.mapEbookAPIByCode(ebooks)
         );
 
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping(
-            value = "/author",
-            consumes = {MediaType.ALL_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    public Response<List<EbookAPI>> getEbookAPIByAuthor(
-            @RequestParam(value = "q", defaultValue = "") String query,
-            @RequestParam(value = "author", defaultValue = "") String author
-    ) {
-        String url = BASE_URL + "?q=" + query + "+inauthor:"+ author +"&filter=free-ebooks&apiKey=" + apikey;
-
-        //Json to JavaObject
-        Root ebooks = restTemplate.getForObject(url, Root.class);
-        return new Response<List<EbookAPI>>("Success: get api successfully!", ebookService.mapListEbookAPI(ebooks));
     }
 
     @GetMapping(
@@ -141,13 +127,13 @@ public class EbookController {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public Response<List<EbookAPI>> getEbooksFromAPI(
-            @RequestParam("q") String query
+            @RequestParam(value = "q", defaultValue = "") String query,
+            @RequestParam(value = "author", defaultValue = "") String author
     ) {
-        String url = BASE_URL + "?q=" + query + "&filter=free-ebooks&apiKey=" + apikey;
+        String url = BASE_URL + "?q=" + query + "+inauthor:"+ author +"&filter=free-ebooks&apiKey=" + apikey;
 
         //Json to JavaObject
         Root ebooks = restTemplate.getForObject(url, Root.class);
-        return new Response<List<EbookAPI>>("Success: get api successfully!", ebookService.mapListEbookAPI(ebooks));
+        return new Response<List<EbookAPI>>(RESPONSE_GET_SUCCESS, ebookService.mapListEbookAPI(ebooks));
     }
-
 }

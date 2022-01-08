@@ -29,5 +29,11 @@ public class VolumeInfo{
     public VolumeInfo() {
     }
 
+    public ImageLinks getImageLinks() {
+        return imageLinks;
+    }
 
+    public void setImageLinks(ImageLinks imageLinks) {
+        this.imageLinks = imageLinks;
+    }
 }

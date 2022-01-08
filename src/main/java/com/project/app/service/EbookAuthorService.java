@@ -11,6 +11,4 @@ public interface EbookAuthorService {
 
     EbookAuthor saveAuthor(EbookAuthor author);
 
-    EbookAuthor getAuthorById(String id);
-
 }

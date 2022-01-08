@@ -1,8 +1,5 @@
 package com.project.app.dto;
 
-
-import com.project.app.entity.EbookAuthor;
-
 public class EbookDTO {
 
     private String title;

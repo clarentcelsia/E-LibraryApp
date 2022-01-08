@@ -1,6 +1,7 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.app.dto.ebook.Root;
 import com.project.app.entity.Ebook;
 import com.project.app.request.EbookAPI;
 import com.project.app.service.EbookService;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -20,10 +22,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.app.util.Utility.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,7 +59,7 @@ class EbookControllerTest {
                         .content(mapper.writeValueAsString(api))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.message").value("Success: Data saved successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_CREATE_SUCCESS));
     }
 
     @Test
@@ -74,7 +77,7 @@ class EbookControllerTest {
                         .content(mapper.writeValueAsString(api))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.message").value("Success: Data saved successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_CREATE_SUCCESS));
 
         ArgumentCaptor<EbookAPI> ebookCaptor = ArgumentCaptor.forClass(EbookAPI.class);
         verify(service, times(1)).saveEbookToDB(ebookCaptor.capture());
@@ -84,25 +87,13 @@ class EbookControllerTest {
     }
 
     @Test
-    public void whenEbookGetSuccessfully_thenReturn200() throws Exception {
-
-        mockMvc.perform(get("/api/v5/ebooks")
-                        .param("title", "")
-                        .param("page", "0")
-                        .param("size", "5")
-                        .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Success: data saved successfully!"));
-    }
-
-    @Test
     public void whenEbookGetsByIdSucceed_thenReturn200() throws Exception {
 
         mockMvc.perform(get("/api/v5/ebooks/id/{id}", "R01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
-                        .value("Success: get data successfully!"));
+                        .value(RESPONSE_GET_SUCCESS));
     }
 
 
@@ -111,7 +102,7 @@ class EbookControllerTest {
 
         mockMvc.perform(delete("/api/v5/ebooks/{id}", "R01"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Success: deleted successfully!"))
+                .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));
     }
 
@@ -129,26 +120,26 @@ class EbookControllerTest {
 
         mockMvc.perform(get("/api/v5/ebooks/{code}", ebookCode)
                         .contentType("application/json"))
-                .andExpect(jsonPath("$.message").value("Succeed: requested ebook by code "+ ebookCode  +" successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
 
     @Test
-    public void whenGetEbooksByAuthorFromAPISucceed_thenReturn200() throws Exception {
+    public void whenGivenValidUrlAndMethodGetEbooksByAuthorAndTitleFromAPI_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v5/ebooks/author")
+        mockMvc.perform(get("/api/v5/ebooks/search")
                         .contentType("application/json")
                         .param("q", "flower")
                         .param("author", "keyes"))
-                .andExpect(jsonPath("$.message").value("Success: get api successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
 
     @Test
-    public void whenGetEbooksFromAPISucceed_thenReturn200() throws Exception {
+    public void whenGetEbooksByTitleOnlyFromAPISucceed_thenReturn200() throws Exception {
 
         mockMvc.perform(get("/api/v5/ebooks/search")
                         .queryParam("q", "research")
                         .contentType("application/json"))
-                .andExpect(jsonPath("$.message").value("Success: get api successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
 
 

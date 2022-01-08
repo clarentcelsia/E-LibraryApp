@@ -11,8 +11,4 @@ import java.util.List;
 
 @Repository
 public interface EbookAuthorRepository extends JpaRepository<EbookAuthor, String> {
-
-    Page<EbookAuthor> findAll(Specification<EbookAuthor> specification, Pageable pageable);
-
-    List<EbookAuthor> getAuthorIdByName(String name);
 }

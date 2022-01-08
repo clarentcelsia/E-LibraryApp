@@ -28,6 +28,11 @@ public class EbookAuthor {
     public EbookAuthor() {
     }
 
+    public EbookAuthor(String ebookAuthorId, String name) {
+        this.ebookAuthorId = ebookAuthorId;
+        this.name = name;
+    }
+
     public EbookAuthor(String name) {
         this.name = name;
     }
@@ -56,11 +61,4 @@ public class EbookAuthor {
         this.ebooks = ebooks;
     }
 
-    @Override
-    public String toString() {
-        return "EbookAuthor{" +
-                "ebookAuthorId='" + ebookAuthorId + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

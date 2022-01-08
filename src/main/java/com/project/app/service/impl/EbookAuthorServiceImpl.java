@@ -19,17 +19,11 @@ import java.util.List;
 public class EbookAuthorServiceImpl implements EbookAuthorService {
 
     @Autowired
-    EbookAuthorRepository ebookAuthorRepository;
+    private EbookAuthorRepository ebookAuthorRepository;
 
     @Override
     public EbookAuthor saveAuthor(EbookAuthor author) {
         return ebookAuthorRepository.save(author);
-    }
-
-    @Override
-    public EbookAuthor getAuthorById(String id) {
-        return ebookAuthorRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Error: author with id " + id + " not found"));
     }
 
 }
