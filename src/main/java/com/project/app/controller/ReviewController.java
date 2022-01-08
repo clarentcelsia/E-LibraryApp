@@ -65,7 +65,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<String>> updateReview(
+    public ResponseEntity<Response<String>> deleteReview(
             @PathVariable(name = "id") String id
     ){
         service.deleteReview(id);

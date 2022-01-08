@@ -23,6 +23,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review createReview(Review review) {
         if(review == null) return null;
+        if(review.getBook().getBookId() == null)
+            System.out.println("which book you want to make a review");
         return repository.save(review);
     }
 
