@@ -1,23 +1,29 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.app.dto.RoomDTO;
 import com.project.app.entity.Room;
 import com.project.app.entity.RoomMember;
 import com.project.app.entity.RoomMessage;
 import com.project.app.entity.User;
+import com.project.app.response.PageResponse;
 import com.project.app.response.WebResponse;
 import com.project.app.service.RoomService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -25,10 +31,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,32 +122,206 @@ class RoomControllerTest {
     }
 
     @Test
-    public void addMemberToRoom_shouldReturn_StatusCREATED_and_RoomWithAddedMembers_When_PostRoomMember() throws Exception {
-        RoomMember roomMember = new RoomMember("member-id", savedRoom , user, new Date());
-        Room roomWithMembers = new Room("uuid-bebas", "bebas", "bebas", new Date(), user, new HashSet<>(), new ArrayList<>());
+    public void addMember_shouldReturn_StatusCreated_and_RequestedRoomWithAddedMember() throws Exception {
 
-        Set<RoomMember> roomMembers = roomWithMembers.getRoomMember();
-        roomMembers.add(roomMember);
-        roomWithMembers.setRoomMember(roomMembers);
+        // preparation room members
+        User jannes = new User("testing2", "jannes");
+        Room roomWithMembers = new Room("uuid-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        RoomMember roomMember = new RoomMember("id-member", null, jannes, new Date());
+        roomWithMembers.getRoomMember().add(roomMember);
 
+        String message = "member added to room";
+        Mockito.when(roomService.addMemberToRoom(Mockito.anyString(), Mockito.any(RoomMember.class))).thenReturn(roomWithMembers);
 
-        Mockito.when(roomService.addMemberToRoom(Mockito.any(String.class), Mockito.any(RoomMember.class))).thenReturn(roomWithMembers);
 
         // expected
+        Room jsonBody = new Room(null, "mtk", "integral", null, user, null, null);
+        String jsonRequest = objectMapper.writeValueAsString(savedRoom);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/rooms/uuid-bebas/members")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n    \"user\" : {\n        \"id\" : \"testing1\"\n    }\n}");
+                .content(jsonRequest);
 
         String responseJson = mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is("member added to room")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Room> response = objectMapper.readValue(responseJson, WebResponse.class);
-//        response.getData().getRoomMember().size();
-//        assertEquals(count,1);
+        WebResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<WebResponse<Room>>() {});
+        assertNotNull(response.getData());
+        assertEquals(response.getData().getRoomMember().size(), 1);
+    }
 
+    @Test
+    public void removeMember_shouldReturn_StatusOK_and_RequestedRoomWithDeletedMember() throws Exception {
+        // preparation room with no members
+        User jannes = new User("testing2", "jannes");
+        Room roomWithNoMembers = new Room("uuid-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+
+        Mockito.when(roomService.removeMemberFromRoom(Mockito.anyString(), Mockito.any(RoomMember.class))).thenReturn(roomWithNoMembers);
+
+        // expected
+        RoomMember jsonBody = new RoomMember("id-member1", null, null, null);
+        String jsonRequest = objectMapper.writeValueAsString(jsonBody);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/rooms/uuid-bebas/members")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest);
+
+        String message = "member removed from room";
+        String responseJson = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
+                .andReturn().getResponse().getContentAsString();
+
+        WebResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<WebResponse<Room>>() {});
+        assertEquals(response.getData().getRoomMember().size(), 0);
+    }
+
+    @Test
+    public void addMessage_ShouldReturn_StatusCREATED_and_RequestedRoomWithAddedMessages() throws Exception {
+        // preparasi room messages
+        User jannes = new User("testing2", "jannes");
+        Room roomWithMessages = new Room("uuid-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        RoomMessage roomMessage = new RoomMessage("id-message", roomWithMessages, jannes, "Hai guys", new Date());
+        roomWithMessages.getRoomMessage().add(roomMessage);
+
+        // actual
+        String message = "message was added to room";
+        Mockito.when(roomService.addMessageToRoom(Mockito.anyString(), Mockito.any(RoomMessage.class))).thenReturn(roomWithMessages);
+
+        // expected
+        Room jsonData = new Room(null, "mtk", "integral", null, user, null, null);
+        String jsonRequestBody = objectMapper.writeValueAsString(jsonData);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rooms/uuid-bebas/messages")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequestBody);
+
+        String responseJson = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
+                .andReturn().getResponse().getContentAsString();
+
+        WebResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<WebResponse<Room>>() {});
+        assertNotNull(response.getData());
+        assertEquals(response.getData().getRoomMessage().size(), 1);
+    }
+
+    @Test
+    public void getRooms_ShouldReturn_StatusOK_and_AllPagedRooms() throws Exception {
+        // preparation all paged rooms
+        Sort sort = Sort.by("topic");
+        Pageable pageable = PageRequest.of(0,1,sort);
+        RoomDTO roomDTO = new RoomDTO("mtk", null);
+
+        Room roomOne = new Room("id-room-1", "mtk", "integral", new Date(), user , new HashSet<>(), new ArrayList<>());
+        List<Room> rooms = new ArrayList<>();
+        rooms.add(roomOne);
+        Page<Room> roomPage = new PageImpl<>(rooms,pageable,rooms.size());
+
+        // actual
+        Mockito.when(roomService.getPagedRooms(Mockito.any(RoomDTO.class), Mockito.any(Pageable.class))).thenReturn(roomPage);
+
+
+        // expected
+        String message =  String.format("data halaman ke 1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
+                "/rooms/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("size", "1")
+                .queryParam("page", "0")
+                .queryParam("sortBy", "topic")
+                .queryParam("direction", "ASC")
+                .queryParam("topic", "mtk");
+
+
+        String responseJson = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
+                .andReturn().getResponse().getContentAsString();
+
+        PageResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Room>>() {});
+
+        assertNotNull(response.getData());
+        assertEquals(response.getData().size(), 1);
+        assertEquals(response.getTotalContent(), 1);
+    }
+
+    @Test
+    public void getRoomMembers_ShouldReturn_StatusOK_and_AllPagedMembers() throws Exception {
+        // preparation all paged room members
+        Pageable pageable = PageRequest.of(0,1);
+
+        Room roomOne = new Room("id-room-1", "mtk", "integral", new Date(), user , new HashSet<>(), new ArrayList<>());
+        User jannes = new User("testing1", "jannes");
+
+        RoomMember memberOne = new RoomMember("id-member", roomOne, jannes, new Date());
+        roomOne.getRoomMember().add(memberOne);
+
+        List<RoomMember> members = new ArrayList<>(roomOne.getRoomMember());
+
+        Page<RoomMember> memberPage = new PageImpl<>(members, pageable, members.size());
+
+        // actual
+        Mockito.when(roomService.getRoomMembers(Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(memberPage);
+
+
+        // expected
+        String message =  String.format("data halaman ke 1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
+                        "/rooms/id-room-1/members")
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("size", "1")
+                .queryParam("page", "0");
+
+
+        String responseJson = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
+                .andReturn().getResponse().getContentAsString();
+
+        PageResponse<RoomMember> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<RoomMember>>() {});
+
+        assertNotNull(response.getData());
+        assertEquals(response.getData().size(), 1);
+        assertEquals(response.getTotalContent(), 1);
+    }
+
+    @Test
+    public void getRoomMessages_ShouldReturn_StatusOK_and_AllPagedMessages() throws Exception {
+        // preparation all paged room members
+        Pageable pageable = PageRequest.of(0,1);
+
+        Room roomOne = new Room("id-room-1", "mtk", "integral", new Date(), user , new HashSet<>(), new ArrayList<>());
+        User jannes = new User("testing1", "jannes");
+        RoomMessage messageOne = new RoomMessage("id-message", roomOne, jannes, "halo gys",new Date());
+        roomOne.getRoomMessage().add(messageOne);
+
+        Page<RoomMessage> messagePage = new PageImpl<>(roomOne.getRoomMessage(), pageable, roomOne.getRoomMessage().size());
+
+        // actual
+        Mockito.when(roomService.getPagedRoomMessages(Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(messagePage);
+
+
+        // expected
+        String message =  String.format("data halaman ke 1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
+                        "/rooms/id-room-1/messages")
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("size", "1")
+                .queryParam("page", "0");
+
+
+        String responseJson = mockMvc.perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
+                .andReturn().getResponse().getContentAsString();
+
+        PageResponse<RoomMessage> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<RoomMessage>>() {});
+
+        assertNotNull(response.getData());
+        assertEquals(response.getData().size(), 1);
+        assertEquals(response.getTotalContent(), 1);
     }
 }
 

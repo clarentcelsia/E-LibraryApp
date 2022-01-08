@@ -25,7 +25,7 @@ public class RoomController {
     private RoomService roomService;
 
     @GetMapping
-    public ResponseEntity<PageResponse<List<Room>>> getRooms(
+    public ResponseEntity<PageResponse<Room>> getRooms(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "sortBy", defaultValue = "topic") String sortBy,
@@ -40,7 +40,7 @@ public class RoomController {
 
         HttpStatus httpStatus =HttpStatus.OK;
         String message = String.format("data halaman ke %d" ,page+1);
-        PageResponse<List<Room>> response = new PageResponse(
+        PageResponse<Room> response = new PageResponse<>(
                 pagedRooms.getContent(),
                 message,
                 pagedRooms.getTotalElements(),

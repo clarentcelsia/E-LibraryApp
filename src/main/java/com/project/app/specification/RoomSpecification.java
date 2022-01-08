@@ -21,7 +21,7 @@ public class RoomSpecification {
 
                 if (roomDTO.getSearchBySubTopic() != null){
                     Predicate topicPredicate = criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("topic")),
+                            criteriaBuilder.lower(root.get("subTopic")),
                             "%" + roomDTO.getSearchBySubTopic().toLowerCase()+ "%");
                     predicateList.add(topicPredicate);
                 }
