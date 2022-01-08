@@ -1,13 +1,13 @@
 package com.project.app.request;
 
-import com.project.app.entity.TransactionDetail;
+import com.project.app.entity.AdminTransactionDetail;
 import com.project.app.entity.User;
 
 import java.util.List;
 
-public class TransactionRequest {
+public class TransactionRequest<T> {
     private User user;
-    private List<TransactionDetail> transactionDetails;
+    private List<T> transactionDetails;
 
     public TransactionRequest() {
     }
@@ -20,11 +20,11 @@ public class TransactionRequest {
         this.user = user;
     }
 
-    public List<TransactionDetail> getTransactionDetails() {
+    public List<T> getTransactionDetails() {
         return transactionDetails;
     }
 
-    public void setTransactionDetails(List<TransactionDetail> transactionDetails) {
+    public void setTransactionDetails(List<T> transactionDetails) {
         this.transactionDetails = transactionDetails;
     }
 }

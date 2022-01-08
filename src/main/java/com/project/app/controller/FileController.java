@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -16,7 +18,7 @@ public class FileController {
     @Autowired
     FileService fileService;
 
-    @GetMapping("/download/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<byte[]> getFile(
             @PathVariable String id
     ) {
@@ -30,13 +32,13 @@ public class FileController {
                 .body(file.getData());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/info/{id}")
     public ResponseEntity<Response<Files>> getFileInfo(
             @PathVariable String id
     ) {
         Files file = fileService.getDataFileById(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new Response<>("Success: get data successfully!", file));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, file));
     }
 }

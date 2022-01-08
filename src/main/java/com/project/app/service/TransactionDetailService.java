@@ -1,8 +1,8 @@
 package com.project.app.service;
 
-import com.project.app.entity.TransactionDetail;
+import com.project.app.entity.AdminTransactionDetail;
 
-public interface TransactionDetailService {
+public interface TransactionDetailService<T> {
 
-    TransactionDetail save(TransactionDetail transactionDetail);
+    T save(T transactionDetail);
 }

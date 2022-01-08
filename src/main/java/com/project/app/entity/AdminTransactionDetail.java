@@ -7,43 +7,49 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "transaction_details")
-public class TransactionDetail {
+@Table(name = "admin_transaction_detail")
+public class AdminTransactionDetail {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String transactionDetailId;
+    private String adminTransactionDetailId;
 
-    @ManyToOne(targetEntity = Transactions.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = AdminTransaction.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id")
     @JsonBackReference
-    private Transactions transaction;
+    private AdminTransaction transaction;
 
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToOne(targetEntity = BookSale.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_sale_id")
     private BookSale book;
 
     private Integer price;
-    private Integer subtotal;
     private Integer qty;
+    private Integer subtotal;
 
-    public TransactionDetail() {
+
+    public AdminTransactionDetail() {
     }
 
-    public String getTransactionDetailId() {
-        return transactionDetailId;
+    public AdminTransactionDetail(String adminTransactionDetailId, Integer price, Integer qty) {
+        this.adminTransactionDetailId = adminTransactionDetailId;
+        this.price = price;
+        this.qty = qty;
     }
 
-    public void setTransactionDetailId(String transactionDetailId) {
-        this.transactionDetailId = transactionDetailId;
+    public String getAdminTransactionDetailId() {
+        return adminTransactionDetailId;
     }
 
-    public Transactions getTransaction() {
+    public void setAdminTransactionDetailId(String adminTransactionDetailId) {
+        this.adminTransactionDetailId = adminTransactionDetailId;
+    }
+
+    public AdminTransaction getTransaction() {
         return transaction;
     }
 
-    public void setTransaction(Transactions transaction) {
+    public void setTransaction(AdminTransaction transaction) {
         this.transaction = transaction;
     }
 
@@ -79,15 +85,4 @@ public class TransactionDetail {
         this.qty = qty;
     }
 
-    @Override
-    public String toString() {
-        return "TransactionDetail{" +
-                "transactionDetailId='" + transactionDetailId + '\'' +
-                ", transaction=" + transaction +
-                ", book=" + book +
-                ", price=" + price +
-                ", subtotal=" + subtotal +
-                ", qty=" + qty +
-                '}';
-    }
 }

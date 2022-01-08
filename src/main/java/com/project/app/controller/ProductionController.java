@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.project.app.util.Utility.*;
+
 @RestController
 @RequestMapping("/api/v3/productions")
 public class ProductionController {
@@ -37,22 +39,22 @@ public class ProductionController {
     ) {
         Response<ProductionBook> response;
         if (image == null && preview == null && download == null) {
-            response = new Response<>("Error: data is null!", null);
+            response = new Response<>(RESPONSE_ERROR, null);
         } else if (preview == null && download == null) {
             response = new Response<>(
-                    "Success: data saved successfully!",
+                    RESPONSE_CREATE_SUCCESS,
                     productionBookService.save(productionBook, image));
         } else if (preview == null) {
             response = new Response<>(
-                    "Success: data saved successfully!",
+                    RESPONSE_CREATE_SUCCESS,
                     productionBookService.save(productionBook, image, download));
         } else if (download == null) {
             response = new Response<>(
-                    "Success: data saved successfully!",
+                    RESPONSE_CREATE_SUCCESS,
                     productionBookService.save(productionBook, image, preview));
         } else {
             response = new Response<>(
-                    "Success: data saved successfully!",
+                    RESPONSE_CREATE_SUCCESS,
                     productionBookService.save(productionBook, image, preview, download));
         }
 
@@ -66,19 +68,11 @@ public class ProductionController {
             @RequestParam(name = "size", defaultValue = "5") Integer size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductionBook> productionBooks = productionBookService.getAll(pageable);
-        PageResponse<ProductionBook> response = new PageResponse<>(
-                productionBooks.getContent(),
-                productionBooks.getTotalElements(),
-                productionBooks.getTotalPages(),
-                page,
-                size
-        );
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Response<>(
-                        "Success: get all data productionBooks successfully!",
-                        response
+                        RESPONSE_GET_SUCCESS,
+                        productionBookService.getAll(pageable)
                 ));
     }
 
@@ -88,7 +82,7 @@ public class ProductionController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Response<>(
-                        "Success: getProductionBookById successfully!",
+                        RESPONSE_GET_SUCCESS,
                         productionBookService.getById(id)));
     }
 
@@ -102,7 +96,7 @@ public class ProductionController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Response<>(
-                        "Success: getProductionBookById successfully!",
+                        RESPONSE_UPDATE_SUCCESS,
                         productionBookService.updateWithMultipart(productionBook, image, preview, download)));
     }
 
@@ -113,6 +107,6 @@ public class ProductionController {
         productionBookService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Response<>(
-                        "Success: delete data successfully!", id));
+                        RESPONSE_DELETE_SUCCESS, id));
     }
 }

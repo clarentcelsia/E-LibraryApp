@@ -2,19 +2,21 @@ package com.project.app.service;
 
 
 import com.project.app.entity.BookSale;
+import com.project.app.response.PageResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface BookSaleService {
 
-    BookSale saveIntoContainer(BookSale item, MultipartFile...multipartFiles);
+    BookSale saveBookSale(BookSale item, MultipartFile...multipartFiles);
 
-    List<BookSale> getContainers();
+    PageResponse<BookSale> getBookSales(Pageable pageable);
 
-    BookSale getContainerById(String id);
+    BookSale getBookSaleById(String id);
 
-    BookSale updateContainer(BookSale purchaseContainer);
+    BookSale updateWithMultipart(BookSale bookSale, MultipartFile...multipartFiles);
 
-    void deleteContainer(String id);
+    BookSale updateBookSale(BookSale bookSale);
+
+    void deleteBookSale(String id);
 }

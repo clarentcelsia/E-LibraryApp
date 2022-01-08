@@ -1,16 +1,18 @@
 package com.project.app.service;
 
-import com.project.app.entity.Transactions;
+import com.project.app.entity.AdminTransaction;
 import com.project.app.request.TransactionRequest;
+import com.project.app.response.PageResponse;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface TransactionService {
+public interface TransactionService<T> {
 
-    Transactions createTransaction(TransactionRequest request);
+    T createTransaction(T request);
 
-    List<Transactions> getTransactions();
+    PageResponse<T> getTransactions(Pageable pageable);
 
-    Transactions getTransactionById(String id);
+    T getTransactionById(String id);
 
 }

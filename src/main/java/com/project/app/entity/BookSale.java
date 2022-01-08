@@ -1,5 +1,6 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -7,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.util.Date;
 
+//Handle by admin
 @Entity
 @Table(name = "mst_book_sale")
 public class BookSale {
@@ -20,22 +22,21 @@ public class BookSale {
     private String title;
     private String description;
 
-    @Column(updatable = false)
     private String previewLink;
 
-    @Column(updatable = false)
     private String downloadLink;
 
     private Integer stock;
     private Integer price;
-    @Column(updatable = false)
-    private String createdBy;
+
     private Boolean availableForBookPhysic;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @CreatedDate
     @Column(updatable = false)
     private Date createdAt;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @LastModifiedDate
     private Date updatedAt;
 
@@ -43,6 +44,7 @@ public class BookSale {
     private void prePersist(){
         if (this.createdAt == null) this.createdAt = new Date();
         if (this.updatedAt == null) this.updatedAt = new Date();
+        if (this.price == null) this.price = 0;
         if (this.stock == null) this.stock = 0;
         if (this.availableForBookPhysic == null) this.availableForBookPhysic = false;
     }
@@ -55,7 +57,12 @@ public class BookSale {
     public BookSale() {
     }
 
-    public BookSale(String bookSaleId, String imageUrl, String title, String description, String previewLink, String downloadLink, Integer stock, Integer price, String createdBy, Boolean availableForBookPhysic) {
+    public BookSale(String bookSaleId, String title) {
+        this.bookSaleId = bookSaleId;
+        this.title = title;
+    }
+
+    public BookSale(String bookSaleId, String imageUrl, String title, String description, String previewLink, String downloadLink, Integer stock, Integer price, Boolean availableForBookPhysic) {
         this.bookSaleId = bookSaleId;
         this.imageUrl = imageUrl;
         this.title = title;
@@ -64,7 +71,6 @@ public class BookSale {
         this.downloadLink = downloadLink;
         this.stock = stock;
         this.price = price;
-        this.createdBy = createdBy;
         this.availableForBookPhysic = availableForBookPhysic;
     }
 
@@ -132,14 +138,6 @@ public class BookSale {
         this.price = price;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Boolean getAvailableForBookPhysic() {
         return availableForBookPhysic;
     }
@@ -162,5 +160,22 @@ public class BookSale {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "BookSale{" +
+                "bookSaleId='" + bookSaleId + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", previewLink='" + previewLink + '\'' +
+                ", downloadLink='" + downloadLink + '\'' +
+                ", stock=" + stock +
+                ", price=" + price +
+                ", availableForBookPhysic=" + availableForBookPhysic +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

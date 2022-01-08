@@ -1,5 +1,6 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.app.files.Files;
 import org.hibernate.annotations.Cascade;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+//Self-publish
 @Entity
 @Table(name = "mst_production_book")
 public class ProductionBook {
@@ -29,38 +31,44 @@ public class ProductionBook {
     private Integer price;
     private Integer stock;
     private Boolean onSale;
+    private Boolean availableForBookPhysic;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @JsonIgnore
-//    @OneToMany(targetEntity = Files.class, fetch = FetchType.LAZY)
-//    private Set<Files> userFiles;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @CreatedDate
     @Column(updatable = false)
     private Date createdAt;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @LastModifiedDate
     private Date updatedAt;
 
     @PrePersist
-    private void prePersist(){
-        if(this.createdAt == null) this.createdAt = new Date();
-        if(this.updatedAt == null) this.updatedAt = new Date();
-        if(this.onSale == null) this.onSale = false;
-        if(this.price == null) this.price = 0;
-        if(this.stock == null) this.stock = 0;
+    private void prePersist() {
+        if (this.createdAt == null) this.createdAt = new Date();
+        if (this.updatedAt == null) this.updatedAt = new Date();
+        if (this.onSale == null) this.onSale = false;
+        if (this.price == null) this.price = 0;
+        if (this.stock == null) this.stock = 0;
+        if (this.availableForBookPhysic == null) this.availableForBookPhysic = false;
     }
 
     @PreUpdate
-    private void preUpdate(){
+    private void preUpdate() {
         this.updatedAt = new Date();
+        if(!this.onSale) this.availableForBookPhysic = false;
     }
 
     public ProductionBook() {
+    }
+
+    public ProductionBook(String productionBookId, String title) {
+        this.productionBookId = productionBookId;
+        this.title = title;
     }
 
     public String getProductionBookId() {
@@ -167,14 +175,13 @@ public class ProductionBook {
         this.user = user;
     }
 
-//    public Set<Files> getUserFiles() {
-//        return userFiles;
-//    }
-//
-//    public void setUserFiles(Set<Files> userFiles) {
-//        this.userFiles = userFiles;
-//    }
+    public Boolean getAvailableForBookPhysic() {
+        return availableForBookPhysic;
+    }
 
+    public void setAvailableForBookPhysic(Boolean availableForBookPhysic) {
+        this.availableForBookPhysic = availableForBookPhysic;
+    }
 
     @Override
     public String toString() {

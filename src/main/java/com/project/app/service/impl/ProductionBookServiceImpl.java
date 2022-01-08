@@ -4,6 +4,7 @@ import com.project.app.entity.ProductionBook;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.files.Files;
 import com.project.app.repository.ProductionBookRepository;
+import com.project.app.response.PageResponse;
 import com.project.app.service.ProductionBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,8 +61,14 @@ public class ProductionBookServiceImpl implements ProductionBookService {
     }
 
     @Override
-    public Page<ProductionBook> getAll(Pageable pageable) {
-        return productionBookRepository.findAll(pageable);
+    public PageResponse<ProductionBook> getAll(Pageable pageable) {
+        Page<ProductionBook> bookPage = productionBookRepository.findAll(pageable);
+        PageResponse<ProductionBook> response = new PageResponse<>(
+                bookPage.getContent(),
+                bookPage.getTotalElements(),
+                bookPage.getTotalPages()
+        );
+        return response;
     }
 
     @Override

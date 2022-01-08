@@ -1,5 +1,6 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,23 +11,24 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_transaction")
-public class Transactions {
+public class UserTransaction {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String transactionId;
+    private String userTransactionId;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private User user;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @CreatedDate
     @Column(updatable = false)
     private Date transactionDate;
 
-    @OneToMany(targetEntity = TransactionDetail.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = UserTransactionDetail.class, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<TransactionDetail> transactionDetails;
+    private List<UserTransactionDetail> transactionDetails;
 
     private Boolean isDeleted;
 
@@ -36,15 +38,20 @@ public class Transactions {
         if(this.isDeleted == null) this.isDeleted = false;
     }
 
-    public Transactions() {
+    public UserTransaction() {
     }
 
-    public String getTransactionId() {
-        return transactionId;
+    public UserTransaction(String userTransactionId, Date transactionDate) {
+        this.userTransactionId = userTransactionId;
+        this.transactionDate = transactionDate;
     }
 
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
+    public String getUserTransactionId() {
+        return userTransactionId;
+    }
+
+    public void setUserTransactionId(String userTransactionId) {
+        this.userTransactionId = userTransactionId;
     }
 
     public User getUser() {
@@ -63,11 +70,11 @@ public class Transactions {
         this.transactionDate = transactionDate;
     }
 
-    public List<TransactionDetail> getTransactionDetails() {
+    public List<UserTransactionDetail> getTransactionDetails() {
         return transactionDetails;
     }
 
-    public void setTransactionDetails(List<TransactionDetail> transactionDetails) {
+    public void setTransactionDetails(List<UserTransactionDetail> transactionDetails) {
         this.transactionDetails = transactionDetails;
     }
 

@@ -1,47 +1,27 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.app.entity.ProductionBook;
+import com.project.app.entity.BookSale;
 import com.project.app.response.PageResponse;
-import com.project.app.service.ProductionBookService;
+import com.project.app.service.BookSaleService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.project.app.util.Utility.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ProductionControllerTest {
+class BookSaleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,19 +30,17 @@ class ProductionControllerTest {
     private ObjectMapper mapper;
 
     @MockBean
-    ProductionBookService service;
+    BookSaleService service;
 
-    @Autowired
-    ProductionController controller;
 
     @Test
-    public void whenGivenValidUrlAndMethodSavedProductionBook_thenReturn201() throws Exception {
-        MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
+    public void whenGivenValidUrlAndMethodSavedBook_thenReturn201() throws Exception {
+        MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("preview", "file1.txt", "plain/txt", "text1".getBytes());
         MockMultipartFile file3 = new MockMultipartFile("download", "file2.txt", "plain/txt", "text2".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/api/v11/booksale")
                         .file(book)
                         .file(file1).file(file2).file(file3))
                 .andExpect(status().isCreated());
@@ -70,10 +48,10 @@ class ProductionControllerTest {
 
     @Test
     public void whenSaveBookImageIsNull_thenReturnError() throws Exception {
-        MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
+        MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("preview", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/api/v11/booksale")
                         .file(book)
                         .file(file1)
                         .contentType("multipart/form-data"))
@@ -82,10 +60,10 @@ class ProductionControllerTest {
 
     @Test
     public void whenPreviewAndDownloadIsNull_thenStillReturnMessageSuccess() throws Exception {
-        MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
+        MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/api/v11/booksale")
                         .file(book)
                         .file(file1)
                         .contentType("multipart/form-data"))
@@ -95,11 +73,11 @@ class ProductionControllerTest {
 
     @Test
     public void whenOnlyPreviewIsNull_thenStillReturnMessageSuccess() throws Exception {
-        MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
+        MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("download", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/api/v11/booksale")
                         .file(book)
                         .file(file1)
                         .file(file2)
@@ -110,11 +88,11 @@ class ProductionControllerTest {
 
     @Test
     public void whenOnlyDownloadIsNull_thenStillReturnMessageSuccess() throws Exception {
-        MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
+        MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("preview", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/api/v11/booksale")
                         .file(book)
                         .file(file1)
                         .file(file2)
@@ -125,10 +103,10 @@ class ProductionControllerTest {
 
     @Test
     public void whenImageAndBookIsNull_thenReturn400() throws Exception {
-        MockMultipartFile preview = new MockMultipartFile("preview", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
+        MockMultipartFile preview = new MockMultipartFile("preview", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("download", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/api/v11/booksale")
                         .file(preview)
                         .file(file2)
                         .contentType("multipart/form-data"))
@@ -137,7 +115,8 @@ class ProductionControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
-        mockMvc.perform(get("/api/v3/productions/{id}", "R01"))
+
+        mockMvc.perform(get("/api/v11/booksale/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
@@ -145,26 +124,26 @@ class ProductionControllerTest {
     @Test
     public void whenValidInputGetById_thenReturnExpectedResult() throws Exception {
         String id = "R01";
-        ProductionBook book = new ProductionBook("R01", "title");
+        BookSale book = new BookSale("R01", "title");
 
-        given(service.getById(id)).willReturn(book);
+        given(service.getBookSaleById(id)).willReturn(book);
 
-        mockMvc.perform(get("/api/v3/productions/{id}", "R01"))
+        mockMvc.perform(get("/api/v11/booksale/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
-                .andExpect(jsonPath("$.['data'].['productionBookId']").value(book.getProductionBookId()))
+                .andExpect(jsonPath("$.['data'].['bookSaleId']").value(book.getBookSaleId()))
                 .andExpect(jsonPath("$.['data'].['title']").value(book.getTitle()));
     }
 
     @Test
     public void whenGivenValidUrlAndMethodGetAll_thenReturn200() throws Exception {
 
-        PageResponse<ProductionBook> page = service.getAll(PageRequest.of(0, 5));
+        PageResponse<BookSale> page = service.getBookSales(PageRequest.of(0, 5));
 
-        given(service.getAll(PageRequest.of(0,5))).willReturn(page);
+        given(service.getBookSales(PageRequest.of(0,5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v3/productions")
+        mockMvc.perform(get("/api/v11/booksale")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -173,11 +152,11 @@ class ProductionControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodDeleteBook_thenReturn200() throws Exception {
-        mockMvc.perform(delete("/api/v3/productions/{id}", "R01"))
+
+        mockMvc.perform(delete("/api/v11/booksale/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));
     }
-
 
 }
