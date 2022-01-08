@@ -85,9 +85,9 @@ class ReviewServiceImplTest {
 
         when(repository.findAll(pageable)).thenReturn(reviews);
 
-        Page<Review> expectedReviews = service.getReviews(pageable);
+        Page<Review> serviceReviews = service.getReviews(pageable);
 
-        assertEquals(expectedReviews, reviews);
+        assertEquals(reviews, serviceReviews);
     }
 
     @Test
@@ -113,13 +113,13 @@ class ReviewServiceImplTest {
 
     @Test
     public void whenReviewUpdated_thenVerifyRepoSaveUpdatedReview(){
-        given(repository.save(review)).willReturn(review);
+        given(repository.save(any(Review.class))).willReturn(review);
 
         whenReviewGetByIdSucceed_thenReturnNotNull();
 
-        Review expectedReview = service.updateReview(this.review);
+        Review review = service.updateReview(this.review);
 
-        assertThat(expectedReview).isNotNull();
+        assertThat(review).isNotNull();
 
         verify(repository).save(any(Review.class));
     }

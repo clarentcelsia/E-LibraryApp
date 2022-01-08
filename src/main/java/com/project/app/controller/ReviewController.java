@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.project.app.util.Utility.*;
+
 @RestController
 @RequestMapping("/api/v6/reviews")
 public class ReviewController {
@@ -26,7 +28,7 @@ public class ReviewController {
             @RequestBody Review review
     ){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new Response<>("Succeed: data created successfully!", service.createReview(review)));
+                .body(new Response<>(RESPONSE_CREATE_SUCCESS, service.createReview(review)));
     }
 
     @GetMapping
@@ -45,7 +47,7 @@ public class ReviewController {
         );
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: data get successfully!", response));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @GetMapping("/{id}")
@@ -53,7 +55,7 @@ public class ReviewController {
             @PathVariable("id") String id
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: data get successfully!", service.getReviewById(id)));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, service.getReviewById(id)));
     }
 
     @PutMapping
@@ -61,7 +63,7 @@ public class ReviewController {
             @RequestBody Review review
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: data updated successfully!", service.updateReview(review)));
+                .body(new Response<>(RESPONSE_UPDATE_SUCCESS, service.updateReview(review)));
     }
 
     @DeleteMapping("/{id}")
@@ -70,6 +72,6 @@ public class ReviewController {
     ){
         service.deleteReview(id);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: data deleted successfully!", id));
+                .body(new Response<>(RESPONSE_DELETE_SUCCESS, id));
     }
 }

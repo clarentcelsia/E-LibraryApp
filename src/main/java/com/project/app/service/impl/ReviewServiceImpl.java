@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
+
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -42,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review getReviewById(String id) {
         return repository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Error: data with id " + id + " not found"));
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
     }
 
     @Override

@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.project.app.util.Utility.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -56,7 +57,7 @@ class ReviewControllerTest {
                         .content(mapper.writeValueAsString(review))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.message").value("Succeed: data created successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_CREATE_SUCCESS));
     }
 
     @Test
@@ -70,7 +71,7 @@ class ReviewControllerTest {
         mockMvc.perform(get("/api/v6/reviews/{id}", "R01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Succeed: data get successfully!"))
+                .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.['data'].['reviewId']", Matchers.is(review.getReviewId())));
     }
 
@@ -84,7 +85,7 @@ class ReviewControllerTest {
                         .content(mapper.writeValueAsString(review))
                         .contentType("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Succeed: data updated successfully!"));
+                .andExpect(jsonPath("$.message").value(RESPONSE_UPDATE_SUCCESS));
     }
 
     @Test
@@ -98,7 +99,7 @@ class ReviewControllerTest {
         mockMvc.perform(delete("/api/v6/reviews/{id}", review.getReviewId()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Succeed: data deleted successfully!"))
+                .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value(review.getReviewId()));
     }
 }
