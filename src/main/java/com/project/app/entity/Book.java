@@ -1,13 +1,15 @@
 package com.project.app.entity;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Table(name = "master_book")
 public class Book {
@@ -19,5 +21,8 @@ public class Book {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(nullable = false)
+    private Integer stock;
 
 }

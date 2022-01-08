@@ -1,5 +1,6 @@
 package com.project.app.service.impl;
 
+import com.project.app.entity.Book;
 import com.project.app.entity.Loan;
 import com.project.app.entity.LoanDetail;
 import com.project.app.exception.NotFoundException;
@@ -59,7 +60,17 @@ public class LoanServiceImpl implements LoanService {
 
         Integer totalQty = 0;
         for(LoanDetail loanDetail: loan.getLoanDetail()){
-            // update stock buku
+            // update stock buku = TAMBAHIN SAAT MERGING.
+//            Book book = loanDetail.getBook();
+//            Integer newStock = book.getStock() - loanDetail.getQty();
+//            if(newStock < 0 ){
+//                String message = String.format("stock buku kurang, tersedia %d buku", book.getStock());
+//                throw new RuntimeException(message);
+//            }
+
+//            book.setStock(newStock);
+            // bookservice.update(book)
+
 
             // save info loanDetail
             loanDetail.setLoan(loan);
