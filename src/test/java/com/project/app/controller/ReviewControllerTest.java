@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.app.entity.Book;
 import com.project.app.entity.Review;
 import com.project.app.entity.Users;
+import com.project.app.response.PageResponse;
+import com.project.app.response.Response;
 import com.project.app.service.ReviewService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,8 +42,8 @@ class ReviewControllerTest {
     @Autowired
     ObjectMapper mapper;
 
-    @Mock
-    Pageable pageable;
+    @Autowired
+    private ReviewController controller;
 
     @Test
     public void whenReviewCreated_thenReturn201() throws Exception {
@@ -52,19 +57,6 @@ class ReviewControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("Succeed: data created successfully!"));
-    }
-
-    @Test
-    public void whenGetReviews_thenReturn200() throws Exception {
-        Page<Review> reviews = mock(Page.class);
-        assertThat(reviews).isNotNull();
-
-        mockMvc.perform(get("/api/v6/reviews")
-                        .param("page", "0")
-                        .param("size", "5")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Succeed: data get successfully!"));
     }
 
     @Test
