@@ -5,12 +5,13 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class JournalResponse {
     private String doi;
     private String title;
     private String description;
-    private List<Writer> writers = new ArrayList<>();
+    private Set<Writer> writers;
 
     public String getDoi() {
         return doi;
@@ -36,15 +37,15 @@ public class JournalResponse {
         this.description = description;
     }
 
-    public List<Writer> getWriters() {
+    public Set<Writer> getWriters() {
         return writers;
     }
 
-    public void setWriters(List<Writer> writers) {
+    public void setWriters(Set<Writer> writers) {
         this.writers = writers;
     }
 
-    public JournalResponse(String doi, String title, String description, List<Writer> writers) {
+    public JournalResponse(String doi, String title, String description, Set<Writer> writers) {
         this.doi = doi;
         this.title = title;
         this.description = description;

@@ -150,7 +150,7 @@ public class Journal {
         isDeleted = deleted;
     }
 
-    public Journal(String doi, String title, String description, List<Writer> writers) {
+    public Journal(String doi, String title, String description) {
     }
 
     public List<Writer> getWriters() {

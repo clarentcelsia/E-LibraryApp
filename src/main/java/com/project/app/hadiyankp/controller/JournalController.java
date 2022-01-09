@@ -3,10 +3,12 @@ package com.project.app.hadiyankp.controller;
 import com.project.app.hadiyankp.dto.JournalDTO;
 import com.project.app.hadiyankp.entity.library.Journal;
 import com.project.app.hadiyankp.entity.library.Publisher;
+import com.project.app.hadiyankp.response.JournalResponse;
 import com.project.app.hadiyankp.service.AuthorService;
 import com.project.app.hadiyankp.service.JournalService;
 import com.project.app.hadiyankp.service.impl.FileService;
 import com.project.app.hadiyankp.util.WebResponse;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +25,6 @@ public class JournalController {
 
     @Autowired
     JournalService journalService;
-    @Autowired
-    AuthorService authorService;
-
     @Autowired
     FileService fileService;
 
@@ -60,6 +59,14 @@ public class JournalController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @PostMapping
+    public ResponseEntity<WebResponse<Journal>> saveDB(@RequestBody JournalResponse journalResponse){
+        Journal journal = journalService.saveJournalToDB(journalResponse);
+        WebResponse<Journal>response = new WebResponse<>("Set to Database",journal);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 
     @GetMapping
     public ResponseEntity<WebResponse<Page<Journal>>> listWithPage(

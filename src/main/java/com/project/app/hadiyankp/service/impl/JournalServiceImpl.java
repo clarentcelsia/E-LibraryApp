@@ -30,8 +30,6 @@ public class JournalServiceImpl implements JournalService {
     @Autowired
     JournalRepository journalRepository;
     @Autowired
-    JournalResponse journalResponse;
-    @Autowired
     WriterRepository writerRepository;
 
     @Autowired
@@ -93,8 +91,7 @@ public class JournalServiceImpl implements JournalService {
         Journal journal = new Journal(
                 journalResponse.getDoi(),
                 journalResponse.getTitle(),
-                journalResponse.getDescription(),
-                journalResponse.getWriters()
+                journalResponse.getDescription()
         );
         Journal emptyJournal = journalRepository.save(journal);
         List<Writer> writerList = new ArrayList<>();
