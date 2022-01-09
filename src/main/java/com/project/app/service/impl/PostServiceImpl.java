@@ -49,10 +49,7 @@ public class PostServiceImpl implements PostService {
         Post savedPost = postRepository.save(post);
 
         Topic topic = topicService.getById(savedPost.getTopic().getId());
-        List<Post> posts = topic.getPosts();
-        posts.add(savedPost);
-        topic.setPosts(posts);
-        topicService.create(topic);
+        topic.getPosts().add(savedPost);
 
         return savedPost;
     }

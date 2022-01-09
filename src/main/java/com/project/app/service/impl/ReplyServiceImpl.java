@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,7 +27,7 @@ public class ReplyServiceImpl implements ReplyService {
     private PostService postService;
     
     @Override
-    public Reply getById(Integer id) {
+    public Reply getById(String id) {
         Optional<Reply> optionalReply = replyRepository.findById(id);
         if ( optionalReply.isPresent()){
             return  optionalReply.get();
@@ -55,7 +54,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
-    public String deleteById(Integer id) {
+    public String deleteById(String id) {
         Reply reply = getById(id);
         Post post = postService.getById(reply.getPost().getId());
         post.getReply().remove(reply);

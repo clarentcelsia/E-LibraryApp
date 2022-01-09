@@ -26,7 +26,7 @@ public class TopicController {
     @GetMapping("/{topicId}")
     public ResponseEntity<WebResponse<Topic>> getTopicById(@PathVariable(value = "topicId") String id){
         Topic topic = topicService.getById(id);
-        WebResponse<Topic> response = new WebResponse<>(topic, "getting topic");
+        WebResponse<Topic> response = new WebResponse<>( "getting topic",topic);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -59,14 +59,14 @@ public class TopicController {
     @PostMapping
     public ResponseEntity<WebResponse<Topic>> createTopic(@RequestBody Topic topic){
         Topic savedTopic = topicService.create(topic);
-        WebResponse<Topic> response = new WebResponse<>(savedTopic, "topic created");
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        WebResponse<Topic> response = new WebResponse<>("topic created",savedTopic);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<WebResponse<Topic>> updateTopic(@RequestBody Topic topic){
         Topic savedTopic = topicService.update(topic);
-        WebResponse<Topic> response = new WebResponse<>(savedTopic, "topic updated");
+        WebResponse<Topic> response = new WebResponse<>( "topic updated",savedTopic);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

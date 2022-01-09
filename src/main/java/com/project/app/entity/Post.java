@@ -2,10 +2,7 @@ package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,6 +11,7 @@ import org.springframework.data.repository.cdi.Eager;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Getter
@@ -68,14 +66,5 @@ public class Post {
     @PreUpdate
     public void updateDate(){
         updatedAt = new Date();
-    }
-
-    public Post(String title, String body, Topic topic, User user, Date createdAt, Date updatedAt) {
-        this.title = title;
-        this.body = body;
-        this.topic = topic;
-        this.user = user;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 }

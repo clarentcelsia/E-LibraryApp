@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -53,11 +54,4 @@ public class Topic {
         if (createdAt == null) this.createdAt = new Date();
     }
 
-    public Topic(String topicSubject, String subTopic, String description, User user, Date createdAt) {
-        this.topicSubject = topicSubject;
-        this.subTopic = subTopic;
-        this.description = description;
-        this.user = user;
-        this.createdAt = createdAt;
-    }
 }

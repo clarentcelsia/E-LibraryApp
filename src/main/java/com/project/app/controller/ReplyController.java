@@ -26,9 +26,9 @@ public class ReplyController {
     private ReplyService replyService;
 
     @GetMapping("/{replyId}")
-    public ResponseEntity<WebResponse<Reply>> getReplyById(@PathVariable(value = "replyId") Integer id){
+    public ResponseEntity<WebResponse<Reply>> getReplyById(@PathVariable(value = "replyId") String id){
         Reply savedReply = replyService.getById(id);
-        WebResponse<Reply> response = new WebResponse<>(savedReply, "reply created");
+        WebResponse<Reply> response = new WebResponse<>("getting reply",savedReply);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -59,12 +59,12 @@ public class ReplyController {
     @PostMapping
     public ResponseEntity<WebResponse<Reply>> createReply(@RequestBody Reply reply){
         Reply savedReply = replyService.create(reply);
-        WebResponse<Reply> response = new WebResponse<>(savedReply, "reply created");
+        WebResponse<Reply> response = new WebResponse<>("reply created",savedReply);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{ReplyId}")
-    public ResponseEntity<WebResponse<String>> deleteReplyById(@PathVariable(value = "replyId") Integer id){
+    @DeleteMapping("/{replyId}")
+    public ResponseEntity<WebResponse<String>> deleteReplyById(@PathVariable(value = "replyId") String id){
         String message = replyService.deleteById(id);
         WebResponse<String> response = new WebResponse<>(message, null);
         return new ResponseEntity<>(response, HttpStatus.OK);

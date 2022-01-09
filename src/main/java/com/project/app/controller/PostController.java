@@ -28,7 +28,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<WebResponse<Post>> getPostById(@PathVariable(value = "postId") String id){
         Post post = postService.getById(id);
-        WebResponse<Post> response = new WebResponse<>(post, "getting post");
+        WebResponse<Post> response = new WebResponse<>( "getting post",post);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -59,7 +59,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<WebResponse<Post>> createPost(@RequestBody Post post){
         Post savedPost = postService.create(post);
-        WebResponse<Post> response = new WebResponse<>(savedPost, "post created");
+        WebResponse<Post> response = new WebResponse<>( "post created",savedPost);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

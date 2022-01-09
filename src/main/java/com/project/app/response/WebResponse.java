@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WebResponse<T> {
-    private T data;
     private String message;
+    private T data;
 }

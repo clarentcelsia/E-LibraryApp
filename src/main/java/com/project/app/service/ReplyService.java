@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ReplyService {
-    public Reply getById(Integer id);
+    public Reply getById(String id);
     public Page<Reply> getAll(ReplyDTO dto, Pageable pageable);
     public Reply create(Reply reply);
-    public String deleteById(Integer id);
+    public String deleteById(String id);
 }

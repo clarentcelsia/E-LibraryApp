@@ -2,10 +2,12 @@ package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -15,9 +17,9 @@ import java.util.Date;
 @Table(name = "reply")
 public class Reply {
     @Id
-    @SequenceGenerator(name = "sequence-generator")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    @GenericGenerator(name = "uuid-generator", strategy = "uuid")
+    @GeneratedValue(generator = "uuid-generator")
+    private String id;
 
 
     @ManyToOne (targetEntity = Post.class, fetch = FetchType.LAZY)
