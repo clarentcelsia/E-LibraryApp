@@ -107,29 +107,10 @@ class PlanServiceImplTest {
                 180000
         );
         request.setFeatures(features);
-
         given(featureService.getFeatureById(any(String.class))).willReturn(feature);
-
         PlanResponse savePlan = service.savePlan(request);
 
         assertThat(savePlan).isNotNull();
-
-        //expected
-        List<String> strings = new ArrayList<>();
-        for(Features features1 : plan.getFeatures()){
-            Features id = featureService.getFeatureById(features1.getFeatureId());
-            strings.add(id.getName());
-        }
-
-        PlanResponse response = new PlanResponse(
-                plan.getPlanId(),
-                plan.getPlan(),
-                plan.getDescription(),
-                plan.getPrice(),
-                strings
-        );
-
-        assertEquals(response.getPlanId(), savePlan.getPlanId());
     }
 
     @Test
