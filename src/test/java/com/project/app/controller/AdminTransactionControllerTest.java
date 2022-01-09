@@ -9,11 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.project.app.util.Utility.RESPONSE_CREATE_SUCCESS;
 import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -74,7 +81,16 @@ class AdminTransactionControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetAll_thenReturn200() throws Exception {
 
-        PageResponse<AdminTransaction> page = service.getTransactions(PageRequest.of(0, 5));
+        AdminTransaction adminTransaction = new AdminTransaction("A01");
+
+        Pageable pageable = PageRequest.of(0,5);
+
+        List<AdminTransaction> admins = new ArrayList<>();
+        admins.add(adminTransaction);
+
+        Page<AdminTransaction> page = new PageImpl<>(admins, pageable, 1L);
+
+        assertNotNull(page);
 
         given(service.getTransactions(PageRequest.of(0,5))).willReturn(page);
 

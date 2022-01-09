@@ -61,14 +61,8 @@ public class ProductionBookServiceImpl implements ProductionBookService {
     }
 
     @Override
-    public PageResponse<ProductionBook> getAll(Pageable pageable) {
-        Page<ProductionBook> bookPage = productionBookRepository.findAll(pageable);
-        PageResponse<ProductionBook> response = new PageResponse<>(
-                bookPage.getContent(),
-                bookPage.getTotalElements(),
-                bookPage.getTotalPages()
-        );
-        return response;
+    public Page<ProductionBook> getAll(Pageable pageable) {
+        return productionBookRepository.findAll(pageable);
     }
 
     @Override

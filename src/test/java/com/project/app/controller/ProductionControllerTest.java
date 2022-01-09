@@ -1,6 +1,7 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.app.entity.AdminTransaction;
 import com.project.app.entity.ProductionBook;
 import com.project.app.response.PageResponse;
 import com.project.app.service.ProductionBookService;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -160,7 +162,16 @@ class ProductionControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetAll_thenReturn200() throws Exception {
 
-        PageResponse<ProductionBook> page = service.getAll(PageRequest.of(0, 5));
+        ProductionBook productionBook = new ProductionBook("B01", "title");
+
+        Pageable pageable = PageRequest.of(0,5);
+
+        List<ProductionBook> books = new ArrayList<>();
+        books.add(productionBook);
+
+        Page<ProductionBook> page = new PageImpl<>(books, pageable, 1L);
+
+        assertNotNull(page);
 
         given(service.getAll(PageRequest.of(0,5))).willReturn(page);
 

@@ -1,20 +1,25 @@
 package com.project.app.response;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public class PageResponse<T> {
 
+    List<T> content;
     private Long count;
     private Integer totalPage;
-    List<T> content;
+    private Integer page;
+    private Integer size;
 
     public PageResponse() {
     }
 
-    public PageResponse(List<T> content, Long count, Integer totalPage) {
+    public PageResponse(List<T> content, Long count, Integer totalPage, Integer page, Integer size) {
         this.content = content;
         this.count = count;
         this.totalPage = totalPage;
+        this.page = page;
+        this.size = size;
     }
 
     public List<T> getContent() {
@@ -41,4 +46,19 @@ public class PageResponse<T> {
         this.totalPage = totalPage;
     }
 
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 }

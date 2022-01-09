@@ -2,6 +2,7 @@ package com.project.app.service;
 
 import com.project.app.entity.Research;
 import com.project.app.response.PageResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ResearchService {
 
     Research saveResearch(Research research);
 
-    PageResponse<Research> getResearch(Pageable pageable);
+    Page<Research> getResearch(Pageable pageable);
 
     Research getById(String id);
 

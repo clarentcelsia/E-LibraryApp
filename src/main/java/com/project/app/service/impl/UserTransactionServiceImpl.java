@@ -52,14 +52,8 @@ public class UserTransactionServiceImpl implements TransactionService<UserTransa
     }
 
     @Override
-    public PageResponse<UserTransaction> getTransactions(Pageable pageable) {
-        Page<UserTransaction> page = repository.findAll(pageable);
-        PageResponse<UserTransaction> response = new PageResponse<>(
-                page.getContent(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-        return response;
+    public Page<UserTransaction> getTransactions(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

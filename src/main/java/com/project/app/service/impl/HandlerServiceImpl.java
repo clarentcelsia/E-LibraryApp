@@ -53,15 +53,8 @@ public class HandlerServiceImpl implements HandlerService {
     }
 
     @Override
-    public PageResponse<ResearchPermissionHandler> fetchRequests(Pageable pageable) {
-        Page<ResearchPermissionHandler> page = repository.findAll(pageable);
-        PageResponse<ResearchPermissionHandler> response = new PageResponse<>(
-                page.getContent(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-
-        return response;
+    public Page<ResearchPermissionHandler> fetchRequests(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

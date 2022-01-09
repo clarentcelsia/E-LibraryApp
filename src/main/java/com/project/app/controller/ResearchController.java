@@ -5,6 +5,7 @@ import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.ResearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,16 @@ public class ResearchController {
             @RequestParam(value = "size", defaultValue = "5") Integer size
     ) {
         Pageable pageable = PageRequest.of(page, size);
+        Page<Research> research = service.getResearch(pageable);
+        PageResponse<Research> response = new PageResponse<>(
+                research.getContent(),
+                research.getTotalElements(),
+                research.getTotalPages(),
+                page,
+                size
+        );
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>(RESPONSE_GET_SUCCESS, service.getResearch(pageable)));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @GetMapping("/{id}")

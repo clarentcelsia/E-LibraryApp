@@ -24,14 +24,8 @@ public class ProductionRequestServiceImpl implements ProductionRequestService {
     }
 
     @Override
-    public PageResponse<ProductionRequestHandler> fetchRequests(Pageable pageable) {
-        Page<ProductionRequestHandler> page = repository.findAll(pageable);
-        PageResponse<ProductionRequestHandler> response = new PageResponse<>(
-                page.getContent(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-        return response;
+    public Page<ProductionRequestHandler> fetchRequests(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

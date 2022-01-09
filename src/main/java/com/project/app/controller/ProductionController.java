@@ -39,7 +39,7 @@ public class ProductionController {
     ) {
         Response<ProductionBook> response;
         if (image == null && preview == null && download == null) {
-            response = new Response<>(RESPONSE_ERROR, null);
+            response = new Response<>(RESPONSE_NULL, null);
         } else if (preview == null && download == null) {
             response = new Response<>(
                     RESPONSE_CREATE_SUCCESS,
@@ -68,12 +68,16 @@ public class ProductionController {
             @RequestParam(name = "size", defaultValue = "5") Integer size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-
+        Page<ProductionBook> bookPage = productionBookService.getAll(pageable);
+        PageResponse<ProductionBook> response = new PageResponse<>(
+                bookPage.getContent(),
+                bookPage.getTotalElements(),
+                bookPage.getTotalPages(),
+                page,
+                size
+        );
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>(
-                        RESPONSE_GET_SUCCESS,
-                        productionBookService.getAll(pageable)
-                ));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @GetMapping("/{id}")

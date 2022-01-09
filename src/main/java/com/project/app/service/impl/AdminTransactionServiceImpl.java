@@ -14,10 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
-import static com.project.app.util.Utility.RESPONSE_ID_NOT_FOUND;
+import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
 
 @Service
 @Transactional
@@ -50,26 +48,17 @@ public class AdminTransactionServiceImpl implements TransactionService<AdminTran
             transactionDetailService.save(detail);
         }
 
-        //save (admin) transaction
-//        AdminTransaction save = transactionRepository.save(transactions);
-//        save.setTransactionDetails(adminTransactionDetails);
         return transactions;
     }
 
     @Override
-    public PageResponse<AdminTransaction> getTransactions(Pageable pageable) {
-        Page<AdminTransaction> page = transactionRepository.findAll(pageable);
-        PageResponse<AdminTransaction> response = new PageResponse<>(
-                page.getContent(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-        return response;
+    public Page<AdminTransaction> getTransactions(Pageable pageable) {
+        return transactionRepository.findAll(pageable);
     }
 
     @Override
     public AdminTransaction getTransactionById(String id) {
         return transactionRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(RESPONSE_ID_NOT_FOUND, id)));
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
     }
 }

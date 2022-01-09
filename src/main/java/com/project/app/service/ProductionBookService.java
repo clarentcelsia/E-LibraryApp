@@ -11,7 +11,7 @@ public interface ProductionBookService {
 
     ProductionBook save(ProductionBook productionBook, MultipartFile...multipartFiles);
 
-    PageResponse<ProductionBook> getAll(Pageable pageable);
+    Page<ProductionBook> getAll(Pageable pageable);
 
     ProductionBook getById(String id);
 

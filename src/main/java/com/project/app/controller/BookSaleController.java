@@ -5,12 +5,15 @@ import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.BookSaleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.awt.print.Book;
 
 import static com.project.app.util.Utility.*;
 
@@ -30,7 +33,7 @@ public class BookSaleController {
     ){
         Response<BookSale> response;
         if (image == null && preview == null && download == null) {
-            response = new Response<>("Error: data is null!", null);
+            response = new Response<>(RESPONSE_NULL, null);
         } else if (preview == null && download == null) {
             response = new Response<>(
                     RESPONSE_CREATE_SUCCESS,
@@ -59,8 +62,16 @@ public class BookSaleController {
             @RequestParam(value = "size", defaultValue = "5") Integer size
     ){
         Pageable pageable = PageRequest.of(page, size);
+        Page<BookSale> bookSales = service.getBookSales(pageable);
+        PageResponse<BookSale> response = new PageResponse<>(
+                bookSales.getContent(),
+                bookSales.getTotalElements(),
+                bookSales.getTotalPages(),
+                page,
+                size
+        );
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>(RESPONSE_GET_SUCCESS, service.getBookSales(pageable)));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @GetMapping("/{id}")

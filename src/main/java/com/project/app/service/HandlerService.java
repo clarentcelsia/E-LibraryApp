@@ -3,6 +3,7 @@ package com.project.app.service;
 import com.project.app.entity.Research;
 import com.project.app.handler.ResearchPermissionHandler;
 import com.project.app.response.PageResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,7 @@ public interface HandlerService {
 
     ResearchPermissionHandler createRequest(ResearchPermissionHandler handler, MultipartFile file);
 
-    PageResponse<ResearchPermissionHandler> fetchRequests(Pageable pageable);
+    Page<ResearchPermissionHandler> fetchRequests(Pageable pageable);
 
     ResearchPermissionHandler getById(String id);
 

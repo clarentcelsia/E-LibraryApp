@@ -56,14 +56,8 @@ public class BookSaleServiceImpl implements BookSaleService {
     }
 
     @Override
-    public PageResponse<BookSale> getBookSales(Pageable pageable) {
-        Page<BookSale> page = repository.findAll(pageable);
-        PageResponse<BookSale> response = new PageResponse<>(
-                page.getContent(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-        return response;
+    public Page<BookSale> getBookSales(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

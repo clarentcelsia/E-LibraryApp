@@ -12,13 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.project.app.util.Utility.RESPONSE_CREATE_SUCCESS;
 import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -86,8 +92,19 @@ class UserTransactionControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodGetAll_thenReturn200() throws Exception {
+        Date date = mock(Date.class);
 
-        PageResponse<UserTransaction> page = service.getTransactions(PageRequest.of(0, 5));
+        UserTransaction userTransaction = new UserTransaction("A01", date);
+
+        Pageable pageable = PageRequest.of(0,5);
+
+        List<UserTransaction> users = new ArrayList<>();
+
+        users.add(userTransaction);
+
+        Page<UserTransaction> page = new PageImpl<>(users, pageable, 1L);
+
+        assertNotNull(page);
 
         given(service.getTransactions(PageRequest.of(0, 5))).willReturn(page);
 

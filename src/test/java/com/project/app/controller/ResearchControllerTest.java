@@ -1,6 +1,7 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.app.entity.AdminTransaction;
 import com.project.app.entity.Research;
 import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
@@ -10,13 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.project.app.util.Utility.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -56,10 +64,20 @@ class ResearchControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodGetResearch_thenReturn200() throws Exception {
+        Research research = new Research(
+                new User("U01", "iliana"),
+                "researchUrl");
 
-        PageResponse<Research> response = service.getResearch(PageRequest.of(0, 5));
+        Pageable pageable = PageRequest.of(0,5);
 
-        given(service.getResearch(PageRequest.of(0, 5))).willReturn(response);
+        List<Research> list = new ArrayList<>();
+        list.add(research);
+
+        Page<Research> page = new PageImpl<>(list, pageable, 1L);
+
+        assertNotNull(page);
+
+        given(service.getResearch(PageRequest.of(0, 5))).willReturn(page);
 
         mockMvc.perform(get("/api/v3/research")
                         .contentType(MediaType.APPLICATION_JSON)

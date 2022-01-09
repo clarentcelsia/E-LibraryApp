@@ -5,6 +5,7 @@ import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.ProductionRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class ProductionRequestController {
             @RequestBody ProductionRequestHandler requestHandler
     ){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new Response<>(RESPONSE_GET_SUCCESS, service.createRequest(requestHandler)));
+                .body(new Response<>(RESPONSE_CREATE_SUCCESS, service.createRequest(requestHandler)));
     }
 
     @GetMapping
@@ -36,8 +37,16 @@ public class ProductionRequestController {
             @RequestParam(value = "size", defaultValue = "5") Integer size
     ){
         Pageable pageable = PageRequest.of(page, size);
+        Page<ProductionRequestHandler> productionRequestHandlers = service.fetchRequests(pageable);
+        PageResponse<ProductionRequestHandler> response = new PageResponse<>(
+                productionRequestHandlers.getContent(),
+                productionRequestHandlers.getTotalElements(),
+                productionRequestHandlers.getTotalPages(),
+                page,
+                size
+        );
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>(RESPONSE_GET_SUCCESS, service.fetchRequests(pageable)));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @GetMapping("/{id}")

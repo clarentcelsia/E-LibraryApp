@@ -1,6 +1,7 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.app.entity.AdminTransaction;
 import com.project.app.entity.BookSale;
 import com.project.app.response.PageResponse;
 import com.project.app.service.BookSaleService;
@@ -9,11 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.project.app.util.Utility.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -139,7 +147,16 @@ class BookSaleControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetAll_thenReturn200() throws Exception {
 
-        PageResponse<BookSale> page = service.getBookSales(PageRequest.of(0, 5));
+        BookSale bookSale = new BookSale("B01", "title");
+
+        Pageable pageable = PageRequest.of(0,5);
+
+        List<BookSale> bookSales = new ArrayList<>();
+        bookSales.add(bookSale);
+
+        Page<BookSale> page = new PageImpl<>(bookSales, pageable, 1L);
+
+        assertNotNull(page);
 
         given(service.getBookSales(PageRequest.of(0,5))).willReturn(page);
 
