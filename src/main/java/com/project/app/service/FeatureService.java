@@ -1,11 +1,14 @@
 package com.project.app.service;
 
 import com.project.app.entity.Features;
+import com.project.app.response.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface FeatureService {
-    List<Features> getFeatures();
+    Page<Features> getFeatures(Pageable pageable);
 
     Features getFeatureById(String id);
 

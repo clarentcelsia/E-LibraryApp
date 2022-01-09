@@ -2,15 +2,22 @@ package com.project.app.request;
 
 import com.project.app.entity.Features;
 
+import java.util.List;
 import java.util.Set;
 
 public class PlanRequest {
     private String plan;
     private String description;
     private Integer price;
-    private Set<Features> features;
+    private List<Features> features;
 
     public PlanRequest() {
+    }
+
+    public PlanRequest(String plan, String description, Integer price) {
+        this.plan = plan;
+        this.description = description;
+        this.price = price;
     }
 
     public String getPlan() {
@@ -37,11 +44,11 @@ public class PlanRequest {
         this.price = price;
     }
 
-    public Set<Features> getFeatures() {
+    public List<Features> getFeatures() {
         return features;
     }
 
-    public void setFeatures(Set<Features> features) {
+    public void setFeatures(List<Features> features) {
         this.features = features;
     }
 }

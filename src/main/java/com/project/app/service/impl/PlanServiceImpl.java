@@ -5,16 +5,21 @@ import com.project.app.entity.Plan;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.PlanRepository;
 import com.project.app.request.PlanRequest;
+import com.project.app.response.PageResponse;
 import com.project.app.response.PlanResponse;
 import com.project.app.service.FeatureService;
 import com.project.app.service.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
 
 @Service
 @Transactional
@@ -26,14 +31,14 @@ public class PlanServiceImpl implements PlanService {
     FeatureService featureService;
 
     @Override
-    public List<Plan> getPlans() {
-        return repository.findAll();
+    public Page<Plan> getPlans(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override
     public Plan getPlanById(String id) {
         return repository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("Error: data with id "+id+" not found"));
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
     }
 
     @Override

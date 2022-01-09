@@ -3,11 +3,16 @@ package com.project.app.service.impl;
 import com.project.app.entity.Features;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.FeatureRepository;
+import com.project.app.response.PageResponse;
 import com.project.app.service.FeatureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
 
 @Service
 public class FeatureServiceImpl implements FeatureService {
@@ -15,14 +20,14 @@ public class FeatureServiceImpl implements FeatureService {
     FeatureRepository repository;
 
     @Override
-    public List<Features> getFeatures() {
-        return repository.findAll();
+    public Page<Features> getFeatures(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override
     public Features getFeatureById(String id) {
         return repository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("Error: data with id "+id+" not found"));
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
     }
 
     @Override

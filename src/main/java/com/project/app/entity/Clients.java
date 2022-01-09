@@ -1,5 +1,7 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,8 +32,11 @@ public class Clients {
 
     @CreatedDate
     @Column(updatable = false)
+    @JsonIgnore
     private Date createdAt;
+
     @LastModifiedDate
+    @JsonIgnore
     private Date updatedAt;
     private Boolean isDeleted;
 
@@ -49,6 +54,15 @@ public class Clients {
     }
 
     public Clients() {
+    }
+
+    public Clients(String clientId, String name, String address, String phoneNumber, String email, Integer status) {
+        this.clientId = clientId;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.status = status;
     }
 
     public String getClientId() {
@@ -99,6 +113,7 @@ public class Clients {
         this.status = status;
     }
 
+    @JsonIgnore
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -107,6 +122,7 @@ public class Clients {
         this.createdAt = createdAt;
     }
 
+    @JsonIgnore
     public Date getUpdatedAt() {
         return updatedAt;
     }

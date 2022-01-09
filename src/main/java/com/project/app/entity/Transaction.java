@@ -1,13 +1,16 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "client_transactions")
 public class Transaction {
 
     //basic premium
@@ -16,19 +19,22 @@ public class Transaction {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String transactionId;
 
-    @OneToOne(targetEntity = Clients.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Clients.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
-    private Clients clients;
+    private Clients client;
 
-    @ManyToOne(targetEntity = Plan.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "plan_id")
-    private Plan plan;
+    @OneToMany(targetEntity = TransactionDetail.class, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<TransactionDetail> details;
 
-    private Integer price;
-
+    @JsonFormat(
+            pattern = "yyyy-MM-dd hh:mm:ss"
+    )
     @CreatedDate
     @Column(updatable = false)
     private Date transactionDate;
+
+    private Integer grandtotal;
 
     private Boolean isDeleted;
 
@@ -41,11 +47,12 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String transactionId, Clients clients, Plan plan, Date transactionDate, Boolean isDeleted) {
+    public Transaction(String transactionId, Clients client, List<TransactionDetail> details, Date transactionDate, Integer grandtotal, Boolean isDeleted) {
         this.transactionId = transactionId;
-        this.clients = clients;
-        this.plan = plan;
+        this.client = client;
+        this.details = details;
         this.transactionDate = transactionDate;
+        this.grandtotal = grandtotal;
         this.isDeleted = isDeleted;
     }
 
@@ -57,20 +64,20 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public Clients getClients() {
-        return clients;
+    public Clients getClient() {
+        return client;
     }
 
-    public void setClients(Clients clients) {
-        this.clients = clients;
+    public void setClient(Clients client) {
+        this.client = client;
     }
 
-    public Plan getPlan() {
-        return plan;
+    public List<TransactionDetail> getDetails() {
+        return details;
     }
 
-    public void setPlan(Plan plan) {
-        this.plan = plan;
+    public void setDetails(List<TransactionDetail> details) {
+        this.details = details;
     }
 
     public Date getTransactionDate() {
@@ -81,19 +88,19 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
+    public Integer getGrandtotal() {
+        return grandtotal;
+    }
+
+    public void setGrandtotal(Integer grandtotal) {
+        this.grandtotal = grandtotal;
+    }
+
     public Boolean getDeleted() {
         return isDeleted;
     }
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 }

@@ -1,11 +1,14 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,19 +27,21 @@ public class Plan {
 
     private Integer price;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "feature_plan",
             joinColumns = @JoinColumn(name = "plan_id"),
             inverseJoinColumns = @JoinColumn(name = "feature_id")
     )
-    private Set<Features> features;
+    private List<Features> features;
 
     @CreatedDate
+    @JsonIgnore
     @Column(updatable = false)
     private Date createdAt;
 
     @LastModifiedDate
+    @JsonIgnore
     private Date updatedAt;
     private Boolean isDeleted;
 
@@ -53,6 +58,13 @@ public class Plan {
     }
 
     public Plan() {
+    }
+
+    public Plan(String planId, String plan, String description, Integer price) {
+        this.planId = planId;
+        this.plan = plan;
+        this.description = description;
+        this.price = price;
     }
 
     public String getPlanId() {
@@ -87,6 +99,7 @@ public class Plan {
         this.price = price;
     }
 
+    @JsonIgnore
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -95,6 +108,7 @@ public class Plan {
         this.createdAt = createdAt;
     }
 
+    @JsonIgnore
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -111,11 +125,11 @@ public class Plan {
         isDeleted = deleted;
     }
 
-    public Set<Features> getFeatures() {
+    public List<Features> getFeatures() {
         return features;
     }
 
-    public void setFeatures(Set<Features> features) {
+    public void setFeatures(List<Features> features) {
         this.features = features;
     }
 }

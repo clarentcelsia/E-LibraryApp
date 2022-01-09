@@ -1,14 +1,20 @@
 package com.project.app.controller;
 
+import com.project.app.dto.ClientDTO;
 import com.project.app.entity.Clients;
+import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.project.app.util.Utility.*;
 
 
 @RestController
@@ -23,7 +29,7 @@ public class ClientController {
             @RequestBody Clients client
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new Response<>("Succeed: client saved successfully!", service.saveClient(client)));
+                .body(new Response<>(RESPONSE_CREATE_SUCCESS, service.saveClient(client)));
 
     }
 
@@ -32,14 +38,28 @@ public class ClientController {
             @PathVariable(name = "id") String id
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: client saved successfully!", service.getClientById(id)));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, service.getClientById(id)));
 
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<Clients>>> getClients() {
+    public ResponseEntity<Response<PageResponse<Clients>>> getClients(
+            @RequestParam(name = "active", defaultValue = "1") Integer status,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "5") Integer size
+    ) {
+        ClientDTO clientDTO = new ClientDTO(status);
+        Page<Clients> clientsPage = service.getClients(clientDTO, PageRequest.of(page, size));
+        PageResponse<Clients> response = new PageResponse<>(
+                clientsPage.getContent(),
+                clientsPage.getTotalElements(),
+                clientsPage.getTotalPages(),
+                page,
+                size
+        );
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: get client successfully!", service.getClients()));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @PutMapping
@@ -47,16 +67,16 @@ public class ClientController {
             @RequestBody Clients client
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: update client successfully!", service.updateClient(client)));
+                .body(new Response<>(RESPONSE_UPDATE_SUCCESS, service.updateClient(client)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<?>> getClients(
+    public ResponseEntity<Response<?>> deleteClients(
             @PathVariable(name = "id") String id
     ) {
         service.deleteClient(id);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new Response<>("Succeed: delete client successfully!", id));
+                .body(new Response<>(RESPONSE_DELETE_SUCCESS, id));
     }
 
 }

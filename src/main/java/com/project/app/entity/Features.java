@@ -1,5 +1,8 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,8 +13,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "mst_feature")
-public class Features
-{
+public class Features{
+
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
@@ -22,9 +25,11 @@ public class Features
 
     @CreatedDate
     @Column(updatable = false)
+    @JsonIgnore
     private Date createdAt;
 
     @LastModifiedDate
+    @JsonIgnore
     private Date updatedAt;
     private Boolean isDeleted;
 
@@ -41,6 +46,12 @@ public class Features
     }
 
     public Features() {
+    }
+
+    public Features(String featureId, String name, String description) {
+        this.featureId = featureId;
+        this.name = name;
+        this.description = description;
     }
 
     public String getFeatureId() {
@@ -67,6 +78,7 @@ public class Features
         this.description = description;
     }
 
+    @JsonIgnore
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -75,6 +87,7 @@ public class Features
         this.createdAt = createdAt;
     }
 
+    @JsonIgnore
     public Date getUpdatedAt() {
         return updatedAt;
     }
