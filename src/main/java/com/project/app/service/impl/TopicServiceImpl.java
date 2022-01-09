@@ -1,16 +1,19 @@
 package com.project.app.service.impl;
 
-import com.project.app.entity.Post;
+import com.project.app.dto.TopicDTO;
 import com.project.app.entity.Topic;
-import com.project.app.exception.NotFoundException;
-import com.project.app.repository.PostRepository;
 import com.project.app.repository.TopicRepository;
 import com.project.app.service.TopicService;
+import com.project.app.specification.TopicSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,13 +27,14 @@ public class TopicServiceImpl implements TopicService {
         if ( optionalTopic.isPresent()){
             return  optionalTopic.get();
         } else {
-            throw new NotFoundException(String.format("Topic with ID %s Not Found", id));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("topic with id %s not found", id));
         }
     }
 
     @Override
-    public List<Topic> getAll() {
-        return topicRepository.findAll();
+    public Page<Topic> getAll(TopicDTO dto, Pageable pageable) {
+        Specification<Topic> specification = TopicSpecification.getSpecificationTopic(dto);
+        return topicRepository.findAll(specification, pageable);
     }
 
     @Override
@@ -50,7 +54,7 @@ public class TopicServiceImpl implements TopicService {
     public String deleteById(String id) {
         Topic topic = getById(id);
         topicRepository.delete(topic);
-        return String.format("Topic with ID %s has been deleted", id);
+        return String.format("topic with id %s has been deleted", id);
     }
 
 }

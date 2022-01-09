@@ -1,13 +1,13 @@
 package com.project.app.service;
 
+import com.project.app.dto.PostDTO;
 import com.project.app.entity.Post;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PostService {
     public Post getById(String id);
-    public List<Post> getAll();
+    public Page<Post> getAll(PostDTO dto, Pageable pageable);
     public Post create(Post post);
-    public Post update(Post post);
     public String deleteById(String id);
 }

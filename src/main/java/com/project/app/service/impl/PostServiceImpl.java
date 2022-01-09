@@ -1,14 +1,19 @@
 package com.project.app.service.impl;
 
+import com.project.app.dto.PostDTO;
 import com.project.app.entity.Post;
 import com.project.app.entity.Topic;
-import com.project.app.exception.NotFoundException;
 import com.project.app.repository.PostRepository;
-import com.project.app.repository.TopicRepository;
 import com.project.app.service.PostService;
 import com.project.app.service.TopicService;
+import com.project.app.specification.PostSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -28,13 +33,14 @@ public class PostServiceImpl implements PostService {
         if ( optionalPost.isPresent()){
             return  optionalPost.get();
         } else {
-            throw new NotFoundException(String.format("Post with ID %s Not Found", id));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("post with id %s not found", id));
         }
     }
 
     @Override
-    public List<Post> getAll() {
-        return postRepository.findAll();
+    public Page<Post> getAll(PostDTO dto, Pageable pageable) {
+        Specification<Post> specification = PostSpecification.getSpecification(dto);
+        return postRepository.findAll(specification, pageable);
     }
 
     @Override
@@ -51,11 +57,6 @@ public class PostServiceImpl implements PostService {
         return savedPost;
     }
 
-    public Post update(Post post){
-        getById(post.getId());
-        return postRepository.save(post);
-    }
-
     @Override
     @Transactional
     public String deleteById(String id) {
@@ -64,7 +65,7 @@ public class PostServiceImpl implements PostService {
         topic.getPosts().remove(post);
 
         postRepository.delete(getById(id));
-        return String.format("Post with ID %s has been deleted", id);
+        return String.format("post with id %s has been deleted", id);
     }
 
 }
