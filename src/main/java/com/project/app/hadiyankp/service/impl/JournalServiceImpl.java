@@ -1,10 +1,7 @@
 package com.project.app.hadiyankp.service.impl;
 
 import com.project.app.hadiyankp.dto.JournalDTO;
-import com.project.app.hadiyankp.entity.library.Author;
-import com.project.app.hadiyankp.entity.library.Files;
-import com.project.app.hadiyankp.entity.library.Journal;
-import com.project.app.hadiyankp.entity.library.Writer;
+import com.project.app.hadiyankp.entity.library.*;
 import com.project.app.hadiyankp.exception.NotFoundException;
 import com.project.app.hadiyankp.repository.JournalRepository;
 import com.project.app.hadiyankp.repository.WriterRepository;
@@ -74,13 +71,17 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     public String deleteById(String id) {
-        return null;
+        Journal journal = getById(id);
+        journalRepository.delete(journal);
+        return String.format("Journal with Id %s has been deleted",journal.getId());
     }
 
     @Override
     public Journal updateById(Journal journal, MultipartFile photo) {
-        return null;
+        getById(journal.getId());
+        return journalRepository.save(journal);
     }
+
     @Override
     public JournalResponse saveResponse(){
         return null;

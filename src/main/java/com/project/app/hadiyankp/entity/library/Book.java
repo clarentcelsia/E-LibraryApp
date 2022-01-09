@@ -1,5 +1,6 @@
 package com.project.app.hadiyankp.entity.library;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,29 +16,43 @@ public class Book {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
+    private String cover;
+
     @Column(nullable = false)
     private String title;
 
-    private String author;
+    private String description;
 
     @Column(nullable = false)
     private String publisher;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
-    private String years;
+    private Date publishDate;
 
     @Column(nullable = false)
-    private String isbn;
+    private String book;
 
-    @ManyToOne(targetEntity = Subject.class,fetch = FetchType.EAGER)
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    private String total_ratings;
 
-    @ManyToOne(targetEntity = Type.class,fetch = FetchType.EAGER)
+    private String total_review;
+
+    private String stock;
+
+    @ManyToMany(targetEntity = Category.class,fetch = FetchType.LAZY,cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne(targetEntity = Type.class,fetch = FetchType.LAZY,cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
     @JoinColumn(name = "type_id")
     private Type type;
 
-    private String description;
 
     @CreatedDate
     @Column(updatable = false)
@@ -60,26 +75,20 @@ public class Book {
     public Book() {
     }
 
-    public Book(String id, String title, String author, String publisher, String years, String isbn, Subject subject, Type type, String description, Date createdAt, Date updateAt) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.publisher = publisher;
-        this.years = years;
-        this.isbn = isbn;
-        this.subject = subject;
-        this.type = type;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public String getTitle() {
@@ -90,12 +99,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getPublisher() {
@@ -106,28 +115,52 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public String getYears() {
-        return years;
+    public Date getPublishDate() {
+        return publishDate;
     }
 
-    public void setYears(String years) {
-        this.years = years;
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getBook() {
+        return book;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setBook(String book) {
+        this.book = book;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public String getTotal_ratings() {
+        return total_ratings;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setTotal_ratings(String total_ratings) {
+        this.total_ratings = total_ratings;
+    }
+
+    public String getTotal_review() {
+        return total_review;
+    }
+
+    public void setTotal_review(String total_review) {
+        this.total_review = total_review;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Type getType() {
@@ -136,14 +169,6 @@ public class Book {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Date getCreatedAt() {
@@ -162,4 +187,20 @@ public class Book {
         this.updateAt = updateAt;
     }
 
+    public Book(String id, String cover, String title, String description, String publisher, Date publishDate, String book, String total_ratings, String total_review, String stock, Category category, Type type, Date createdAt, Date updateAt) {
+        this.id = id;
+        this.cover = cover;
+        this.title = title;
+        this.description = description;
+        this.publisher = publisher;
+        this.publishDate = publishDate;
+        this.book = book;
+        this.total_ratings = total_ratings;
+        this.total_review = total_review;
+        this.stock = stock;
+        this.category = category;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.updateAt = updateAt;
+    }
 }

@@ -13,6 +13,9 @@ public class FileService {
     void saveFile(Files files){
         fileRepository.save(files);
     }
+//    void saveTwoFile(Files fileOne, Files filesTwo){
+//        fileRepository.save(fileOne,filesTwo);
+//    }
 //
 //    Files get(String id);
 }
