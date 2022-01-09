@@ -2,6 +2,8 @@ package com.project.app.hadiyankp.controller;
 
 import com.project.app.hadiyankp.dto.JournalDTO;
 import com.project.app.hadiyankp.entity.library.Journal;
+import com.project.app.hadiyankp.entity.library.Publisher;
+import com.project.app.hadiyankp.service.AuthorService;
 import com.project.app.hadiyankp.service.JournalService;
 import com.project.app.hadiyankp.service.impl.FileService;
 import com.project.app.hadiyankp.util.WebResponse;
@@ -21,6 +23,8 @@ public class JournalController {
 
     @Autowired
     JournalService journalService;
+    @Autowired
+    AuthorService authorService;
 
     @Autowired
     FileService fileService;
@@ -73,6 +77,44 @@ public class JournalController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @DeleteMapping("/{journalId}")
+    public ResponseEntity<WebResponse<String>> deletePublisherById(@PathVariable("journalId") String id) {
+        String delete = journalService.deleteById(id);
+        WebResponse<String> responseDelete = new WebResponse<>("Deleted", delete);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(responseDelete);
+//        return customerService.deleteCustomer(id);
+    }
+//    @PutMapping
+//    public ResponseEntity<WebResponse<Journal>> updatePublisherById(@RequestBody Journal journal) {
+//        Journal update = journalService.updateById(journal,photo);
+//        WebResponse<Journal> response = new WebResponse<>("Data Has Been Updated", update);
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(response);
+//    }
+    @PutMapping(
+            consumes = {
+                    MediaType.MULTIPART_FORM_DATA_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_OCTET_STREAM_VALUE
+            },
+            produces = "application/json"
+    )
+    public ResponseEntity<WebResponse<Journal>> update(
+            @RequestPart(name = "journal") Journal journal,
+            @RequestPart(name = "files") MultipartFile photo
+    ) {
+        Journal updateById = journalService.updateById(journal,photo);
+        WebResponse<Journal> response = new WebResponse<>("Data Journal Has Been Updated", updateById);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+//        return journalServiceImpl.createJournal(journal,photo);
+    }
+
 
 
 

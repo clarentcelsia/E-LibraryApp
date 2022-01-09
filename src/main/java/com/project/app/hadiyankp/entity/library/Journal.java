@@ -1,12 +1,15 @@
 package com.project.app.hadiyankp.entity.library;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "journal")
@@ -21,7 +24,9 @@ public class Journal {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private Date publishDate;
+
     private String files;
+
     @CreatedDate
     @Column(updatable = false)
     private Date createdAt;
@@ -30,6 +35,29 @@ public class Journal {
     private Date updateAt;
 
     private Boolean isDeleted;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST
+    })
+    @JoinTable(name = "journal_writers",
+            joinColumns = @JoinColumn(name = "journal_id"),
+            inverseJoinColumns = @JoinColumn(name = "writer_id"))
+    @JsonManagedReference
+    private List<Writer> writers = new ArrayList<>();
+
+    public Journal(String id, String doi, String title, String description, Date publishDate, String files, Date createdAt, Date updateAt, Boolean isDeleted, List<Writer> writers) {
+        this.id = id;
+        this.doi = doi;
+        this.title = title;
+        this.description = description;
+        this.publishDate = publishDate;
+        this.files = files;
+        this.createdAt = createdAt;
+        this.updateAt = updateAt;
+        this.isDeleted = isDeleted;
+        this.writers = writers;
+    }
 
     @PrePersist
     private void insertBefore() {
@@ -122,19 +150,15 @@ public class Journal {
         isDeleted = deleted;
     }
 
-    public Journal() {
+    public Journal(String doi, String title, String description, List<Writer> writers) {
     }
 
-    public Journal(String id, String doi, String title, String description, Date publishDate, String files, Date createdAt, Date updateAt, Boolean isDeleted) {
-        this.id = id;
-        this.doi = doi;
-        this.title = title;
-        this.description = description;
-        this.publishDate = publishDate;
-        this.files = files;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
-        this.isDeleted = isDeleted;
+    public List<Writer> getWriters() {
+        return writers;
+    }
+
+    public void setWriters(List<Writer> writers) {
+        this.writers = writers;
     }
 }
 

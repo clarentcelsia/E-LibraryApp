@@ -1,15 +1,16 @@
 package com.project.app.hadiyankp.service.impl;
 
 import com.project.app.hadiyankp.dto.JournalDTO;
+import com.project.app.hadiyankp.entity.library.Author;
 import com.project.app.hadiyankp.entity.library.Files;
 import com.project.app.hadiyankp.entity.library.Journal;
-import com.project.app.hadiyankp.entity.library.Publisher;
+import com.project.app.hadiyankp.entity.library.Writer;
 import com.project.app.hadiyankp.exception.NotFoundException;
-import com.project.app.hadiyankp.repository.FileRepository;
 import com.project.app.hadiyankp.repository.JournalRepository;
+import com.project.app.hadiyankp.repository.WriterRepository;
+import com.project.app.hadiyankp.response.JournalResponse;
 import com.project.app.hadiyankp.service.JournalService;
 import com.project.app.hadiyankp.specification.JournalSpecification;
-import com.project.app.hadiyankp.specification.PublisherSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +20,19 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class JournalServiceImpl implements JournalService {
     @Autowired
     JournalRepository journalRepository;
+    @Autowired
+    JournalResponse journalResponse;
+    @Autowired
+    WriterRepository writerRepository;
 
     @Autowired
     FileService fileService;
@@ -73,6 +81,35 @@ public class JournalServiceImpl implements JournalService {
 
     @Override
     public Journal updateById(Journal journal, MultipartFile photo) {
+        return null;
+    }
+    @Override
+    public JournalResponse saveResponse(){
+        return null;
+    }
+
+    @Override
+    public Journal saveJournalToDB(JournalResponse journalResponse) {
+        Journal journal = new Journal(
+                journalResponse.getDoi(),
+                journalResponse.getTitle(),
+                journalResponse.getDescription(),
+                journalResponse.getWriters()
+        );
+        Journal emptyJournal = journalRepository.save(journal);
+        List<Writer> writerList = new ArrayList<>();
+        for (Writer strWriter : journalResponse.getWriters() ){
+            Writer writer = new Writer(strWriter);
+            Writer writerDB =  writerRepository.save(writer);
+            emptyJournal.getWriters().add(writerDB);
+        }
+        Journal save = journalRepository.save(emptyJournal);
+        return null;
+    }
+
+    @Override
+    public Journal createJournal(Journal journal, MultipartFile files, Set<Author> authors) {
+
         return null;
     }
 

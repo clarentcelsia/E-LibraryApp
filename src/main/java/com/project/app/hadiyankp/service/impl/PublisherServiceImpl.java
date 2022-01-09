@@ -29,7 +29,7 @@ public class PublisherServiceImpl implements PublisherService {
         Optional<Publisher> publisher = publisherRepository.findById(id);
         if (publisher.isPresent()) {
             return publisher.get();
-        }else {
+        } else {
             throw new NotFoundException(String.format("Publisher with id %s not found", id));
         }
     }
@@ -37,14 +37,14 @@ public class PublisherServiceImpl implements PublisherService {
     @Override
     public Page<Publisher> listWithPage(Pageable pageable, PublisherDTO publisherDTO) {
         Specification<Publisher> specification = PublisherSpecification.getSpecification(publisherDTO);
-        return publisherRepository.findAll(specification,pageable);
+        return publisherRepository.findAll(specification, pageable);
     }
 
     @Override
     public String deletePublisher(String id) {
         Publisher publisher = getById(id);
         publisherRepository.delete(publisher);
-        return String.format("Publisher with Id %s has been deleted",publisher.getId());
+        return String.format("Publisher with Id %s has been deleted", publisher.getId());
     }
 
     @Override
