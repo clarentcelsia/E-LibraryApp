@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.rmi.Remote;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -22,11 +23,11 @@ public class ReturnBook {
     @GeneratedValue(generator = "uuid-generator")
     private String id;
 
-    @OneToOne(targetEntity = Loan.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = Loan.class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "loan_id", updatable = false, unique = true )
     private Loan loan;
 
-    @OneToMany(targetEntity = ReturnBookDetail.class, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = ReturnBookDetail.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference
     private List<ReturnBookDetail> returnBookDetails;
 

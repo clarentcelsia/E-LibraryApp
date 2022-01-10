@@ -38,11 +38,12 @@ public class Loan {
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
-    @OneToMany(targetEntity = LoanDetail.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = LoanDetail.class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<LoanDetail> loanDetail;
 
     @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
     private LocalDateTime dateBorrow;
 

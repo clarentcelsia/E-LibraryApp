@@ -1,11 +1,16 @@
 package com.project.app.service.impl;
 
+import com.project.app.dto.ReturnDTO;
 import com.project.app.entity.*;
 import com.project.app.repository.ReturnBookRepository;
 import com.project.app.service.LoanService;
 import com.project.app.service.ReturnBookDetailService;
 import com.project.app.service.ReturnBookService;
+import com.project.app.specification.ReturnSpec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,12 +97,15 @@ public class ReturnBookServiceImpl implements ReturnBookService {
         returnBook.setTotalQty(totalQty);
         returnBook.setTotalPenaltyFee(totalPenaltyFee);
 
+        loan.setReturnBook(returnBook);
+
         return repository.save(returnBook);
     }
 
     @Override
-    public List<ReturnBook> getReturnBooks() {
-        return repository.findAll();
+    public Page<ReturnBook> getReturnBooks(ReturnDTO dto, Pageable pageable) {
+        Specification<ReturnBook> specification = ReturnSpec.getSpecification(dto);
+        return repository.findAll(specification,pageable);
     }
 
     @Override
