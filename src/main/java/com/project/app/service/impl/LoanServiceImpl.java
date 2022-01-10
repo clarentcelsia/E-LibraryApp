@@ -65,14 +65,14 @@ public class LoanServiceImpl implements LoanService {
         Integer totalQty = 0;
         for(LoanDetail loanDetail: loan.getLoanDetail()){
             // update stock buku = TAMBAHIN SAAT MERGING.
-//            Book book = loanDetail.getBook();
+//            Book book = bookservice.getById(loanDetail.getBook().getId());
 //            Integer newStock = book.getStock() - loanDetail.getQty();
 //            if(newStock < 0 ){
 //                String message = String.format("book stock : %d is less than requested loan", book.getStock());
 //                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
 //            }
 //            book.setStock(newStock);
-////            bookservice.update(book);
+//            bookservice.update(book);
 
 
             // save info loanDetail

@@ -64,8 +64,8 @@ public class ReturnBookServiceImpl implements ReturnBookService {
             }
 
             // Tambahkan Stock buku perpus sesuai jumlah pengembalian;
-            Book book = loanDetail.getBook();
-            book.setStock(returnBookDetail.getQty());
+//            Book book = loanDetail.getBook();
+//            book.setStock(returnBookDetail.getQty());
 //            bookService.update(book); // tambahin nanti saat merging.
 
             // TAMBAHIN - logic jumlah hari keterlambatan;
@@ -108,12 +108,4 @@ public class ReturnBookServiceImpl implements ReturnBookService {
         return repository.findAll(specification,pageable);
     }
 
-    @Override
-    public ReturnBook loadReturnBookByLoan(Loan loan) {
-        Optional<ReturnBook> returnBook = repository.findByLoan(loan);
-        if (returnBook.isPresent()){
-            return returnBook.get();
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("there is no return info with loan id %s ", loan.getId()));
-    }
 }

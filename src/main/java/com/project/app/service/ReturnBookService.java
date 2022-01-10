@@ -13,5 +13,4 @@ public interface ReturnBookService {
     public ReturnBook createTransaction(ReturnBook returnBook);
     public Page<ReturnBook> getReturnBooks(ReturnDTO dto, Pageable pageable);
 
-    public ReturnBook loadReturnBookByLoan(Loan loan);
 }

@@ -24,9 +24,6 @@ public class LoanController {
     @Autowired
     private LoanService loanService;
 
-    @Autowired
-    private ReturnBookService returnBookService;
-
     @GetMapping
     public ResponseEntity<PageResponse<Loan>> getAllLoan(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
@@ -56,14 +53,6 @@ public class LoanController {
         Loan loan = loanService.getById(id);
         WebResponse<Loan> response = new WebResponse<>("getting loan",loan);
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/{loanId}/status")
-    public ResponseEntity<WebResponse<ReturnBook>> getReturnBookStatus(@PathVariable("loanId") String id){
-        Loan loan = loanService.getById(id);
-        ReturnBook returnBook = returnBookService.loadReturnBookByLoan(loan);
-        WebResponse<ReturnBook> response = new WebResponse<>("getting loan status",returnBook);
-        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @DeleteMapping("/{loanId}")
