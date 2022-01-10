@@ -3,13 +3,13 @@ package com.project.app.service.impl;
 import com.project.app.entity.Book;
 import com.project.app.entity.Loan;
 import com.project.app.entity.LoanDetail;
-import com.project.app.exception.NotFoundException;
 import com.project.app.repository.LoanRepository;
 import com.project.app.service.LoanDetailService;
 import com.project.app.service.LoanService;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
@@ -29,7 +29,7 @@ public class LoanServiceImpl implements LoanService {
     public String deleteById(String id) {
         Loan loan = getById(id);
         loanRepository.delete(loan);
-        return String.format("Loan with %s is deleted", id);
+        return String.format("loan with id %s is deleted", id);
     }
 
     @Override
@@ -38,8 +38,7 @@ public class LoanServiceImpl implements LoanService {
         if(optionalLoan.isPresent()){
             return optionalLoan.get();
         }
-        // tambahin exception
-        throw new NotFoundException(String.format("Loan with Id %s not found", id));
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("loan with id %s not found", id));
     }
 
     @Override
@@ -55,21 +54,20 @@ public class LoanServiceImpl implements LoanService {
         LocalDateTime dateBorrow = LocalDateTime.now();
         Duration duration = Duration.between(dateBorrow, dateDue);
         if (duration.toDays() < 1 ){
-            throw new RuntimeException("Masukkan tanggal pengembalian dengan durasi minimal 1 hari dari tanggal pinjam");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "dateDue should not earlier than dateBorrow");
         }
 
         Integer totalQty = 0;
         for(LoanDetail loanDetail: loan.getLoanDetail()){
             // update stock buku = TAMBAHIN SAAT MERGING.
-//            Book book = loanDetail.getBook();
-//            Integer newStock = book.getStock() - loanDetail.getQty();
-//            if(newStock < 0 ){
-//                String message = String.format("stock buku kurang, tersedia %d buku", book.getStock());
-//                throw new RuntimeException(message);
-//            }
-
-//            book.setStock(newStock);
-            // bookservice.update(book)
+            Book book = loanDetail.getBook();
+            Integer newStock = book.getStock() - loanDetail.getQty();
+            if(newStock < 0 ){
+                String message = String.format("book stock : %d is less than requested loan", book.getStock());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+            }
+            book.setStock(newStock);
+//            bookservice.update(book);
 
 
             // save info loanDetail
