@@ -9,5 +9,4 @@ public class Utility {
 
     public static final String RESPONSE_NOT_FOUND = "exception: no data with id %s was not found";
     public static final String RESPONSE_NULL = "error: data error or null";
-
 }

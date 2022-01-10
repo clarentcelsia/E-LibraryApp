@@ -13,8 +13,8 @@ import java.util.Date;
 public class GlobalException extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> resourceNotFound(ResourceNotFoundException ex, WebRequest request){
-        Error error = new Error(new Date(), ex.getMessage(), request.getDescription(false));
+    public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest webRequest){
+        Error error = new Error(new Date(), ex.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
