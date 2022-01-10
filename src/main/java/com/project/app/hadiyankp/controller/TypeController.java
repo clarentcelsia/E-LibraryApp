@@ -60,7 +60,7 @@ public class TypeController {
 //        return customerService.deleteCustomer(id);
     }
     @PutMapping
-    public ResponseEntity<WebResponse<Type>> updateCustomerById(@RequestBody Type type) {
+    public ResponseEntity<WebResponse<Type>> updateById(@RequestBody Type type) {
         Type updateType = typeService.updateType(type);
         WebResponse<Type> response = new WebResponse<>("Data Type Has Been Updated",updateType);
         return ResponseEntity
