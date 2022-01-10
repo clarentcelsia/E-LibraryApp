@@ -24,15 +24,6 @@ public class AuthorController {
     public AuthorController() {
     }
 
-    @PostMapping
-    public ResponseEntity<WebResponse<Author>> create(@RequestBody Author author) {
-        Author create = authorService.create(author);
-        WebResponse<Author> response = new WebResponse<>("Data Author Has Been Created", create);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
-    }
-
     @GetMapping("/{authorId}")
     public ResponseEntity<WebResponse<Author>> getById(@PathVariable("authorId") String id) {
         Author author = authorService.getById(id);
@@ -41,16 +32,15 @@ public class AuthorController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
     @GetMapping
     public ResponseEntity<WebResponse<Page<Author>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "firstName", required = false) String firstName,
-            @RequestParam(name = "middleName", required = false) String middleName,
-            @RequestParam(name = "lastName", required = false) String lastName
+            @RequestParam(name = "name", required = false) String name
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        AuthorDTO authorDTO = new AuthorDTO(firstName,middleName,lastName);
+        AuthorDTO authorDTO = new AuthorDTO(name);
         Page<Author> authors = authorService.listWithPage(pageable, authorDTO);
         WebResponse<Page<Author>> response = new WebResponse<>("Success", authors);
 
@@ -66,15 +56,6 @@ public class AuthorController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);
-//        return customerService.deleteCustomer(id);
     }
 
-    @PutMapping
-    public ResponseEntity<WebResponse<Author>> updateById(@RequestBody Author author) {
-        Author updateAuthor = authorService.update(author);
-        WebResponse<Author> response = new WebResponse<>("Data Has Been Updated", updateAuthor);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
-    }
 }

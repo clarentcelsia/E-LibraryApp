@@ -31,7 +31,7 @@ public class Writer {
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "writers",cascade = {
             CascadeType.MERGE,CascadeType.PERSIST
     })
-    @JsonManagedReference
+    @JsonBackReference
     private List<Journal>journals = new ArrayList<>();
 
     @PrePersist
@@ -50,6 +50,7 @@ public class Writer {
         this.updateAt = new Date();
     }
 
+
     public Writer(String id, String writer, Date createdAt, Date updateAt, List<Journal> journals) {
         this.id = id;
         this.writer = writer;
@@ -59,6 +60,9 @@ public class Writer {
     }
     public String getId() {
         return id;
+    }
+
+    public Writer() {
     }
 
     public void setId(String id) {

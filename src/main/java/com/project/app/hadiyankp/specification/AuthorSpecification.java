@@ -17,21 +17,12 @@ public class AuthorSpecification {
             @Override
             public Predicate toPredicate(Root<Author> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
-                if (authorDTO.getGetSearchByFirstName() != null) {
-                    Predicate authorFirstName = criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), "%"
-                            + authorDTO.getGetSearchByFirstName().toLowerCase() + "%");
-                    predicates.add(authorFirstName);
+                if (authorDTO.getGetSearchByName() != null) {
+                    Predicate name = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"
+                            + authorDTO.getGetSearchByName().toLowerCase() + "%");
+                    predicates.add(name);
                 }
-                if (authorDTO.getGetSearchByMiddleName()!=null){
-                    Predicate authorMiddleName = criteriaBuilder.like(criteriaBuilder.lower(root.get("middleName")), "%"
-                            + authorDTO.getGetSearchByMiddleName().toLowerCase() + "%");
-                    predicates.add(authorMiddleName);
-                }
-                if (authorDTO.getGetSearchByLastName()!=null){
-                    Predicate authorLastName = criteriaBuilder.like(criteriaBuilder.lower(root.get("lastName")), "%"
-                            + authorDTO.getGetSearchByLastName().toLowerCase() + "%");
-                    predicates.add(authorLastName);
-                }
+
                 Predicate[]arrayPredicates =predicates.toArray(new Predicate[predicates.size()]);
                 return criteriaBuilder.and(arrayPredicates);
             }

@@ -17,16 +17,16 @@ public class FIleController {
     @Autowired
     private FileService fileService;
 
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<byte[]> getFile(@PathVariable String id) {
-//        Files file = fileService.ge(id);
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .header(HttpHeaders.CONTENT_DISPOSITION,
-//                        "attachment; filename=\""
-//                                + file.getName() + "\"")
-//                .body(file.getData());
-//    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<byte[]> getFile(@PathVariable String id) {
+        Files file = fileService.getFileById(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\""
+                                + file.getFileName() + "\"")
+                .body(file.getData());
+    }
 }

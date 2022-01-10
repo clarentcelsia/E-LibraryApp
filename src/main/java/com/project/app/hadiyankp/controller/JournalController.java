@@ -2,13 +2,11 @@ package com.project.app.hadiyankp.controller;
 
 import com.project.app.hadiyankp.dto.JournalDTO;
 import com.project.app.hadiyankp.entity.library.Journal;
-import com.project.app.hadiyankp.entity.library.Publisher;
+import com.project.app.hadiyankp.request.JournalRequest;
 import com.project.app.hadiyankp.response.JournalResponse;
-import com.project.app.hadiyankp.service.AuthorService;
 import com.project.app.hadiyankp.service.JournalService;
 import com.project.app.hadiyankp.service.impl.FileService;
 import com.project.app.hadiyankp.util.WebResponse;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +23,9 @@ public class JournalController {
 
     @Autowired
     JournalService journalService;
+
     @Autowired
     FileService fileService;
-
-
-    public JournalController() {
-    }
 
     @PostMapping(
             consumes = {
@@ -41,7 +36,7 @@ public class JournalController {
             produces = "application/json"
     )
     public ResponseEntity<WebResponse<Journal>> create(
-            @RequestPart(name = "journal") Journal journal,
+            @RequestPart(name = "journal") JournalRequest journal,
             @RequestPart(name = "files") MultipartFile photo
     ) {
         Journal createJournal = journalService.create(journal,photo);
@@ -49,8 +44,8 @@ public class JournalController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
-//        return journalServiceImpl.createJournal(journal,photo);
     }
+
     @GetMapping("/{journalId}")
     public ResponseEntity<WebResponse<Journal>> getById(@PathVariable("journalId") String id) {
         Journal journal = journalService.getById(id);
@@ -59,14 +54,6 @@ public class JournalController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
-
-    @PostMapping
-    public ResponseEntity<WebResponse<Journal>> saveDB(@RequestBody JournalResponse journalResponse){
-        Journal journal = journalService.saveJournalToDB(journalResponse);
-        WebResponse<Journal>response = new WebResponse<>("Set to Database",journal);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
 
     @GetMapping
     public ResponseEntity<WebResponse<Page<Journal>>> listWithPage(
@@ -86,22 +73,14 @@ public class JournalController {
     }
 
     @DeleteMapping("/{journalId}")
-    public ResponseEntity<WebResponse<String>> deletePublisherById(@PathVariable("journalId") String id) {
+    public ResponseEntity<WebResponse<String>> deleteJournalById(@PathVariable("journalId") String id) {
         String delete = journalService.deleteById(id);
         WebResponse<String> responseDelete = new WebResponse<>("Deleted", delete);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);
-//        return customerService.deleteCustomer(id);
     }
-//    @PutMapping
-//    public ResponseEntity<WebResponse<Journal>> updatePublisherById(@RequestBody Journal journal) {
-//        Journal update = journalService.updateById(journal,photo);
-//        WebResponse<Journal> response = new WebResponse<>("Data Has Been Updated", update);
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(response);
-//    }
+
     @PutMapping(
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -111,7 +90,7 @@ public class JournalController {
             produces = "application/json"
     )
     public ResponseEntity<WebResponse<Journal>> update(
-            @RequestPart(name = "journal") Journal journal,
+            @RequestPart(name = "journal") JournalRequest journal,
             @RequestPart(name = "files") MultipartFile photo
     ) {
         Journal updateById = journalService.updateById(journal,photo);
@@ -119,7 +98,6 @@ public class JournalController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
-//        return journalServiceImpl.createJournal(journal,photo);
     }
 
 

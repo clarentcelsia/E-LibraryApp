@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = "com.project.app")
+@ComponentScan(basePackages = "com.project.app.hadiyankp")
 @SpringBootApplication
 public class ProjectApplication {
 
@@ -13,3 +13,4 @@ public class ProjectApplication {
 	}
 
 }
+

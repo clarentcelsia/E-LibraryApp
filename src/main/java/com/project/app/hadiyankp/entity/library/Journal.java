@@ -46,17 +46,15 @@ public class Journal {
     @JsonManagedReference
     private List<Writer> writers = new ArrayList<>();
 
-    public Journal(String id, String doi, String title, String description, Date publishDate, String files, Date createdAt, Date updateAt, Boolean isDeleted, List<Writer> writers) {
-        this.id = id;
+    public Journal() {
+    }
+
+    public Journal(String doi, String title, String description, Date publishDate, String files) {
         this.doi = doi;
         this.title = title;
         this.description = description;
         this.publishDate = publishDate;
         this.files = files;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
-        this.isDeleted = isDeleted;
-        this.writers = writers;
     }
 
     @PrePersist

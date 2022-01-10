@@ -1,14 +1,15 @@
 package com.project.app.hadiyankp.entity.library;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "author")
+@Table(name = "mst_author")
 public class Author {
 
     @Id
@@ -16,61 +17,20 @@ public class Author {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    @Column(nullable = false)
-    private String firstName;
+    private String name;
 
-    private String middleName;
-
-    private String lastName;
-
-    private Boolean isDeleted;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private Date createdAt;
-
-    @LastModifiedDate
-    private Date updateAt;
-
+    @JoinTable(
+            name = "tb_book_author",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.ALL
+    })
+    @JsonManagedReference
+    private List<Books> books = new ArrayList<>();
 
     public Author() {
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public Author(String id, String firstName, String middleName, String lastName, Boolean isDeleted, Date createdAt, Date updateAt) {
-        this.id = id;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.isDeleted = isDeleted;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
-    }
-
-    @PrePersist
-    private void insertBefore() {
-        if (this.createdAt == null) {
-            this.createdAt = new Date();
-        }
-
-        if (this.updateAt == null) {
-            this.updateAt = new Date();
-        }
-
-        if (isDeleted == null)
-            isDeleted = false;
-    }
-
-    @PreUpdate
-    private void updateBefore() {
-        this.updateAt = new Date();
     }
 
     public String getId() {
@@ -81,43 +41,26 @@ public class Author {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMiddleName() {
-        return middleName;
+    public List<Books> getBooks() {
+        return books;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setBooks(List<Books> books) {
+        this.books = books;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id='" + id + '\'' +
+                ", name='" + name ;
     }
 }

@@ -1,16 +1,20 @@
 package com.project.app.hadiyankp.entity.library;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "mst_book")
-public class Book {
+public class Books {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
@@ -23,36 +27,34 @@ public class Book {
 
     private String description;
 
+    @ManyToMany(
+            fetch = FetchType.EAGER, cascade = {
+            CascadeType.ALL
+    }, mappedBy = "books")
+    @JsonBackReference
+    private List<Author> authors = new ArrayList<>();
+
     @Column(nullable = false)
     private String publisher;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(nullable = false)
-    private Date publishDate;
+    private Date publishedDate;
 
-    @Column(nullable = false)
-    private String book;
+    private String bookUrl;
 
-    private String total_ratings;
+    private Float totalRating;
 
-    private String total_review;
+    private Integer totalReview;
 
-    private String stock;
+    private Integer stock;
 
-    @ManyToMany(targetEntity = Category.class,fetch = FetchType.LAZY,cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST
-    })
+    @ManyToOne(targetEntity = Category.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(targetEntity = Type.class,fetch = FetchType.LAZY,cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST
-    })
+    @ManyToOne(targetEntity = Type.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     private Type type;
-
 
     @CreatedDate
     @Column(updatable = false)
@@ -65,6 +67,9 @@ public class Book {
     private void createDate() {
         if (this.createdAt == null) this.createdAt = new Date();
         if (this.updateAt == null) this.updateAt = new Date();
+        if (this.stock == null) this.stock = 1;
+        if (this.totalRating == null) this.totalRating = 0f;
+        if (this.totalReview == null) this.totalReview = 0;
     }
 
     @PreUpdate //pre preUpdate akan dijalankan ketika update data dilakukan
@@ -72,7 +77,7 @@ public class Book {
         this.updateAt = new Date();
     }
 
-    public Book() {
+    public Books() {
     }
 
     public String getId() {
@@ -115,43 +120,43 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Date getPublishDate() {
-        return publishDate;
+    public Date getPublishedDate() {
+        return publishedDate;
     }
 
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
+    public void setPublishedDate(Date publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
-    public String getBook() {
-        return book;
+    public String getBookUrl() {
+        return bookUrl;
     }
 
-    public void setBook(String book) {
-        this.book = book;
+    public void setBookUrl(String bookUrl) {
+        this.bookUrl = bookUrl;
     }
 
-    public String getTotal_ratings() {
-        return total_ratings;
+    public Float getTotalRating() {
+        return totalRating;
     }
 
-    public void setTotal_ratings(String total_ratings) {
-        this.total_ratings = total_ratings;
+    public void setTotalRating(Float totalRating) {
+        this.totalRating = totalRating;
     }
 
-    public String getTotal_review() {
-        return total_review;
+    public Integer getTotalReview() {
+        return totalReview;
     }
 
-    public void setTotal_review(String total_review) {
-        this.total_review = total_review;
+    public void setTotalReview(Integer totalReview) {
+        this.totalReview = totalReview;
     }
 
-    public String getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(String stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
@@ -187,20 +192,32 @@ public class Book {
         this.updateAt = updateAt;
     }
 
-    public Book(String id, String cover, String title, String description, String publisher, Date publishDate, String book, String total_ratings, String total_review, String stock, Category category, Type type, Date createdAt, Date updateAt) {
-        this.id = id;
-        this.cover = cover;
-        this.title = title;
-        this.description = description;
-        this.publisher = publisher;
-        this.publishDate = publishDate;
-        this.book = book;
-        this.total_ratings = total_ratings;
-        this.total_review = total_review;
-        this.stock = stock;
-        this.category = category;
-        this.type = type;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
+
+    @Override
+    public String toString() {
+        return "Books{" +
+                "id='" + id + '\'' +
+                ", cover='" + cover + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", authors=" + authors +
+                ", publisher='" + publisher + '\'' +
+                ", publishDate=" + publishedDate +
+                ", book='" + bookUrl + '\'' +
+                ", total_ratings=" + totalRating +
+                ", total_review=" + totalReview +
+                ", stock=" + stock +
+                ", category=" + category +
+                ", type=" + type +
+                ", createdAt=" + createdAt +
+                ", updateAt=" + updateAt +
+                '}';
     }
 }

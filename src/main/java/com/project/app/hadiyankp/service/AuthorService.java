@@ -8,13 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AuthorService {
+
     Author create(Author author);
 
     Author getById(String id);
 
     Page<Author> listWithPage(Pageable pageable, AuthorDTO authorDTO);
-
-    Author update(Author author);
 
     String delete(String id);
 

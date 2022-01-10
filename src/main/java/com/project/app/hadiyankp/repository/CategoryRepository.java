@@ -1,7 +1,6 @@
 package com.project.app.hadiyankp.repository;
 
 import com.project.app.hadiyankp.entity.library.Category;
-import com.project.app.hadiyankp.entity.library.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

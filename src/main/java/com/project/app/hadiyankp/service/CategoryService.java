@@ -1,9 +1,7 @@
 package com.project.app.hadiyankp.service;
 
 import com.project.app.hadiyankp.dto.CategoryDTO;
-import com.project.app.hadiyankp.dto.SubjectDTO;
 import com.project.app.hadiyankp.entity.library.Category;
-import com.project.app.hadiyankp.entity.library.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
