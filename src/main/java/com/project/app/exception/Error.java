@@ -14,6 +14,9 @@ public class Error {
         this.description = description;
     }
 
+    public Error() {
+    }
+
     public Date getTimestamp() {
         return timestamp;
     }

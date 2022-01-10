@@ -23,5 +23,4 @@ public class GlobalException extends ResponseEntityExceptionHandler {
         Error error = new Error(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
