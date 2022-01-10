@@ -172,30 +172,6 @@ class RoomServiceImplTest {
         assertFalse(expectedRoom.getRoomMember().contains(roomMember));
     }
 
-    @Test
-    public void getRoomMembers_ShoudReturn_PagedMembers(){
-        // preparasi, add 2 members to room
-        User jono = new User("testing2", "jono");
-        User rexus = new User("testing3", "rexus");
-
-        Room roomWithMembers = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
-
-        RoomMember roomMember = new RoomMember("id-member1", roomWithMembers, jono, new Date());
-        RoomMember roomMember2 = new RoomMember("id-member2", roomWithMembers, rexus, new Date());
-
-        roomWithMembers.getRoomMember().add(roomMember);
-        roomWithMembers.getRoomMember().add(roomMember2);
-
-        // actual
-        Mockito.when(repository.findById("id-bebas")).thenReturn(Optional.of(roomWithMembers));
-
-        Page<RoomMember> expectedMembers = service.getRoomMembers("id-bebas", PageRequest.of(0, 2));
-
-        assertEquals(expectedMembers.getTotalElements(), 2);
-        // checking if members is the same as returned page
-        assertTrue(expectedMembers.getContent().containsAll(roomWithMembers.getRoomMember()));
-    }
-
     // ===================== Room - Message Test Transaction =================
     @Test
     public void addMessageToRoom_Should_AddTwoMessageToRooms_WhenAddTwoMessagesToRooms(){
@@ -213,25 +189,5 @@ class RoomServiceImplTest {
 
         assertEquals(expectedRoom.getRoomMessage().size(), 2);
         assertTrue(expectedRoom.getRoomMessage().contains(roomMessage));
-    }
-
-    @Test
-    public void getPagedRoomMessages_ShoudReturn_PagedMessages(){
-        // preparasi, add 2 messages to room
-        User jono = new User("testing2", "jono");
-        Room roomWithMessages = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
-        RoomMessage roomMessage = new RoomMessage("id-pesan", roomWithMessages, jono, "halo guys", new Date());
-        RoomMessage roomMessage2 = new RoomMessage("id-pesan2", roomWithMessages, jono, "halo guys", new Date());
-
-        roomWithMessages.getRoomMessage().add(roomMessage);
-        roomWithMessages.getRoomMessage().add(roomMessage2);
-
-        // actual
-        Mockito.when(repository.findById("id-bebas")).thenReturn(Optional.of(roomWithMessages));
-
-        Page<RoomMessage> expectedMessages = service.getPagedRoomMessages("id-bebas", PageRequest.of(1, 2));
-
-        assertEquals(expectedMessages.getTotalElements(), 2);
-        // check if messages is the same as returned paged messages
     }
 }

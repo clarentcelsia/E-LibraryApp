@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
@@ -56,45 +54,6 @@ public class RoomController {
         WebResponse<Room> response = new WebResponse<>(message, room);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    @GetMapping("/{roomId}/members")
-    public ResponseEntity<PageResponse<RoomMember>> getRoomMembers(
-            @PathVariable("roomId") String id,
-            @RequestParam(name = "size", defaultValue = "2") Integer size,
-            @RequestParam(name = "page", defaultValue = "0") Integer page
-    ){
-        Pageable pageable = PageRequest.of(page,size);
-        String message = String.format("data halaman ke %d" ,page+1);
-        Page<RoomMember> roomMembers = roomService.getRoomMembers(id, pageable);
-
-        PageResponse<RoomMember> response = new PageResponse<>(roomMembers.getContent(), message,
-                roomMembers.getTotalElements(), roomMembers.getTotalPages(),
-                page,size);
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
-
-    }
-
-    @GetMapping("/{roomId}/messages")
-    public ResponseEntity<PageResponse<RoomMessage>> getRoomMessages(
-            @PathVariable("roomId") String id,
-            @RequestParam(name = "size", defaultValue = "2") Integer size,
-            @RequestParam(name = "page", defaultValue = "0") Integer page
-    ){
-        Pageable pageable = PageRequest.of(page,size);
-
-        Page<RoomMessage> pagedRoomMessages = roomService.getPagedRoomMessages(id, pageable);
-        HttpStatus httpStatus = HttpStatus.OK;
-        String message = String.format("data halaman ke %d" ,page+1);
-
-        PageResponse<RoomMessage> response = new PageResponse<>(
-                pagedRoomMessages.getContent(),
-                message,
-                pagedRoomMessages.getTotalElements(),
-                pagedRoomMessages.getTotalPages(), page+1, size );
-
-        return new ResponseEntity<>(response,httpStatus);
     }
 
     @PostMapping

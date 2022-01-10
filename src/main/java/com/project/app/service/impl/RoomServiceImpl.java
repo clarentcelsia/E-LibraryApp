@@ -72,28 +72,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Page<RoomMember> getRoomMembers(String id, Pageable pageable) {
-        Set<RoomMember> roomMembers = getRoomById(id).getRoomMember();
-        List<RoomMember> memberList = new ArrayList<>(roomMembers);
-
-        Integer total = roomMembers.size();
-        Integer start = Math.toIntExact(pageable.getOffset());
-        Integer end = Math.min((start + pageable.getPageSize()), total);
-
-        List<RoomMember> output = new ArrayList<>();
-
-        if (start <= end) {
-            output = memberList.subList(start, end);
-        }
-
-        return new PageImpl<>(
-                output,
-                pageable,
-                total
-        );
-    }
-
-    @Override
     @Transactional
     public Room addMemberToRoom(String roomId, RoomMember roomMember) {
         Room room = getRoomById(roomId);
@@ -123,26 +101,5 @@ public class RoomServiceImpl implements RoomService {
         room.getRoomMessage().add(roomMessage);
 
         return room;
-    }
-
-    @Override
-    public Page<RoomMessage> getPagedRoomMessages(String id, Pageable pageable) {
-        List<RoomMessage> roomMessage = getRoomById(id).getRoomMessage();
-
-        Integer total = roomMessage.size();
-        Integer start = Math.toIntExact(pageable.getOffset());
-        Integer end = Math.min((start + pageable.getPageSize()), total);
-
-        List<RoomMessage> output = new ArrayList<>();
-
-        if (start <= end) {
-            output = roomMessage.subList(start, end);
-        }
-
-        return new PageImpl<>(
-                output,
-                pageable,
-                total
-        );
     }
 }

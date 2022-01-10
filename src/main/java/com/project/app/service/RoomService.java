@@ -16,9 +16,7 @@ public interface RoomService {
     // member - room transaction
     public Room addMemberToRoom(String roomId, RoomMember roomMember);
     public Room removeMemberFromRoom(String roomId, RoomMember roomMember);
-    public Page<RoomMember> getRoomMembers(String id, Pageable pageable);
 
     // message - room transaction
     public Room addMessageToRoom(String roomId, RoomMessage roomMessage);
-    public Page<RoomMessage> getPagedRoomMessages(String id, Pageable pageable);
 }
