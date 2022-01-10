@@ -23,8 +23,9 @@ public class ReturnBook {
     @GeneratedValue(generator = "uuid-generator")
     private String id;
 
-    @OneToOne(targetEntity = Loan.class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "loan_id", updatable = false, unique = true )
+    @OneToOne(targetEntity = Loan.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "loan_id", unique = true )
+    @JsonBackReference
     private Loan loan;
 
     @OneToMany(targetEntity = ReturnBookDetail.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)

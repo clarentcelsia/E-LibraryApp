@@ -38,6 +38,10 @@ public class Loan {
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
 
+    @OneToOne(targetEntity = ReturnBook.class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private ReturnBook returnBook;
+
     @OneToMany(targetEntity = LoanDetail.class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<LoanDetail> loanDetail;
