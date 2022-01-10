@@ -1,8 +1,10 @@
 package com.project.app.service;
 
-import com.project.app.entity.Users;
+import com.project.app.entity.User;
 
 public interface UserService {
 
-    Users create(Users users);
+    User create(User user);
+
+    User getUserById(String id);
 }

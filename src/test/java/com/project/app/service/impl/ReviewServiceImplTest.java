@@ -2,7 +2,7 @@ package com.project.app.service.impl;
 
 import com.project.app.entity.Book;
 import com.project.app.entity.Review;
-import com.project.app.entity.Users;
+import com.project.app.entity.User;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class ReviewServiceImplTest {
         review = new Review();
         review.setReviewId("r01");
         review.setBook(new Book("b01", "title"));
-        review.setUsers(new Users("u01", "name"));
+        review.setUsers(new User("u01", "name"));
         review.setTitle("comment title");
         review.setContent("content");
         review.setRating(4);

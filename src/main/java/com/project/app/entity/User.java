@@ -3,25 +3,19 @@ package com.project.app.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
-//SAMPLE
 @Entity
 @Table(name = "mst_user")
-public class Users {
+public class User {
+
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String userId;
-
     private String name;
 
-    //...//
-
-
-    public Users() {
-    }
-
-    public Users(String userId, String name) {
+    public User(String userId, String name) {
         this.userId = userId;
         this.name = name;
     }

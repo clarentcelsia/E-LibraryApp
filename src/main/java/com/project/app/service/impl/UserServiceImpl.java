@@ -1,6 +1,7 @@
 package com.project.app.service.impl;
 
-import com.project.app.entity.Users;
+import com.project.app.entity.User;
+import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.UserRepository;
 import com.project.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository repository;
 
+    @Autowired
+    FileServiceImpl fileService;
+
     @Override
-    public Users create(Users users) {
-        return repository.save(users);
+    public User create(User user) {
+        return repository.save(user);
+    }
+
+    public User getUserById(String id) {
+        return repository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException("user id not found"));
     }
 }

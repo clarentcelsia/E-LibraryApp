@@ -21,9 +21,9 @@ public class Review {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @ManyToOne(targetEntity = Users.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private Users users;
+    private User user;
 
     private String title;
 
@@ -53,10 +53,10 @@ public class Review {
         this.updatedAt = new Date();
     }
 
-    public Review(String reviewId, Book book, Users users, String title, String content, Integer rating, Integer agree) {
+    public Review(String reviewId, Book book, User user, String title, String content, Integer rating, Integer agree) {
         this.reviewId = reviewId;
         this.book = book;
-        this.users = users;
+        this.user = user;
         this.title = title;
         this.content = content;
         this.rating = rating;
@@ -82,12 +82,12 @@ public class Review {
         this.book = book;
     }
 
-    public Users getUsers() {
-        return users;
+    public User getUsers() {
+        return user;
     }
 
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setUsers(User users) {
+        this.user = users;
     }
 
     public String getTitle() {

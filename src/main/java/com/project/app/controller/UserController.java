@@ -1,12 +1,11 @@
 package com.project.app.controller;
 
-import com.project.app.entity.Users;
+import com.project.app.entity.User;
 import com.project.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 //SAMPLE
 @RestController
@@ -17,7 +16,8 @@ public class UserController {
     UserService service;
 
     @PostMapping
-    public Users createUser(@RequestBody Users users){
+    public User createUser(@RequestBody User users) {
         return service.create(users);
+
     }
 }

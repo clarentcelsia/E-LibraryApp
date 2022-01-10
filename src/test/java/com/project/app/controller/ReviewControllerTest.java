@@ -3,29 +3,17 @@ package com.project.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.app.entity.Book;
 import com.project.app.entity.Review;
-import com.project.app.entity.Users;
-import com.project.app.response.PageResponse;
-import com.project.app.response.Response;
+import com.project.app.entity.User;
 import com.project.app.service.ReviewService;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.project.app.util.Utility.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -49,9 +37,9 @@ class ReviewControllerTest {
     @Test
     public void whenReviewCreated_thenReturn201() throws Exception {
         Book book = new Book("B01", "Finding Nemo");
-        Users users = new Users("U01", "Moana");
+        User user = new User("U01", "Moana");
 
-        Review review = new Review("R01", book, users, "title", "content", 4, 3);
+        Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
         mockMvc.perform(post("/api/v6/reviews")
                         .content(mapper.writeValueAsString(review))
@@ -63,8 +51,8 @@ class ReviewControllerTest {
     @Test
     public void whenGetReviewsByIdSucceed_thenReturn200() throws Exception {
         Book book = new Book("B01", "Finding Nemo");
-        Users users = new Users("U01", "Moana");
-        Review review = new Review("R01", book, users, "title", "content", 4, 3);
+        User user = new User("U01", "Moana");
+        Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
         when(service.getReviewById(review.getReviewId())).thenReturn(review);
 
@@ -78,8 +66,8 @@ class ReviewControllerTest {
     @Test
     public void whenReviewUpdated_thenReturn200() throws Exception {
         Book book = new Book("B01", "Finding Nemo");
-        Users users = new Users("U01", "Moana");
-        Review review = new Review("R01", book, users, "title", "content", 4, 3);
+        User user = new User("U01", "Moana");
+        Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
         mockMvc.perform(put("/api/v6/reviews")
                         .content(mapper.writeValueAsString(review))
@@ -91,8 +79,8 @@ class ReviewControllerTest {
     @Test
     public void whenReviewDeleted_thenReturn200() throws Exception {
         Book book = new Book("B01", "Finding Nemo");
-        Users users = new Users("U01", "Moana");
-        Review review = new Review("R01", book, users, "title", "content", 4, 3);
+        User user = new User("U01", "Moana");
+        Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
         when(service.createReview(review)).thenReturn(review);
 
