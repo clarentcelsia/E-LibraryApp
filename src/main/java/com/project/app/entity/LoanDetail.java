@@ -23,7 +23,7 @@ public class LoanDetail {
     @JsonBackReference
     private Loan loan;
 
-    @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", updatable = false)
     private Book book;
 

@@ -5,6 +5,7 @@ import com.project.app.entity.Book;
 import com.project.app.entity.Loan;
 import com.project.app.entity.LoanDetail;
 import com.project.app.repository.LoanRepository;
+import com.project.app.service.BookService;
 import com.project.app.service.LoanDetailService;
 import com.project.app.service.LoanService;
 import com.project.app.specification.LoanSpec;
@@ -28,6 +29,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Autowired
     private LoanDetailService loanDetailService;
+
+    @Autowired
+    private BookService bookService;
 
     @Override
     public String deleteById(String id) {
@@ -65,15 +69,14 @@ public class LoanServiceImpl implements LoanService {
         Integer totalQty = 0;
         for(LoanDetail loanDetail: loan.getLoanDetail()){
             // update stock buku = TAMBAHIN SAAT MERGING.
-//            Book book = bookservice.getById(loanDetail.getBook().getId());
-//            Integer newStock = book.getStock() - loanDetail.getQty();
-//            if(newStock < 0 ){
-//                String message = String.format("book stock : %d is less than requested loan", book.getStock());
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
-//            }
-//            book.setStock(newStock);
-//            bookservice.update(book);
-
+            Book book = bookService.getBookById(loanDetail.getBook().getId());
+            Integer newStock = book.getStock() - loanDetail.getQty();
+            if(newStock < 0 ){
+                String message = String.format("book stock : %d is less than requested loan", book.getStock());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+            }
+            book.setStock(newStock);
+            bookService.updateBook(book);
 
             // save info loanDetail
             loanDetail.setLoan(loan);

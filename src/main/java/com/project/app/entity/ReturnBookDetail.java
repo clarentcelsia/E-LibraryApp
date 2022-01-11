@@ -37,5 +37,8 @@ public class ReturnBookDetail {
     private String returnInfo;
 
     @Column (nullable = false)
+    private Integer lostFee;
+
+    @Column (nullable = false)
     private Integer penaltyFee;
 }

@@ -3,10 +3,7 @@ package com.project.app.service.impl;
 import com.project.app.dto.ReturnDTO;
 import com.project.app.entity.*;
 import com.project.app.repository.ReturnBookRepository;
-import com.project.app.service.LoanService;
-import com.project.app.service.LostBookService;
-import com.project.app.service.ReturnBookDetailService;
-import com.project.app.service.ReturnBookService;
+import com.project.app.service.*;
 import com.project.app.specification.ReturnSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +31,9 @@ public class ReturnBookServiceImpl implements ReturnBookService {
 
     @Autowired
     private LostBookService lostBookService;
+
+    @Autowired
+    private BookService bookService;
 
     @Override
     @Transactional
@@ -70,7 +70,7 @@ public class ReturnBookServiceImpl implements ReturnBookService {
             // Tambahkan Stock buku perpus sesuai jumlah pengembalian;
             Book book = loanDetail.getBook();
             book.setStock(book.getStock() + returnBookDetail.getQty());
-//            Book updatedBook = bookService.update(book); // tambahin nanti saat merging.
+            Book updatedBook = bookService.updateBook(book);
 
             if (lostBook > 0){
                 LostBookReport lostBookReport = new LostBookReport(null, loan.getUser(), book, lostBook, LocalDateTime.now());
@@ -87,9 +87,8 @@ public class ReturnBookServiceImpl implements ReturnBookService {
                 overdueDuration = Math.toIntExact(duration.toDays());
             }
 
-            // bookPrice nanti ganti sesuai harga buku saat merging.
             // isi info returnBookDetail ( isi penalty fee ).
-            Integer bookPrice = 50000;
+            Integer bookPrice = returnBookDetail.getLostFee();
             Integer penaltyFee = overdueFee * overdueDuration + bookPrice * lostBook;
             returnBookDetail.setPenaltyFee(penaltyFee);
             returnBookDetailService.create(returnBookDetail);
