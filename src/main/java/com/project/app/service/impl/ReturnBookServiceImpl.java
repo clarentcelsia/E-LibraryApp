@@ -4,6 +4,7 @@ import com.project.app.dto.ReturnDTO;
 import com.project.app.entity.*;
 import com.project.app.repository.ReturnBookRepository;
 import com.project.app.service.LoanService;
+import com.project.app.service.LostBookService;
 import com.project.app.service.ReturnBookDetailService;
 import com.project.app.service.ReturnBookService;
 import com.project.app.specification.ReturnSpec;
@@ -30,6 +31,9 @@ public class ReturnBookServiceImpl implements ReturnBookService {
 
     @Autowired
     private LoanService loanService;
+
+    @Autowired
+    private LostBookService lostBookService;
 
     @Override
     @Transactional
@@ -64,9 +68,15 @@ public class ReturnBookServiceImpl implements ReturnBookService {
             }
 
             // Tambahkan Stock buku perpus sesuai jumlah pengembalian;
-//            Book book = loanDetail.getBook();
-//            book.setStock(returnBookDetail.getQty());
-//            bookService.update(book); // tambahin nanti saat merging.
+            Book book = loanDetail.getBook();
+            book.setStock(book.getStock() + returnBookDetail.getQty());
+//            Book updatedBook = bookService.update(book); // tambahin nanti saat merging.
+
+            if (lostBook > 0){
+                System.out.println("Masuk kondisi");
+                LostBookReport lostBookReport = new LostBookReport(null, loan.getUser(), book, lostBook, LocalDateTime.now());
+                lostBookService.create(lostBookReport);
+            }
 
             // TAMBAHIN - logic jumlah hari keterlambatan;
             LocalDateTime dateDue = loan.getDateDue();

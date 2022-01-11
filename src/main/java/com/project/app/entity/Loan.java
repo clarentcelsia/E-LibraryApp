@@ -48,10 +48,10 @@ public class Loan {
 
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = DefaultLocalDateTimeDeserializer.class)
     @Column(updatable = false)
     private LocalDateTime dateBorrow;
 
-    // nanti tambahin time
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = DefaultLocalDateTimeDeserializer.class)
     @Column(nullable = false)

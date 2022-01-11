@@ -142,7 +142,6 @@ class LoanControllerTest {
 
     // transaction testing
     @Test
-    // cannot deserialize ??
     public void createTransaction_shouldReturn_StatusCREATED_AND_SavedTransaction_WithOneLoanDetailInLoan_When_PostLoanWithOneLoanDetail() throws Exception {
         String requestJson = objectMapper.writeValueAsString(requestLoan);
 
@@ -160,7 +159,8 @@ class LoanControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is("creating transaction")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Matchers.is(outputLoan.getId())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id.loanDetail.id", Matchers.is(loanDetailId)))
+                // assert loanDetail is the same as outputLoan
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.loanDetail.[0].id", Matchers.is(loanDetailId)))
                 .andReturn().getResponse().getContentAsString();
 
     }
