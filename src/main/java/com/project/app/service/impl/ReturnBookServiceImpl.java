@@ -73,7 +73,6 @@ public class ReturnBookServiceImpl implements ReturnBookService {
 //            Book updatedBook = bookService.update(book); // tambahin nanti saat merging.
 
             if (lostBook > 0){
-                System.out.println("Masuk kondisi");
                 LostBookReport lostBookReport = new LostBookReport(null, loan.getUser(), book, lostBook, LocalDateTime.now());
                 lostBookService.create(lostBookReport);
             }

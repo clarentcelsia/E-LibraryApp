@@ -25,7 +25,7 @@ public class ReturnTransactionController {
     @PostMapping
     public ResponseEntity<WebResponse<ReturnBook>> createTransaction(@RequestBody ReturnBook returnBook){
         ReturnBook transaction = returnBookService.createTransaction(returnBook);
-        WebResponse<ReturnBook> response = new WebResponse<>("creating transaction", returnBook);
+        WebResponse<ReturnBook> response = new WebResponse<>("creating transaction", transaction);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

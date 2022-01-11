@@ -17,7 +17,9 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -97,22 +99,64 @@ class LoanServiceImplTest {
         assertEquals(pagedLoans.getTotalElements(), 1);
     }
 
-//    // ============== transaction test =====================
-//    @Test
-//    public void create_Should_AddTopictoCollection(){
-//        Loan requestedLoan = new Loan("loan-1", null, false, jannes, null, new ArrayList<>(), LocalDateTime.now(), LocalDateTime.now());
-//        Book bookOne = new Book("book-1", "buku mtk", 100);
-//        LoanDetail loanDetailOne = new LoanDetail("loan-detail-1", requestedLoan , bookOne ,1);
+    // ============== transaction test =====================
+    @Test
+    public void createTransaction_ShouldReturn_LoanTransaction(){
+        // preparasi data
+        LocalDateTime dateDue = LocalDateTime.of(LocalDate.of(2022, 1, 30), LocalTime.now());
+        Book book = new Book("book-1", "mtk", 100);
+        LoanDetail loanDetailOne = new LoanDetail("loan-detail-1", null, book, 1);
+
+        Loan requestLoan =new Loan(null, null, null, jannes, null, new ArrayList<>(), null, dateDue);
+        requestLoan.getLoanDetail().add(loanDetailOne);
+
+        Loan outputLoan =new Loan("loan-1", 1, false, jannes, null, new ArrayList<>(), null, dateDue);
+        outputLoan.getLoanDetail().add(loanDetailOne);
+
+
+        // mock repo , actual
+        Mockito.when(repository.save(Mockito.any(Loan.class))).thenReturn(outputLoan);
+        Mockito.when(loanDetailService.create(Mockito.any(LoanDetail.class))).thenReturn(loanDetailOne);
+
+        //expected
+        Loan transaction = service.createTransaction(requestLoan);
+
+        assertEquals(transaction.getId(), outputLoan.getId());
+        assertEquals(transaction.getLoanDetail().get(0).getId(), loanDetailOne.getId());
+    }
+
+    @Test
+    public void createTransaction_ShouldThrow_Exception_When_dateDueLessThandateBorrow(){
+        // preparasi data
+        LocalDateTime dateDue = LocalDateTime.of(LocalDate.of(2021, 1, 30), LocalTime.now());
+        Book book = new Book("book-1", "mtk", 100);
+        LoanDetail loanDetailOne = new LoanDetail("loan-detail-1", null, book, 1);
+
+        Loan requestLoan =new Loan(null, null, null, jannes, null, new ArrayList<>(), null, dateDue);
+        requestLoan.getLoanDetail().add(loanDetailOne);
+
+        //expected
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.createTransaction(requestLoan));
+
+        assertEquals(exception.getRawStatusCode(), 400);
+        assertEquals(exception.getReason(), "dateDue should not earlier than dateBorrow");
+    }
+
+//    @Test == testing book saat merging
+//    public void createTransaction_ShouldThrow_Exception_When_BookStockNotEnough(){
+//        // preparasi data
+//        LocalDateTime dateDue = LocalDateTime.of(LocalDate.of(2023, 1, 30), LocalTime.now());
+//        Book book = new Book("book-1", "mtk", 0);
+//        LoanDetail loanDetailOne = new LoanDetail("loan-detail-1", null, book, 1);
 //
+//        Loan requestLoan =new Loan(null, null, null, jannes, null, new ArrayList<>(), null, dateDue);
+//        requestLoan.getLoanDetail().add(loanDetailOne);
 //
-//        Mockito.when(repository.save(inputLoan)).thenReturn(outputLoan);
+//        //expected
+//        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.createTransaction(requestLoan));
 //
-//        Topic savedTopic = service.create(inputLoan);
-//        List<Topic> topics = new ArrayList<>();
-//        topics.add(savedTopic);
-//
-//        // actual
-//        Mockito.when(repository.findAll()).thenReturn(topics);
-//        assertEquals(repository.findAll().size(), 1);
+//        String errorMsg = String.format("book stock : %d is less than requested loan", book.getStock());
+//        assertEquals(exception.getRawStatusCode(), 400);
+//        assertEquals(exception.getReason(), errorMsg);
 //    }
 }

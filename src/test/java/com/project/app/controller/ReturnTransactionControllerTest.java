@@ -3,13 +3,10 @@ package com.project.app.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.app.dto.LoanDTO;
-import com.project.app.entity.Book;
-import com.project.app.entity.Loan;
-import com.project.app.entity.LoanDetail;
-import com.project.app.entity.User;
+import com.project.app.dto.ReturnDTO;
+import com.project.app.entity.*;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
-import com.project.app.service.LoanService;
+import com.project.app.service.ReturnBookService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,13 +37,14 @@ class ReturnTransactionControllerTest {
     MockMvc mockMvc; // sebagai client
 
     @MockBean
-    LoanService loanService;
+    ReturnBookService service;
 
     @Autowired
     ObjectMapper objectMapper;
 
-    private Loan requestLoan;
-    private Loan outputLoan;
+    private ReturnBook requestReturn;
+    private ReturnBook outputReturn;
+    private Loan loanOne;
     private LoanDetail loanDetailOne;
     private Book bookOne;
     private User jannes;
@@ -54,39 +52,39 @@ class ReturnTransactionControllerTest {
     public void setup(){
         jannes = new User("user-1", "jannes");
         bookOne = new Book("book-1", "buku mtk", 100);
+        loanOne = new Loan("loan-1", 1, false, jannes, null, new ArrayList<>(), LocalDateTime.now(), LocalDateTime.of(LocalDate.of(2022,1,13), LocalTime.now()));
 
-        requestLoan = new Loan(null, null, null, jannes, null, null, null, LocalDateTime.now());
-        outputLoan = new Loan("loan-1", 1, false, jannes, null, new ArrayList<>(), LocalDateTime.now(), LocalDateTime.of(LocalDate.of(2022,1,13), LocalTime.now()));
-        loanDetailOne = new LoanDetail("loan-detail-1", outputLoan, bookOne, 1);
+        requestReturn = new ReturnBook();
 
-        outputLoan.getLoanDetail().add(loanDetailOne);
+        ReturnBookDetail returnBookDetailOne = new ReturnBookDetail("return-detail-1", null , bookOne ,1, "all oke", 0);
+        outputReturn = new ReturnBook("return-book-1", loanOne, new ArrayList<>(), 1, LocalDateTime.now(), 0, 1000);
+        outputReturn.getReturnBookDetails().add(returnBookDetailOne);
     }
 
     @Test
-    public void getLoans_ShouldReturn_StatusOK_and_AllPagedLoans() throws Exception {
-        // preparation all paged loans
+    public void getLoans_ShouldReturn_StatusOK_and_AllPagedReturnBooks() throws Exception {
         Sort sort = Sort.by("status");
         Pageable pageable = PageRequest.of(0,1,sort);
-        LoanDTO dto = new LoanDTO("false", null);
 
-        List<Loan> loans = new ArrayList<>();
-        loans.add(outputLoan);
-        Page<Loan> loanPage = new PageImpl<>(loans,pageable, loans.size());
+        ReturnDTO dto = new ReturnDTO(1, null, null);
+
+        List<ReturnBook> returnBooks = new ArrayList<>();
+        returnBooks.add(outputReturn);
+        Page<ReturnBook> returnPage = new PageImpl<>(returnBooks,pageable, returnBooks.size());
 
         // actual
-        Mockito.when(loanService.getAll(Mockito.any(LoanDTO.class), Mockito.any(Pageable.class))).thenReturn(loanPage);
-
+        Mockito.when(service.getReturnBooks(Mockito.any(ReturnDTO.class), Mockito.any(Pageable.class))).thenReturn(returnPage);
 
         // expected
         String message =  String.format("data halaman ke 1");
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                        "/loans")
+                        "/returns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("size", "1")
                 .queryParam("page", "0")
-                .queryParam("sortBy", "returnStatus")
+                .queryParam("sortBy", "totalQty")
                 .queryParam("direction", "ASC")
-                .queryParam("status", "false");
+                .queryParam("totalQty", "1");
 
 
         String responseJson = mockMvc.perform(requestBuilder)
@@ -94,7 +92,7 @@ class ReturnTransactionControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        PageResponse<Loan> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Loan>>() {});
+        PageResponse<ReturnBook> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<ReturnBook>>() {});
 
         assertNotNull(response.getData());
         assertEquals(response.getData().size(), 1);
@@ -103,25 +101,24 @@ class ReturnTransactionControllerTest {
 
     // transaction testing
     @Test
-    // cannot deserialize ??
-    public void createTransaction_shouldReturn_StatusCREATED_AND_SavedTransaction_WithOneLoanDetailInLoan_When_PostLoanWithOneLoanDetail() throws Exception {
-        String requestJson = objectMapper.writeValueAsString(requestLoan);
+    public void createTransaction_shouldReturn_StatusCREATED_AND_SavedTransaction() throws Exception {
+        String requestJson = objectMapper.writeValueAsString(requestReturn);
 
         // actual
-        Mockito.when(loanService.createTransaction(Mockito.any(Loan.class))).thenReturn(outputLoan);
+        Mockito.when(service.createTransaction(Mockito.any(ReturnBook.class))).thenReturn(outputReturn);
 
         // expected
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/loans/transaction")
+                .post("/returns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson);
 
-        String loanDetailId = outputLoan.getLoanDetail().get(0).getId();
+        String returnBookDetailId = outputReturn.getReturnBookDetails().get(0).getId();
         String responseJson = mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is("creating transaction")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Matchers.is(outputLoan.getId())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id.loanDetail.id", Matchers.is(loanDetailId)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Matchers.is(outputReturn.getId())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.returnBookDetails.[0].id", Matchers.is(returnBookDetailId)))
                 .andReturn().getResponse().getContentAsString();
 
     }
