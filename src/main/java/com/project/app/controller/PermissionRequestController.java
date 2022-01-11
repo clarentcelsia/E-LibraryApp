@@ -65,7 +65,13 @@ public class PermissionRequestController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, service.getById(id)));
     }
 
-    @PutMapping
+    @PutMapping(
+            consumes = {
+                    MediaType.MULTIPART_FORM_DATA_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            },
+            produces = "application/json"
+    )
     public ResponseEntity<Response<?>> updateRequest(
             @RequestPart(name = "request") ResearchPermissionHandler request,
             @RequestPart(name = "file", required = false) MultipartFile file

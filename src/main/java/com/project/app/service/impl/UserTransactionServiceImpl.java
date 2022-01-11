@@ -5,20 +5,15 @@ import com.project.app.entity.UserTransaction;
 import com.project.app.entity.UserTransactionDetail;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.UserTransactionRepository;
-import com.project.app.request.TransactionRequest;
-import com.project.app.response.PageResponse;
 import com.project.app.service.ProductionBookService;
 import com.project.app.service.TransactionDetailService;
 import com.project.app.service.TransactionService;
-import com.project.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional

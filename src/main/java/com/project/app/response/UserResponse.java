@@ -1,79 +1,37 @@
-package com.project.app.entity;
+package com.project.app.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
-@Table(name = "mst_user")
-public class User {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+public class UserResponse {
+
     private String id;
 
-    @Column(name = "identity_number")
     private String identityNumber;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "address")
     private String address;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "birth_date")
     private Date birthDate;
 
-    @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "status")
     private Boolean status;
 
-    private Boolean isDeleted;
-
-    @CreatedDate
     private Date createdAt;
 
-    @LastModifiedDate
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    private Set<String> roles;
 
-    @PrePersist
-    public void createdDate(){
-        if (createdAt == null) createdAt = new Date();
-        if (updatedAt == null) updatedAt = new Date();
-        if (isDeleted == null) isDeleted = false;
-    }
-
-    @PreUpdate
-    public void updateDate(){
-        updatedAt = new Date();
-    }
-
-    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
+    public UserResponse(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Date createdAt, Date updatedAt, Set<String> roles) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -84,18 +42,12 @@ public class User {
         this.username = username;
         this.password = password;
         this.status = status;
-        this.isDeleted = isDeleted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.roles = roles;
     }
 
-    public User() {
-    }
-
-    public User(String id, String name) {
-        this.id = id;
-        this.name = name;
+    public UserResponse() {
     }
 
     public String getId() {
@@ -178,14 +130,6 @@ public class User {
         this.status = status;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -202,11 +146,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public Set<Role> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 }

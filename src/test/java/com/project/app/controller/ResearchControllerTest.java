@@ -1,10 +1,8 @@
 package com.project.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.app.entity.AdminTransaction;
 import com.project.app.entity.Research;
 import com.project.app.entity.User;
-import com.project.app.response.PageResponse;
 import com.project.app.service.ResearchService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 class ResearchControllerTest {
 
     @Autowired

@@ -34,7 +34,7 @@ public class ProductionBook {
     private Boolean availableForBookPhysic;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 

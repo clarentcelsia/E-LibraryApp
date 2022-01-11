@@ -4,12 +4,19 @@ import com.project.app.entity.BookSale;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.BookSaleService;
+//import io.swagger.v3.oas.annotations.Parameter;
+//import io.swagger.v3.oas.annotations.enums.ParameterIn;
+//import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+//import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+//import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +26,26 @@ import static com.project.app.util.Utility.*;
 
 @RestController
 @RequestMapping("/api/v11/booksale")
+//@SecurityScheme(
+//        in = SecuritySchemeIn.HEADER,
+//        type = SecuritySchemeType.HTTP,
+//        paramName = "Authorization",
+//        name = "Authorization",
+//        scheme = "bearer"
+//)
 public class BookSaleController {
 
     @Autowired
     BookSaleService service;
 
-    @PostMapping
+    @PostMapping(
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE
+            },
+            produces = "application/json"
+    )
+//    @Parameter(hidden = true)
     public ResponseEntity<Response<BookSale>> createItem(
             @RequestPart(name = "detail") BookSale bookSale,
             @RequestPart(name = "image") MultipartFile image,
@@ -56,6 +77,7 @@ public class BookSaleController {
                 .body(response);
     }
 
+//    @Parameter(hidden = true)
     @GetMapping
     public ResponseEntity<Response<PageResponse<BookSale>>> getItems(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -74,6 +96,7 @@ public class BookSaleController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
+//    @Parameter(hidden = true)
     @GetMapping("/{id}")
     public ResponseEntity<Response<BookSale>> getItemById(
             @PathVariable(name = "id") String id
@@ -82,7 +105,13 @@ public class BookSaleController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, service.getBookSaleById(id)));
     }
 
-    @PutMapping
+    @PutMapping(
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE
+            },
+            produces = "application/json"
+    )
     public ResponseEntity<Response<BookSale>> updateItem(
             @RequestPart(name = "detail") BookSale bookSale,
             @RequestPart(name = "image") MultipartFile image,
@@ -93,6 +122,7 @@ public class BookSaleController {
                 .body(new Response<>(RESPONSE_UPDATE_SUCCESS, service.updateWithMultipart(bookSale, image, preview, download)));
     }
 
+//    @Parameter(hidden = true)
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<String>> deleteItem(
             @PathVariable(name = "id") String id

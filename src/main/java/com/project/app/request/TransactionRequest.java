@@ -1,6 +1,5 @@
 package com.project.app.request;
 
-import com.project.app.entity.AdminTransactionDetail;
 import com.project.app.entity.User;
 
 import java.util.List;

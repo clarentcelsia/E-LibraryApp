@@ -1,79 +1,65 @@
 package com.project.app.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "mst_user")
-public class User {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+public class UserDetailImpl implements UserDetails {
+
     private String id;
 
-    @Column(name = "identity_number")
     private String identityNumber;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "address")
     private String address;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "birth_date")
     private Date birthDate;
 
-    @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "status")
     private Boolean status;
 
-    private Boolean isDeleted;
-
-    @CreatedDate
     private Date createdAt;
 
-    @LastModifiedDate
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    @PrePersist
-    public void createdDate(){
-        if (createdAt == null) createdAt = new Date();
-        if (updatedAt == null) updatedAt = new Date();
-        if (isDeleted == null) isDeleted = false;
+    public static UserDetailImpl build(User user) {
+        List<GrantedAuthority> authorities = user.getRoles()
+                .stream().map(role -> new SimpleGrantedAuthority(role.getRole().name()))
+                .collect(Collectors.toList());
+
+        return new UserDetailImpl(
+                user.getId(),
+                user.getIdentityNumber(),
+                user.getName(),
+                user.getAddress(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getBirthDate(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getStatus(),
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
+                authorities
+        );
     }
 
-    @PreUpdate
-    public void updateDate(){
-        updatedAt = new Date();
-    }
-
-    public User(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Boolean isDeleted, Date createdAt, Date updatedAt, Set<Role> roles) {
+    public UserDetailImpl(String id, String identityNumber, String name, String address, String email, String phoneNumber, Date birthDate, String username, String password, Boolean status, Date createdAt, Date updatedAt, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.identityNumber = identityNumber;
         this.name = name;
@@ -84,18 +70,12 @@ public class User {
         this.username = username;
         this.password = password;
         this.status = status;
-        this.isDeleted = isDeleted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.roles = roles;
+        this.authorities = authorities;
     }
 
-    public User() {
-    }
-
-    public User(String id, String name) {
-        this.id = id;
-        this.name = name;
+    public UserDetailImpl() {
     }
 
     public String getId() {
@@ -154,16 +134,8 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -176,14 +148,6 @@ public class User {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
     }
 
     public Date getCreatedAt() {
@@ -202,11 +166,42 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

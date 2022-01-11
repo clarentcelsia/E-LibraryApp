@@ -2,6 +2,7 @@ package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -17,6 +18,7 @@ public class UserTransaction {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String userTransactionId;
 
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private User user;

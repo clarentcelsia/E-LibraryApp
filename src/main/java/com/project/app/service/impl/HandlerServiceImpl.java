@@ -1,6 +1,7 @@
 package com.project.app.service.impl;
 
 import com.project.app.entity.Research;
+import com.project.app.entity.User;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.files.Files;
 import com.project.app.handler.ResearchPermissionHandler;
@@ -9,6 +10,7 @@ import com.project.app.response.PageResponse;
 import com.project.app.service.FileService;
 import com.project.app.service.HandlerService;
 import com.project.app.service.ResearchService;
+import com.project.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,9 @@ public class HandlerServiceImpl implements HandlerService {
     @Autowired
     ResearchService researchService;
 
+    @Autowired
+    UserService userService;
+
     @Override
     public ResearchPermissionHandler createRequest(ResearchPermissionHandler handler, MultipartFile file) {
         if (file != null) {
@@ -48,6 +53,14 @@ public class HandlerServiceImpl implements HandlerService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        if(handler.getAccepted()){
+            Research research = new Research();
+            research.setResearch(handler.getResearchFile());
+            User user = userService.getById(handler.getUser().getId());
+            research.setUser(user);
+            researchService.saveResearch(research);
         }
         return repository.save(handler);
     }

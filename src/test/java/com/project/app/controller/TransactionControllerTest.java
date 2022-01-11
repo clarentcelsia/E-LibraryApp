@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,7 +38,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = TransactionController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class TransactionControllerTest {
 
     @Autowired
@@ -46,7 +49,7 @@ class TransactionControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    TransactionService service;
+    TransactionService<Transaction> service;
 
     @Test
     public void whenGivenValidUrlAndMethod_onCreateTransaction_thenReturn201() throws Exception {
