@@ -10,14 +10,13 @@ import javax.persistence.*;
 import java.util.Objects;
 import javax.validation.constraints.NotEmpty;
 
-@Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Entity
 @Table(name = "master_user")
 public class User {
-
     @Id
     @GenericGenerator(name = "uuid-generator", strategy = "uuid")
     @GeneratedValue(generator = "uuid-generator")
