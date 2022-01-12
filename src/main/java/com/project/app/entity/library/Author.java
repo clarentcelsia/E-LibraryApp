@@ -1,6 +1,8 @@
 package com.project.app.entity.library;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.app.entity.Book;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "mst_author")
+@JsonIdentityInfo(generator= ObjectIdGenerators.UUIDGenerator.class, property="id")
 public class Author {
 
     @Id
@@ -27,8 +30,8 @@ public class Author {
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
             CascadeType.ALL
     })
-    @JsonManagedReference
-    private List<Book> books = new ArrayList<>();
+//    @JsonManagedReference
+    List<Book> books = new ArrayList<>();
 
     public Author() {
     }

@@ -35,12 +35,12 @@ public class Book {
 
     private String description;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER, cascade = {
-            CascadeType.ALL
-    }, mappedBy = "books")
-    @JsonBackReference
-    private List<Author> authors = new ArrayList<>();
+//    @ManyToMany(
+//            fetch = FetchType.EAGER, cascade = {
+//            CascadeType.ALL
+//    }, mappedBy = "books")
+////    @JsonBackReference
+//    List<Author> authors = new ArrayList<>();
 
     @Column(nullable = false)
     private String publisher;

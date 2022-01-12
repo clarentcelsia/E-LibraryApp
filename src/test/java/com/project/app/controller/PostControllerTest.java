@@ -10,7 +10,7 @@ import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
 import com.project.app.response.WebResponse;
 import com.project.app.service.PostService;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

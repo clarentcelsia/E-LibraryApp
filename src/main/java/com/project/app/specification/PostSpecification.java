@@ -2,7 +2,7 @@ package com.project.app.specification;
 
 import com.project.app.dto.PostDTO;
 import com.project.app.entity.Post;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

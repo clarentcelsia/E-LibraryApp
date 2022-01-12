@@ -18,12 +18,12 @@ public class LoanDetail {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    @ManyToOne(targetEntity = Loan.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Loan.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "loan_id", updatable = false)
     @JsonBackReference
     private Loan loan;
 
-    @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", updatable = false)
     private Book book;
 
