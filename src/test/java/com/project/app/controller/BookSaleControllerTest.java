@@ -59,7 +59,7 @@ class BookSaleControllerTest {
         MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("preview", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v11/booksale")
+        mockMvc.perform(multipart("/booksale")
                         .file(book)
                         .file(file1)
                         .contentType("multipart/form-data"))
@@ -71,7 +71,7 @@ class BookSaleControllerTest {
         MockMultipartFile book = new MockMultipartFile("detail", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v11/booksale")
+        mockMvc.perform(multipart("/booksale")
                         .file(book)
                         .file(file1)
                         .contentType("multipart/form-data"))
@@ -85,7 +85,7 @@ class BookSaleControllerTest {
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("download", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v11/booksale")
+        mockMvc.perform(multipart("/booksale")
                         .file(book)
                         .file(file1)
                         .file(file2)
@@ -100,7 +100,7 @@ class BookSaleControllerTest {
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("preview", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v11/booksale")
+        mockMvc.perform(multipart("/booksale")
                         .file(book)
                         .file(file1)
                         .file(file2)
@@ -114,7 +114,7 @@ class BookSaleControllerTest {
         MockMultipartFile preview = new MockMultipartFile("preview", "", "application/json", "{\"bookSaleId\": \"B01\"}".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("download", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v11/booksale")
+        mockMvc.perform(multipart("/booksale")
                         .file(preview)
                         .file(file2)
                         .contentType("multipart/form-data"))
@@ -124,7 +124,7 @@ class BookSaleControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v11/booksale/{id}", "R01"))
+        mockMvc.perform(get("/booksale/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
@@ -136,7 +136,7 @@ class BookSaleControllerTest {
 
         given(service.getBookSaleById(id)).willReturn(book);
 
-        mockMvc.perform(get("/api/v11/booksale/{id}", "R01"))
+        mockMvc.perform(get("/booksale/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
@@ -160,7 +160,7 @@ class BookSaleControllerTest {
 
         given(service.getBookSales(PageRequest.of(0,5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v11/booksale")
+        mockMvc.perform(get("/booksale")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -170,7 +170,7 @@ class BookSaleControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodDeleteBook_thenReturn200() throws Exception {
 
-        mockMvc.perform(delete("/api/v11/booksale/{id}", "R01"))
+        mockMvc.perform(delete("/booksale/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));

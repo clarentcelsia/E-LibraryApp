@@ -46,7 +46,7 @@ class ReviewControllerTest {
 
         Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
-        mockMvc.perform(post("/api/v6/reviews")
+        mockMvc.perform(post("/reviews")
                         .content(mapper.writeValueAsString(review))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -63,7 +63,7 @@ class ReviewControllerTest {
 
         when(service.getReviewById(review.getReviewId())).thenReturn(review);
 
-        mockMvc.perform(get("/api/v6/reviews/{id}", "R01")
+        mockMvc.perform(get("/reviews/{id}", "R01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
@@ -78,7 +78,7 @@ class ReviewControllerTest {
         User user = new User("U01", "Moana");
         Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
-        mockMvc.perform(put("/api/v6/reviews")
+        mockMvc.perform(put("/reviews")
                         .content(mapper.writeValueAsString(review))
                         .contentType("application/json"))
                 .andExpect(status().isOk())
@@ -95,7 +95,7 @@ class ReviewControllerTest {
 
         when(service.createReview(review)).thenReturn(review);
 
-        mockMvc.perform(delete("/api/v6/reviews/{id}", review.getReviewId()))
+        mockMvc.perform(delete("/reviews/{id}", review.getReviewId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))

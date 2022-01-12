@@ -4,13 +4,18 @@ import com.project.app.dto.TypeDTO;
 import com.project.app.entity.library.Type;
 import com.project.app.response.Response;
 import com.project.app.service.TypeService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/types")
@@ -19,9 +24,18 @@ public class TypeController {
     private TypeService typeService;
 
     @PostMapping
-    public ResponseEntity<Response<Type>> createType(@RequestBody Type type){
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
+    public ResponseEntity<Response<Type>> createType(@RequestBody Type type) {
         Type createType = typeService.createType(type);
-        Response<Type>response = new Response<>("Data Type Has Been Created",createType);
+        Response<Type> response = new Response<>("Data Type Has Been Created", createType);
         return ResponseEntity
                 .status(HttpStatus.CREATED).body(response);
     }
@@ -29,11 +43,12 @@ public class TypeController {
     @GetMapping("/{typeId}")
     public ResponseEntity<Response<Type>> getCustomerById(@PathVariable("typeId") String id) {
         Type type = typeService.getById(id);
-        Response<Type> response = new Response<>(String.format("Type with id %s found",id),type);
+        Response<Type> response = new Response<>(String.format("Type with id %s found", id), type);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
     @GetMapping
     public ResponseEntity<Response<Page<Type>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
@@ -50,19 +65,37 @@ public class TypeController {
                 .body(response);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{typeId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<String>> deleteType(@PathVariable("typeId") String id) {
         String delete = typeService.deleteType(id);
-        Response<String>responseDelete = new Response<>("Deleted",delete);
+        Response<String> responseDelete = new Response<>("Deleted", delete);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);
-//        return customerService.deleteCustomer(id);
     }
+
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Type>> updateById(@RequestBody Type type) {
         Type updateType = typeService.updateType(type);
-        Response<Type> response = new Response<>("Data Type Has Been Updated",updateType);
+        Response<Type> response = new Response<>("Data Type Has Been Updated", updateType);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

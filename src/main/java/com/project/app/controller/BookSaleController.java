@@ -9,6 +9,8 @@ import com.project.app.service.BookSaleService;
 //import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 //import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 //import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,28 +18,31 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.RolesAllowed;
 import java.awt.print.Book;
 
 import static com.project.app.utils.Utility.*;
 
 @RestController
 @RequestMapping("/booksale")
-//@SecurityScheme(
-//        in = SecuritySchemeIn.HEADER,
-//        type = SecuritySchemeType.HTTP,
-//        paramName = "Authorization",
-//        name = "Authorization",
-//        scheme = "bearer"
-//)
 public class BookSaleController {
 
     @Autowired
     BookSaleService service;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping(
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
@@ -45,7 +50,7 @@ public class BookSaleController {
             },
             produces = "application/json"
     )
-//    @Parameter(hidden = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<BookSale>> createItem(
             @RequestPart(name = "detail") BookSale bookSale,
             @RequestPart(name = "image") MultipartFile image,
@@ -77,7 +82,6 @@ public class BookSaleController {
                 .body(response);
     }
 
-//    @Parameter(hidden = true)
     @GetMapping
     public ResponseEntity<Response<PageResponse<BookSale>>> getItems(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -96,7 +100,6 @@ public class BookSaleController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
-//    @Parameter(hidden = true)
     @GetMapping("/{id}")
     public ResponseEntity<Response<BookSale>> getItemById(
             @PathVariable(name = "id") String id
@@ -105,6 +108,14 @@ public class BookSaleController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, service.getBookSaleById(id)));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping(
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
@@ -112,6 +123,7 @@ public class BookSaleController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<BookSale>> updateItem(
             @RequestPart(name = "detail") BookSale bookSale,
             @RequestPart(name = "image") MultipartFile image,
@@ -122,8 +134,16 @@ public class BookSaleController {
                 .body(new Response<>(RESPONSE_UPDATE_SUCCESS, service.updateWithMultipart(bookSale, image, preview, download)));
     }
 
-//    @Parameter(hidden = true)
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<String>> deleteItem(
             @PathVariable(name = "id") String id
     ){

@@ -34,6 +34,8 @@ public class Book {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
+    private String bookCode;
+
     private String cover;
 
     @Column(nullable = false)

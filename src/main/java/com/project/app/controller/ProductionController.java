@@ -4,6 +4,8 @@ import com.project.app.entity.ProductionBook;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.ProductionBookService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.security.RolesAllowed;
 
 import static com.project.app.utils.Utility.*;
 
@@ -23,6 +28,14 @@ public class ProductionController {
     @Autowired
     ProductionBookService productionBookService;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping(
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
@@ -31,6 +44,7 @@ public class ProductionController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<ProductionBook>> saveProductionBook(
             @RequestPart("book") ProductionBook productionBook,
             @RequestPart(value = "image") MultipartFile image,
@@ -90,7 +104,16 @@ public class ProductionController {
                         productionBookService.getById(id)));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<ProductionBook>> updateProductionBook(
             @RequestPart(name = "book") ProductionBook productionBook,
             @RequestPart(value = "image") MultipartFile image,
@@ -104,7 +127,16 @@ public class ProductionController {
                         productionBookService.updateWithMultipart(productionBook, image, preview, download)));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<String>> deleteProductionBook(
             @PathVariable(name = "id") String id
     ) {

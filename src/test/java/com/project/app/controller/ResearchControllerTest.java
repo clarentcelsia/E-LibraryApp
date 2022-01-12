@@ -50,7 +50,7 @@ class ResearchControllerTest {
 
         given(service.saveResearch(any(Research.class))).willReturn(research);
 
-        mockMvc.perform(post("/api/v3/research")
+        mockMvc.perform(post("/research")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(research)))
                 .andExpect(status().isCreated())
@@ -76,7 +76,7 @@ class ResearchControllerTest {
 
         given(service.getResearch(PageRequest.of(0, 5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v3/research")
+        mockMvc.perform(get("/research")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
                         .param("size", "5"))
@@ -94,7 +94,7 @@ class ResearchControllerTest {
 
         given(service.getById(any(String.class))).willReturn(research);
 
-        mockMvc.perform(get("/api/v3/research/{id}", research.getResearchId())
+        mockMvc.perform(get("/research/{id}", research.getResearchId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
@@ -111,7 +111,7 @@ class ResearchControllerTest {
 
         given(service.saveResearch(any(Research.class))).willReturn(research);
 
-        mockMvc.perform(delete("/api/v3/research/{id}", research.getResearchId())
+        mockMvc.perform(delete("/research/{id}", research.getResearchId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))

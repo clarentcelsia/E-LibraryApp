@@ -56,7 +56,7 @@ class FeatureControllerTest {
                 "Handle book lending"
         );
 
-        mockMvc.perform(post("/api/v8/features")
+        mockMvc.perform(post("/api/v1/features")
                         .content(mapper.writeValueAsString(features))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -72,7 +72,7 @@ class FeatureControllerTest {
                 "Handle book lending"
         );
 
-        mockMvc.perform(post("/api/v8/features")
+        mockMvc.perform(post("/api/v1/features")
                         .content(mapper.writeValueAsString(features))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -88,7 +88,7 @@ class FeatureControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onGetFeatureById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v8/features/{id}", "C01")
+        mockMvc.perform(get("/api/v1/features/{id}", "C01")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
@@ -108,7 +108,7 @@ class FeatureControllerTest {
 
         given(service.getFeatureById(features.getFeatureId())).willReturn(response.getData());
 
-        MvcResult result = mockMvc.perform(get("/api/v8/features/{id}", features.getFeatureId())
+        MvcResult result = mockMvc.perform(get("/api/v1/features/{id}", features.getFeatureId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
@@ -140,7 +140,7 @@ class FeatureControllerTest {
 
         given(service.getFeatures(any(Pageable.class))).willReturn(page);
 
-        mockMvc.perform(get("/api/v8/features")
+        mockMvc.perform(get("/api/v1/features")
                         .param("page", "0")
                         .param("size", "1")
                         .accept(MediaType.APPLICATION_JSON))
@@ -158,7 +158,7 @@ class FeatureControllerTest {
 
         given(service.updateFeature(any(Features.class))).willReturn(updatedFeatures);
 
-        mockMvc.perform(put("/api/v8/features")
+        mockMvc.perform(put("/api/v1/features")
                         .content(mapper.writeValueAsString(updatedFeatures))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -169,7 +169,7 @@ class FeatureControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onDeleteFeature_thenReturn200() throws Exception {
 
-        mockMvc.perform(delete("/api/v8/features/{id}", "C01")
+        mockMvc.perform(delete("/api/v1/features/{id}", "C01")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))

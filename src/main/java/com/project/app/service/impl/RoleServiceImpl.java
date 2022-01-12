@@ -17,26 +17,26 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role create(String strRole) {
         if (strRole == null) {
-            if (!roleRepository.existsByRole(UserRole.USER_ROLE)) {
-                Role userRole = new Role(UserRole.USER_ROLE);
+            if (!roleRepository.existsByRole(UserRole.ROLE_USER)) {
+                Role userRole = new Role(UserRole.ROLE_USER);
                 return roleRepository.save(userRole);
             }
-            return roleRepository.findByRole(UserRole.USER_ROLE)
+            return roleRepository.findByRole(UserRole.ROLE_USER)
                     .orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
         } else {
             if (strRole.equalsIgnoreCase("admin")) {
-                if (!roleRepository.existsByRole(UserRole.ADMIN_ROLE)) {
-                    Role adminRole = new Role(UserRole.ADMIN_ROLE);
+                if (!roleRepository.existsByRole(UserRole.ROLE_ADMIN)) {
+                    Role adminRole = new Role(UserRole.ROLE_ADMIN);
                     return roleRepository.save(adminRole);
                 }
-                return roleRepository.findByRole(UserRole.ADMIN_ROLE)
+                return roleRepository.findByRole(UserRole.ROLE_ADMIN)
                         .orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
             } else {
-                if (!roleRepository.existsByRole(UserRole.USER_ROLE)) {
-                    Role userRole = new Role(UserRole.USER_ROLE);
+                if (!roleRepository.existsByRole(UserRole.ROLE_USER)) {
+                    Role userRole = new Role(UserRole.ROLE_USER);
                     return roleRepository.save(userRole);
                 }
-                return roleRepository.findByRole(UserRole.USER_ROLE)
+                return roleRepository.findByRole(UserRole.ROLE_USER)
                         .orElseThrow(() -> new ResourceNotFoundException("Role Not Found"));
             }
         }

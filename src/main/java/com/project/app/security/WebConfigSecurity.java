@@ -57,6 +57,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/ebooks/**").permitAll()
                 .antMatchers(
                         "/api-docs/**",
                         "/configuration/ui",
@@ -68,6 +69,8 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                         .antMatchers(HttpMethod.GET, "/files/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/v1/**").permitAll()
+                        .antMatchers(HttpMethod.PUT, "/api/v1/**").permitAll()
+                        .antMatchers(HttpMethod.DELETE, "/api/v1/**").permitAll()
                         .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

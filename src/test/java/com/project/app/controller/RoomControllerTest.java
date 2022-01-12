@@ -50,7 +50,7 @@ class RoomControllerTest {
     @BeforeEach
     void setUp() {
         user = new User("testing1", "jannes");
-        savedRoom = new Room("uuid-bebas", "bebas", "bebas", new Date(), user, new HashSet<>(), new ArrayList<>());
+        savedRoom = new Room("uuid-bebas", "r01", "bebas", "bebas", new Date(), user, new HashSet<>(), new ArrayList<>());
 
     }
 
@@ -60,7 +60,7 @@ class RoomControllerTest {
 
     @Test
     public void createRoom_shouldReturn_StatusCREATED_AND_SavedROOM_When_PostRoom() throws Exception {
-        Room requestRoom = new Room(null, "bebas", "bebas", null, user, null, null );
+        Room requestRoom = new Room(null, "r01", "bebas", "bebas", null, user, null, null );
         String requestJson = objectMapper.writeValueAsString(requestRoom);
 
         // actual
@@ -121,7 +121,7 @@ class RoomControllerTest {
 
         // preparation room members
         User jannes = new User("testing2", "jannes");
-        Room roomWithMembers = new Room("uuid-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMembers = new Room("uuid-bebas", "r01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
         RoomMember roomMember = new RoomMember("id-member", null, jannes, new Date());
         roomWithMembers.getRoomMember().add(roomMember);
 
@@ -130,7 +130,7 @@ class RoomControllerTest {
 
 
         // expected
-        Room jsonBody = new Room(null, "mtk", "integral", null, user, null, null);
+        Room jsonBody = new Room(null,"r01", "mtk", "integral", null, user, null, null);
         String jsonRequest = objectMapper.writeValueAsString(savedRoom);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/rooms/uuid-bebas/members")
@@ -151,7 +151,7 @@ class RoomControllerTest {
     public void removeMember_shouldReturn_StatusOK_and_RequestedRoomWithDeletedMember() throws Exception {
         // preparation room with no members
         User jannes = new User("testing2", "jannes");
-        Room roomWithNoMembers = new Room("uuid-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithNoMembers = new Room("uuid-bebas", "r01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
 
         Mockito.when(roomService.removeMemberFromRoom(Mockito.anyString(), Mockito.any(RoomMember.class))).thenReturn(roomWithNoMembers);
 
@@ -177,7 +177,7 @@ class RoomControllerTest {
     public void addMessage_ShouldReturn_StatusCREATED_and_RequestedRoomWithAddedMessages() throws Exception {
         // preparasi room messages
         User jannes = new User("testing2", "jannes");
-        Room roomWithMessages = new Room("uuid-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMessages = new Room("uuid-bebas","r01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
         RoomMessage roomMessage = new RoomMessage("id-message", roomWithMessages, jannes, "Hai guys", new Date());
         roomWithMessages.getRoomMessage().add(roomMessage);
 
@@ -186,7 +186,7 @@ class RoomControllerTest {
         Mockito.when(roomService.addMessageToRoom(Mockito.anyString(), Mockito.any(RoomMessage.class))).thenReturn(roomWithMessages);
 
         // expected
-        Room jsonData = new Room(null, "mtk", "integral", null, user, null, null);
+        Room jsonData = new Room(null, "r01", "mtk", "integral", null, user, null, null);
         String jsonRequestBody = objectMapper.writeValueAsString(jsonData);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rooms/uuid-bebas/messages")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -209,7 +209,7 @@ class RoomControllerTest {
         Pageable pageable = PageRequest.of(0,1,sort);
         RoomDTO roomDTO = new RoomDTO("mtk", null);
 
-        Room roomOne = new Room("id-room-1", "mtk", "integral", new Date(), user , new HashSet<>(), new ArrayList<>());
+        Room roomOne = new Room("id-room-1", "r01", "mtk", "integral", new Date(), user , new HashSet<>(), new ArrayList<>());
         List<Room> rooms = new ArrayList<>();
         rooms.add(roomOne);
         Page<Room> roomPage = new PageImpl<>(rooms,pageable,rooms.size());

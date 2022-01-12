@@ -46,7 +46,7 @@ class PermissionRequestControllerTest {
         MockMultipartFile request = new MockMultipartFile("request", "", "application/json", "{\"requestId\": \"R01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("file", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v0/requests")
+        mockMvc.perform(multipart("/requests")
                         .file(request)
                         .file(file1))
                 .andExpect(status().isCreated());
@@ -65,7 +65,7 @@ class PermissionRequestControllerTest {
     @Test
     public void whenRequestAndFileIsNull_thenReturnError() throws Exception {
 
-        mockMvc.perform(multipart("/api/v0/requests")
+        mockMvc.perform(multipart("/requests")
                         .contentType("multipart/form-data"))
                 .andExpect(status().is4xxClientError());
     }
@@ -73,7 +73,7 @@ class PermissionRequestControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v0/requests/{id}", "R01"))
+        mockMvc.perform(get("/requests/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
@@ -87,7 +87,7 @@ class PermissionRequestControllerTest {
 
         given(service.getById(id)).willReturn(request);
 
-        mockMvc.perform(get("/api/v0/requests/{id}", "R01"))
+        mockMvc.perform(get("/requests/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
@@ -113,7 +113,7 @@ class PermissionRequestControllerTest {
 
         given(service.fetchRequests(PageRequest.of(0, 5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v0/requests")
+        mockMvc.perform(get("/requests")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -123,7 +123,7 @@ class PermissionRequestControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodDeleteBook_thenReturn200() throws Exception {
 
-        mockMvc.perform(delete("/api/v0/requests/{id}", "R01"))
+        mockMvc.perform(delete("/requests/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));

@@ -42,12 +42,12 @@ class RoomServiceImplTest {
     public void setup(){
         user = new User("testing1", "jannes");
 
-        room = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        room = new Room("id-bebas","K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
     }
 
     @Test
     public void create_Should_AddOneRoomtoCollection(){
-        Room inputRoom = new Room(null, "mtk", "integral", null, user, null, null);
+        Room inputRoom = new Room(null, "K01", "mtk", "integral", null, user, null, null);
 
         Mockito.when(repository.save(inputRoom)).thenReturn(room);
 
@@ -81,7 +81,7 @@ class RoomServiceImplTest {
     @Test
     public void getPagedRooms_ShouldReturn_AllPagedRooms(){
         List<Room> rooms = new ArrayList<>();
-        rooms.add(new Room("id-bebas1", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>()));
+        rooms.add(new Room("id-bebas1","K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>()));
 
         RoomDTO dto = new RoomDTO("mtk", null);
         Sort sort = Sort.by(Sort.Direction.ASC, "topic");
@@ -110,7 +110,7 @@ class RoomServiceImplTest {
     public void addMembersToRoom_Should_AddMembersToRoom(){
         User jono = new User("testing2", "jono");
         RoomMember roomMember = new RoomMember("id-member1", null, jono, new Date());
-        Room roomWithMembers = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMembers = new Room("id-bebas","K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
 
         Mockito.when(repository.findById("id-bebas")).thenReturn(Optional.of(roomWithMembers));
         Mockito.when(roomMemberService.create(roomMember)).thenReturn(roomMember);
@@ -125,7 +125,7 @@ class RoomServiceImplTest {
     public void addMembersToRoom_ShouldNot_AddMembers_When_MemberAreRoomCreator(){
         User jannes = new User("testing1", "jannes");
         RoomMember roomMember = new RoomMember("id-member1", null, jannes, new Date());
-        Room roomWithMembers = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMembers = new Room("id-bebas", "K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
 
         Mockito.when(repository.findById("id-bebas")).thenReturn(Optional.of(roomWithMembers));
         Mockito.when(roomMemberService.create(roomMember)).thenReturn(roomMember);
@@ -140,7 +140,7 @@ class RoomServiceImplTest {
     public void addMemberstoRoom_shoudNot_AddExistingMembers(){
         User jono = new User("testing2", "jono");
         RoomMember roomMember = new RoomMember("id-member1", null, jono, new Date());
-        Room roomWithMembers = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMembers = new Room("id-bebas", "K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
 
         Mockito.when(repository.findById("id-bebas")).thenReturn(Optional.of(roomWithMembers));
         Mockito.when(roomMemberService.create(roomMember)).thenReturn(roomMember);
@@ -159,7 +159,7 @@ class RoomServiceImplTest {
     @Test
     public void removeMemberstoRoom_Shoud_remove_MembersFromRoom(){
         User jono = new User("testing2", "jono");
-        Room roomWithMembers = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMembers = new Room("id-bebas", "K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
         RoomMember roomMember = new RoomMember("id-member1", roomWithMembers, jono, new Date());
         roomWithMembers.getRoomMember().add(roomMember);
 
@@ -176,7 +176,7 @@ class RoomServiceImplTest {
     @Test
     public void addMessageToRoom_Should_AddTwoMessageToRooms_WhenAddTwoMessagesToRooms(){
         User jono = new User("testing2", "jono");
-        Room roomWithMessages = new Room("id-bebas", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
+        Room roomWithMessages = new Room("id-bebas","K01", "mtk", "integral", new Date(), user, new HashSet<>(), new ArrayList<>());
         RoomMessage roomMessage = new RoomMessage("id-pesan", roomWithMessages, user, "halo guys", new Date());
         RoomMessage roomMessage2 = new RoomMessage("id-pesan2", roomWithMessages, user, "halo guys", new Date());
 

@@ -4,13 +4,19 @@ import com.project.app.entity.AdminTransaction;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.TransactionService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
 import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
@@ -23,7 +29,16 @@ public class AdminTransactionController {
     @Autowired
     TransactionService<AdminTransaction> transactionService;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping("/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<AdminTransaction>> createTransactions(
             @RequestBody AdminTransaction request
     ){

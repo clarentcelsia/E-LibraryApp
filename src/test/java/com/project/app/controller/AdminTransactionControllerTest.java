@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ class AdminTransactionControllerTest {
     TransactionService<AdminTransaction> service;
 
     @Test
+//    @WithMockUser(username = "test", password = "test12", roles = {"admin"})
     public void whenGivenValidUrlAndMethodAndInput_thenReturn201() throws Exception {
 
         AdminTransaction adminTransaction = new AdminTransaction("TRX01");
@@ -48,6 +51,7 @@ class AdminTransactionControllerTest {
         given(service.createTransaction(any(AdminTransaction.class))).willReturn(adminTransaction);
 
         mockMvc.perform(post("/admin-transactions")
+                        .with(SecurityMockMvcRequestPostProcessors.user("adm12").roles("admin"))
                         .content(mapper.writeValueAsString(adminTransaction))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())

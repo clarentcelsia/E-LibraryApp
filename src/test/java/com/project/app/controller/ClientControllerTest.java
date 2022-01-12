@@ -57,7 +57,7 @@ class ClientControllerTest {
                 1
         );
 
-        mockMvc.perform(post("/api/v9/clients")
+        mockMvc.perform(post("/api/v1/clients")
                         .content(mapper.writeValueAsString(clients))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -76,7 +76,7 @@ class ClientControllerTest {
                 1
         );
 
-        mockMvc.perform(post("/api/v9/clients")
+        mockMvc.perform(post("/api/v1/clients")
                         .content(mapper.writeValueAsString(clients))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -94,7 +94,7 @@ class ClientControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onGetClientById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v9/clients/{id}", "C01")
+        mockMvc.perform(get("/api/v1/clients/{id}", "C01")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
@@ -117,7 +117,7 @@ class ClientControllerTest {
 
         given(service.getClientById(clients.getClientId())).willReturn(response.getData());
 
-        MvcResult result = mockMvc.perform(get("/api/v9/clients/{id}", clients.getClientId())
+        MvcResult result = mockMvc.perform(get("/api/v1/clients/{id}", clients.getClientId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
@@ -151,7 +151,7 @@ class ClientControllerTest {
 
         given(service.getClients(any(ClientDTO.class), any(Pageable.class))).willReturn(page);
 
-        mockMvc.perform(get("/api/v9/clients")
+        mockMvc.perform(get("/api/v1/clients")
                         .param("active", "1")
                         .param("page", "0")
                         .param("size", "1")
@@ -173,7 +173,7 @@ class ClientControllerTest {
 
         given(service.updateClient(any(Clients.class))).willReturn(updatedClient);
 
-        mockMvc.perform(put("/api/v9/clients")
+        mockMvc.perform(put("/api/v1/clients")
                         .content(mapper.writeValueAsString(updatedClient))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -184,7 +184,7 @@ class ClientControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onDeleteClient_thenReturn200() throws Exception {
 
-        mockMvc.perform(delete("/api/v9/clients/{id}", "C01")
+        mockMvc.perform(delete("/api/v1/clients/{id}", "C01")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))

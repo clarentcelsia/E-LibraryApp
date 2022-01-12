@@ -4,6 +4,8 @@ import com.project.app.handler.ResearchPermissionHandler;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.HandlerService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.security.RolesAllowed;
 
 import static com.project.app.utils.Utility.*;
 
@@ -23,6 +28,14 @@ public class PermissionRequestController {
     @Autowired
     HandlerService service;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping(
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -30,6 +43,7 @@ public class PermissionRequestController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')" + "|| hasRole('ROLE_USER')")
     public ResponseEntity<Response<ResearchPermissionHandler>> createRequest(
             @RequestPart(name = "request") ResearchPermissionHandler request,
             @RequestPart(name = "file") MultipartFile file
@@ -65,6 +79,14 @@ public class PermissionRequestController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, service.getById(id)));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping(
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -72,6 +94,7 @@ public class PermissionRequestController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')" + "|| hasRole('ROLE_USER')")
     public ResponseEntity<Response<?>> updateRequest(
             @RequestPart(name = "request") ResearchPermissionHandler request,
             @RequestPart(name = "file", required = false) MultipartFile file
@@ -80,7 +103,16 @@ public class PermissionRequestController {
                 .body(new Response<>(RESPONSE_UPDATE_SUCCESS, service.updateRequest(request, file)));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')" + "|| hasRole('ROLE_USER')")
     public ResponseEntity<Response<?>> deleteRequest(
             @PathVariable("id") String id
     ){

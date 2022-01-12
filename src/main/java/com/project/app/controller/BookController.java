@@ -6,6 +6,8 @@ import com.project.app.request.BookRequest;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.BookService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,9 +15,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.annotation.security.RolesAllowed;
 
 import static com.project.app.utils.Utility.*;
 
@@ -26,6 +31,14 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping(
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -34,6 +47,7 @@ public class BookController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Book>> create(
             @RequestPart(name = "book") BookRequest request,
             @RequestPart(name = "cover") MultipartFile cover,
@@ -68,7 +82,16 @@ public class BookController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Book>> updateBook(
             @RequestPart(name = "book") BookRequest request,
             @RequestPart(name = "cover") MultipartFile cover,
@@ -89,7 +112,16 @@ public class BookController {
                 .body(new Response<>(RESPONSE_GET_SUCCESS, bookService.getBookById(id)));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<?>> deleteBook(
             @PathVariable(name = "id") String id
     ){

@@ -6,6 +6,8 @@ import com.project.app.request.JournalRequest;
 import com.project.app.response.Response;
 import com.project.app.service.JournalService;
 import com.project.app.service.impl.FileService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,8 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/journal")
@@ -26,6 +31,14 @@ public class JournalController {
     @Autowired
     FileService fileService;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping(
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -34,6 +47,7 @@ public class JournalController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Journal>> create(
             @RequestPart(name = "journal") JournalRequest journal,
             @RequestPart(name = "files") MultipartFile photo
@@ -71,7 +85,16 @@ public class JournalController {
                 .body(response);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{journalId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<String>> deleteJournalById(@PathVariable("journalId") String id) {
         String delete = journalService.deleteById(id);
         Response<String> responseDelete = new Response<>("Deleted", delete);
@@ -80,6 +103,14 @@ public class JournalController {
                 .body(responseDelete);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping(
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -88,6 +119,7 @@ public class JournalController {
             },
             produces = "application/json"
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Journal>> update(
             @RequestPart(name = "journal") JournalRequest journal,
             @RequestPart(name = "files") MultipartFile photo

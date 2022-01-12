@@ -58,7 +58,7 @@ class PlanControllerTest {
                 180000
         );
 
-        mockMvc.perform(post("/api/v7/plans")
+        mockMvc.perform(post("/api/v1/plans")
                         .content(mapper.writeValueAsString(plan))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -74,7 +74,7 @@ class PlanControllerTest {
                 180000
         );
 
-        mockMvc.perform(post("/api/v7/plans")
+        mockMvc.perform(post("/api/v1/plans")
                         .content(mapper.writeValueAsString(plan))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -90,7 +90,7 @@ class PlanControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onGetPlanById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v7/plans/{id}", "C01")
+        mockMvc.perform(get("/api/v1/plans/{id}", "C01")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
@@ -111,7 +111,7 @@ class PlanControllerTest {
 
         given(service.getPlanById(plan.getPlanId())).willReturn(response.getData());
 
-        MvcResult result = mockMvc.perform(get("/api/v7/plans/{id}", plan.getPlanId())
+        MvcResult result = mockMvc.perform(get("/api/v1/plans/{id}", plan.getPlanId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
@@ -144,7 +144,7 @@ class PlanControllerTest {
 
         given(service.getPlans(any(Pageable.class))).willReturn(page);
 
-        mockMvc.perform(get("/api/v7/plans")
+        mockMvc.perform(get("/api/v1/plans")
                         .param("page", "0")
                         .param("size", "5")
                         .accept(MediaType.APPLICATION_JSON))
@@ -163,7 +163,7 @@ class PlanControllerTest {
 
         given(service.updatePlan(any(Plan.class))).willReturn(plan);
 
-        mockMvc.perform(put("/api/v7/plans")
+        mockMvc.perform(put("/api/v1/plans")
                         .content(mapper.writeValueAsString(plan))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -174,7 +174,7 @@ class PlanControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onDeletePlan_thenReturn200() throws Exception {
 
-        mockMvc.perform(delete("/api/v7/plans/{id}", "C01")
+        mockMvc.perform(delete("/api/v1/plans/{id}", "C01")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))

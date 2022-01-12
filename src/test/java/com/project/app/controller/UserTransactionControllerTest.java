@@ -50,7 +50,7 @@ class UserTransactionControllerTest {
 
         given(service.createTransaction(any(UserTransaction.class))).willReturn(userTransaction);
 
-        mockMvc.perform(post("/api/v11/transactions/user")
+        mockMvc.perform(post("/user-transactions/user")
                         .content(mapper.writeValueAsString(userTransaction))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -63,7 +63,7 @@ class UserTransactionControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v11/transactions/user/{id}", "B01")
+        mockMvc.perform(get("/user-transactions/user/{id}", "B01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
@@ -77,7 +77,7 @@ class UserTransactionControllerTest {
 
         given(service.getTransactionById(userTransaction.getUserTransactionId())).willReturn(userTransaction);
 
-        mockMvc.perform(get("/api/v11/transactions/user/{id}", "TRX01"))
+        mockMvc.perform(get("/user-transactions/user/{id}", "TRX01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
@@ -103,7 +103,7 @@ class UserTransactionControllerTest {
 
         given(service.getTransactions(PageRequest.of(0, 5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v11/transactions/user")
+        mockMvc.perform(get("/user-transactions/user")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())

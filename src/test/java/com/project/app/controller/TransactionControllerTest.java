@@ -50,7 +50,7 @@ class TransactionControllerTest {
         transaction.setTransactionId("C01");
         transaction.setGrandtotal(350000);
 
-        mockMvc.perform(post("/api/v10/client/transactions")
+        mockMvc.perform(post("/api/v1/client/transactions")
                         .content(mapper.writeValueAsString(transaction))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -64,7 +64,7 @@ class TransactionControllerTest {
         transaction.setTransactionId("C01");
         transaction.setGrandtotal(350000);
 
-        mockMvc.perform(post("/api/v10/client/transactions")
+        mockMvc.perform(post("/api/v1/client/transactions")
                         .content(mapper.writeValueAsString(transaction))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -79,7 +79,7 @@ class TransactionControllerTest {
     @Test
     public void whenGivenValidUrlAndMethod_onGetTransactionById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v10/client/transactions/{id}", "C01")
+        mockMvc.perform(get("/api/v1/client/transactions/{id}", "C01")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));

@@ -1,7 +1,10 @@
 package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.project.app.utils.DefaultLocalDateTimeDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +39,8 @@ public class ReturnBook {
     private Integer totalQty;
 
     @Column (nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = DefaultLocalDateTimeDeserializer.class)
     private LocalDateTime dateReturn;
 
     @Column (nullable = false)

@@ -18,10 +18,11 @@ public class Room {
     @GeneratedValue(generator = "uuid-generator")
     private String id;
 
+    private String roomKey;
+
     @Column (nullable = false)
     private String topic;
 
-    @Column (nullable = false)
     private String subTopic;
 
     @Column (updatable = false)

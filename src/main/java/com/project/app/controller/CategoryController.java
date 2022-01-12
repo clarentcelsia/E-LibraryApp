@@ -4,13 +4,18 @@ import com.project.app.dto.CategoryDTO;
 import com.project.app.entity.library.Category;
 import com.project.app.response.Response;
 import com.project.app.service.CategoryService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/categories")
@@ -19,6 +24,15 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     public ResponseEntity<Response<Category>> create(@RequestBody Category category) {
         Category createCategory = categoryService.createCategory(category);
         Response<Category> response = new Response<>("Data Category Has Been Created", createCategory);
@@ -35,6 +49,7 @@ public class CategoryController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
     @GetMapping
     public ResponseEntity<Response<Page<Category>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
@@ -51,7 +66,16 @@ public class CategoryController {
                 .body(response);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{categoryId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<String>> deleteById(@PathVariable("categoryId") String id) {
         String delete = categoryService.deleteCategory(id);
         Response<String> responseDelete = new Response<>("Deleted", delete);
@@ -60,7 +84,16 @@ public class CategoryController {
                 .body(responseDelete);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Category>> updateById(@RequestBody Category category) {
         Category updateCategory = categoryService.updateCategory(category);
         Response<Category> response = new Response<>("Data Has Been Updated", updateCategory);

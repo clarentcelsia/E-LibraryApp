@@ -47,7 +47,7 @@ class ProductionControllerTest {
         MockMultipartFile file2 = new MockMultipartFile("preview", "file1.txt", "plain/txt", "text1".getBytes());
         MockMultipartFile file3 = new MockMultipartFile("download", "file2.txt", "plain/txt", "text2".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/productions")
                         .file(book)
                         .file(file1).file(file2).file(file3))
                 .andExpect(status().isCreated());
@@ -58,7 +58,7 @@ class ProductionControllerTest {
         MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("preview", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/productions")
                         .file(book)
                         .file(file1)
                         .contentType("multipart/form-data"))
@@ -70,7 +70,7 @@ class ProductionControllerTest {
         MockMultipartFile book = new MockMultipartFile("book", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/productions")
                         .file(book)
                         .file(file1)
                         .contentType("multipart/form-data"))
@@ -84,7 +84,7 @@ class ProductionControllerTest {
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("download", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/productions")
                         .file(book)
                         .file(file1)
                         .file(file2)
@@ -99,7 +99,7 @@ class ProductionControllerTest {
         MockMultipartFile file1 = new MockMultipartFile("image", "file.png", "image/png", "image".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("preview", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/productions")
                         .file(book)
                         .file(file1)
                         .file(file2)
@@ -113,7 +113,7 @@ class ProductionControllerTest {
         MockMultipartFile preview = new MockMultipartFile("preview", "", "application/json", "{\"productionBookId\": \"B01\"}".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("download", "file.png", "image/png", "image".getBytes());
 
-        mockMvc.perform(multipart("/api/v3/productions")
+        mockMvc.perform(multipart("/productions")
                         .file(preview)
                         .file(file2)
                         .contentType("multipart/form-data"))
@@ -122,7 +122,7 @@ class ProductionControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
-        mockMvc.perform(get("/api/v3/productions/{id}", "R01"))
+        mockMvc.perform(get("/productions/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
@@ -134,7 +134,7 @@ class ProductionControllerTest {
 
         given(service.getById(id)).willReturn(book);
 
-        mockMvc.perform(get("/api/v3/productions/{id}", "R01"))
+        mockMvc.perform(get("/productions/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
@@ -158,7 +158,7 @@ class ProductionControllerTest {
 
         given(service.getAll(PageRequest.of(0,5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v3/productions")
+        mockMvc.perform(get("/productions")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -167,7 +167,7 @@ class ProductionControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodDeleteBook_thenReturn200() throws Exception {
-        mockMvc.perform(delete("/api/v3/productions/{id}", "R01"))
+        mockMvc.perform(delete("/productions/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));

@@ -52,7 +52,7 @@ class ProductionRequestControllerTest {
         handler.setProductionRequestHandlerId("P01");
         handler.setOnHandle(true);
 
-        mockMvc.perform(post("/api/v0/request/production")
+        mockMvc.perform(post("/productions/request")
                         .content(mapper.writeValueAsString(handler))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -66,7 +66,7 @@ class ProductionRequestControllerTest {
         handler.setProductionRequestHandlerId("P01");
         handler.setOnHandle(true);
 
-        mockMvc.perform(post("/api/v0/request/production")
+        mockMvc.perform(post("/productions/request")
                         .content(mapper.writeValueAsString(handler))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -80,7 +80,7 @@ class ProductionRequestControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
-        mockMvc.perform(get("/api/v0/request/production/{id}", "R01"))
+        mockMvc.perform(get("/productions/request/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
     }
@@ -94,7 +94,7 @@ class ProductionRequestControllerTest {
 
         given(service.getById(handler.getProductionRequestHandlerId())).willReturn(handler);
 
-        mockMvc.perform(get("/api/v0/request/production/{id}", "P01"))
+        mockMvc.perform(get("/productions/request/{id}", "P01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
@@ -120,7 +120,7 @@ class ProductionRequestControllerTest {
 
         given(service.fetchRequests(PageRequest.of(0, 5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v0/request/production")
+        mockMvc.perform(get("/productions/request")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -138,7 +138,7 @@ class ProductionRequestControllerTest {
 
         when(service.findRequestByStatus(true)).thenReturn(handlers);
 
-        mockMvc.perform(get("/api/v0/request/production/find")
+        mockMvc.perform(get("/productions/request/find")
                         .param("status", "true"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
@@ -154,7 +154,7 @@ class ProductionRequestControllerTest {
 
         given(service.updateRequest(any(ProductionRequestHandler.class))).willReturn(handler);
 
-        mockMvc.perform(put("/api/v0/request/production")
+        mockMvc.perform(put("/productions/request")
                         .content(mapper.writeValueAsString(handler))
                         .contentType("application/json"))
                 .andExpect(status().isOk())
@@ -165,7 +165,7 @@ class ProductionRequestControllerTest {
 
     @Test
     public void whenGivenValidUrlAndMethodDeleteRequest_thenReturn200() throws Exception {
-        mockMvc.perform(delete("/api/v0/request/production/{id}", "R01"))
+        mockMvc.perform(delete("/productions/request/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));

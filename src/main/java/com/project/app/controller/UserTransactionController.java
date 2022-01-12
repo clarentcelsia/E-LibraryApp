@@ -4,13 +4,18 @@ import com.project.app.entity.UserTransaction;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.TransactionService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
 import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
@@ -23,7 +28,16 @@ public class UserTransactionController {
     @Autowired
     TransactionService<UserTransaction> transactionService;
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping("/user")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<UserTransaction>> createTransactions(
             @RequestBody UserTransaction request
     ){

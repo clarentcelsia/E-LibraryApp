@@ -4,16 +4,22 @@ import com.project.app.dto.AuthorDTO;
 import com.project.app.entity.library.Author;
 import com.project.app.response.Response;
 import com.project.app.service.AuthorService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping({"/authors"})
+@RolesAllowed("admin")
 public class AuthorController {
     @Autowired
     private AuthorService authorService;
@@ -46,7 +52,16 @@ public class AuthorController {
                 .body(response);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{authorId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<String>> deleteById(@PathVariable("authorId") String id) {
         String delete = authorService.delete(id);
         Response<String> responseDelete = new Response<>("Deleted", delete);

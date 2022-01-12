@@ -8,6 +8,8 @@ import com.project.app.request.EbookAPI;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.EbookService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Properties;
 

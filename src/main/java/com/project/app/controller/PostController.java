@@ -5,6 +5,8 @@ import com.project.app.entity.Post;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.PostService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/posts")
@@ -52,14 +57,32 @@ public class PostController {
                 new Response<>(message, response));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<Post>> createPost(@RequestBody Post post){
         Post savedPost = postService.create(post);
         Response<Post> response = new Response<>( "post created",savedPost);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{postId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<String>> deletePostById(@PathVariable(value = "postId") String id){
         String message = postService.deleteById(id);
         Response<String> response = new Response<>(message, null);

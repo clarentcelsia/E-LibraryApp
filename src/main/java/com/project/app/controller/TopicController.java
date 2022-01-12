@@ -5,6 +5,8 @@ import com.project.app.entity.Topic;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
 import com.project.app.service.TopicService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/topics")
@@ -54,21 +59,48 @@ public class TopicController {
                 new Response<>(message, response));
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<Topic>> createTopic(@RequestBody Topic topic){
         Topic savedTopic = topicService.create(topic);
         Response<Topic> response = new Response<>("topic created",savedTopic);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @PutMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<Topic>> updateTopic(@RequestBody Topic topic){
         Topic savedTopic = topicService.update(topic);
         Response<Topic> response = new Response<>( "topic updated",savedTopic);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Authorization",
+                    value = "Authorization token",
+                    paramType = "header",
+                    required = true,
+                    dataType = "string"
+            ))
     @DeleteMapping("/{topicId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<String>> deleteTopicById(@PathVariable(value = "topicId") String id){
         String message = topicService.deleteById(id);
         Response<String> response = new Response<>(message, null);

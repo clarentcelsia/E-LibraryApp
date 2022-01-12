@@ -45,7 +45,7 @@ class EbookControllerTest {
                 "description", "imageLink",
                 "webReaderLink");
 
-        mockMvc.perform(post("/api/v5/ebooks")
+        mockMvc.perform(post("/ebooks")
                         .content(mapper.writeValueAsString(api))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -63,7 +63,7 @@ class EbookControllerTest {
                 "description", "imageLink",
                 "webReaderLink");
 
-        mockMvc.perform(post("/api/v5/ebooks")
+        mockMvc.perform(post("/ebooks")
                         .content(mapper.writeValueAsString(api))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -79,7 +79,7 @@ class EbookControllerTest {
     @Test
     public void whenEbookGetsByIdSucceed_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v5/ebooks/id/{id}", "R01")
+        mockMvc.perform(get("/ebooks/id/{id}", "R01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
@@ -90,7 +90,7 @@ class EbookControllerTest {
     @Test
     public void whenEbookDeleted_thenReturn200() throws Exception {
 
-        mockMvc.perform(delete("/api/v5/ebooks/{id}", "R01"))
+        mockMvc.perform(delete("/ebooks/{id}", "R01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_DELETE_SUCCESS))
                 .andExpect(jsonPath("$.data").value("R01"));
@@ -99,7 +99,7 @@ class EbookControllerTest {
     @Test
     public void whenDeleteNoIdGiven_thenReturn405() throws Exception {
 
-        mockMvc.perform(delete("/api/v5/ebooks/{id}", ""))
+        mockMvc.perform(delete("/ebooks/{id}", ""))
                 .andExpect(status().isMethodNotAllowed());
     }
 
