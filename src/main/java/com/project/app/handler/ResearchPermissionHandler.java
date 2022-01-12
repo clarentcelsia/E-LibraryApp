@@ -17,14 +17,16 @@ public class ResearchPermissionHandler {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String requestId;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, cascade = {
+            CascadeType.REFRESH
+    })
     private User user;
 
     private String researchFile;
 
     private String comment;
 
-    private Boolean isAccepted;
+    private boolean isAccepted;
 
     @CreatedDate
     @Column(updatable = false)
@@ -35,7 +37,7 @@ public class ResearchPermissionHandler {
 
     @PrePersist
     private void prePersist(){
-        if (this.isAccepted == null) this.isAccepted = false;
+        if (this.getAccepted() == null) this.isAccepted = false;
         if (this.createdAt == null) this.createdAt = new Date();
         if (this.updatedAt == null) this.updatedAt = new Date();
         if (this.comment == null) this.comment = "not yet";

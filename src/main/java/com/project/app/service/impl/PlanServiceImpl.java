@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
+import static com.project.app.utils.Utility.RESPONSE_NOT_FOUND;
 
 @Service
 @Transactional

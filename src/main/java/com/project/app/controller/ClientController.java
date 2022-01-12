@@ -12,13 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 
 
 @RestController
-@RequestMapping("/api/v9/clients")
+@RequestMapping("/api/v1/clients")
 public class ClientController {
 
     @Autowired

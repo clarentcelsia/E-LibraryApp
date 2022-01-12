@@ -1,6 +1,6 @@
 package com.project.app.controller;
 
-import com.project.app.entity.library.Files;
+import com.project.app.files.Files;
 import com.project.app.service.impl.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +26,7 @@ public class FIleController {
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\""
-                                + file.getFileName() + "\"")
+                                + file.getFilename() + "\"")
                 .body(file.getData());
     }
 }

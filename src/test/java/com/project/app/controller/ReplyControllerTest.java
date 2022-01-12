@@ -2,14 +2,13 @@ package com.project.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.app.dto.PostDTO;
 import com.project.app.dto.ReplyDTO;
 import com.project.app.entity.Post;
 import com.project.app.entity.Reply;
 import com.project.app.entity.Topic;
 import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.ReplyService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc // Untuk pengetesan layer controller sebagai Client(Postman)
@@ -97,7 +97,7 @@ class ReplyControllerTest {
     }
 
     @Test
-    public void deletePostById_shouldReturn_StatusOK_and_Message() throws Exception {
+    public void deleteReplyById_shouldReturn_StatusOK_and_Message() throws Exception {
         String id = outputReply.getId();
         String message = String.format("reply with id %s has been deleted", id);
         Mockito.when(replyService.deleteById(id)).thenReturn(message);
@@ -112,12 +112,12 @@ class ReplyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Reply> response = objectMapper.readValue(responseJson, WebResponse.class);
+        Response<Reply> response = objectMapper.readValue(responseJson, Response.class);
         assertNull(response.getData());
     }
 
     @Test
-    public void getPosts_ShouldReturn_StatusOK_and_AllPagedPosts() throws Exception {
+    public void getReplies_ShouldReturn_StatusOK_and_AllPagedReplies() throws Exception {
         // preparation all paged rooms
         Sort sort = Sort.by("message");
         Pageable pageable = PageRequest.of(0,1,sort);
@@ -143,16 +143,10 @@ class ReplyControllerTest {
                 .queryParam("message", "message");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(outputReply.getId())));
 
-        PageResponse<Reply> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Reply>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().get(0).getId(), outputReply.getId());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
     }
 }

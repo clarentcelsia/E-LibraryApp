@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 
 @RestController
-@RequestMapping("/api/v0/request/production")
+@RequestMapping("/productions/request")
 public class ProductionRequestController {
 
     @Autowired

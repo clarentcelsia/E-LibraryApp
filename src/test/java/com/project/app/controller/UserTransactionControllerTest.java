@@ -18,8 +18,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.project.app.util.Utility.RESPONSE_CREATE_SUCCESS;
-import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+import static com.project.app.utils.Utility.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

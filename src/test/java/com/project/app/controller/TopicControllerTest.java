@@ -6,7 +6,7 @@ import com.project.app.dto.TopicDTO;
 import com.project.app.entity.Topic;
 import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.TopicService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +25,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc // Untuk pengetesan layer controller sebagai Client(Postman)
@@ -127,7 +127,7 @@ class TopicControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Topic> response = objectMapper.readValue(responseJson, WebResponse.class);
+        Response<Topic> response = objectMapper.readValue(responseJson, Response.class);
         assertNull(response.getData());
     }
 
@@ -158,15 +158,10 @@ class TopicControllerTest {
                 .queryParam("topicSubject", "subject");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(outputTopic.getId())));
 
-        PageResponse<Topic> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Topic>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
     }
 }

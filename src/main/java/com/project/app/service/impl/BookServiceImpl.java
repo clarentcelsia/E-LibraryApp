@@ -3,8 +3,8 @@ package com.project.app.service.impl;
 import com.project.app.dto.BookDTO;
 import com.project.app.entity.Book;
 import com.project.app.entity.library.Author;
-import com.project.app.entity.library.Files;
-import com.project.app.exception.NotFoundException;
+import com.project.app.exception.ResourceNotFoundException;
+import com.project.app.files.Files;
 import com.project.app.repository.BookRepository;
 import com.project.app.request.BookRequest;
 import com.project.app.service.AuthorService;
@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBookById(String id) {
         return bookRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
     }
 
     @Override

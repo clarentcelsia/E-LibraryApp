@@ -1,11 +1,9 @@
 package com.project.app.controller;
 
 import com.project.app.dto.ReplyDTO;
-import com.project.app.dto.TopicDTO;
 import com.project.app.entity.Reply;
-import com.project.app.entity.Topic;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/replies")
 public class ReplyController {
@@ -26,14 +22,14 @@ public class ReplyController {
     private ReplyService replyService;
 
     @GetMapping("/{replyId}")
-    public ResponseEntity<WebResponse<Reply>> getReplyById(@PathVariable(value = "replyId") String id){
+    public ResponseEntity<Response<Reply>> getReplyById(@PathVariable(value = "replyId") String id){
         Reply savedReply = replyService.getById(id);
-        WebResponse<Reply> response = new WebResponse<>("getting reply",savedReply);
+        Response<Reply> response = new Response<>("getting reply",savedReply);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<Reply>> getAllReply(
+    public ResponseEntity<Response<PageResponse<Reply>>> getAllReply(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "sortBy", defaultValue = "message") String sortBy,
@@ -43,30 +39,30 @@ public class ReplyController {
         Sort sort = Sort.by(Sort.Direction.fromString(direction),sortBy);
         Pageable pageable = PageRequest.of(page,size,sort);
 
+        String info = String.format("data halaman ke %d", page+1);
         ReplyDTO dto = new ReplyDTO(message);
-        String messageResponse = String.format("data halaman ke %d", page+1);
         Page<Reply> replyPage = replyService.getAll(dto, pageable);
 
         PageResponse<Reply> response = new PageResponse<>(
                 replyPage.getContent(),
-                messageResponse,
                 replyPage.getTotalElements(),
                 replyPage.getTotalPages(), page, size);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(
+                new Response<>(info, response));
     }
 
     @PostMapping
-    public ResponseEntity<WebResponse<Reply>> createReply(@RequestBody Reply reply){
+    public ResponseEntity<Response<Reply>> createReply(@RequestBody Reply reply){
         Reply savedReply = replyService.create(reply);
-        WebResponse<Reply> response = new WebResponse<>("reply created",savedReply);
+        Response<Reply> response = new Response<>("reply created",savedReply);
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{replyId}")
-    public ResponseEntity<WebResponse<String>> deleteReplyById(@PathVariable(value = "replyId") String id){
+    public ResponseEntity<Response<String>> deleteReplyById(@PathVariable(value = "replyId") String id){
         String message = replyService.deleteById(id);
-        WebResponse<String> response = new WebResponse<>(message, null);
+        Response<String> response = new Response<>(message, null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

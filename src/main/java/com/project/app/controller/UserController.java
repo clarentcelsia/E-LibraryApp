@@ -20,13 +20,6 @@ public class UserController  {
     @Autowired
     private UserService userService;
 
-//    @PostMapping
-//    public ResponseEntity<Response<User>> createUser(@RequestBody User request){
-//        User user = this.userService.create(request);
-//        Response<User> webResponse = new Response<>("Successfully created new user", user);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(webResponse);
-//    }
-
     @GetMapping("/{userId}")
     public ResponseEntity<Response<User>> getById(@PathVariable("userId") String id){
         User user = userService.getActiveUser(id);

@@ -79,30 +79,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-//    @PostMapping("/registeradmin")
-//    public ResponseEntity<Response<?>> registeradmin(@RequestBody AdminRegisterRequest request){
-//        Administrator administrator = new Administrator();
-//        administrator.setUsername(request.getUsername());
-//        administrator.setPassword(request.getPassword());
-//        administrator.setName(request.getName());
-//        administrator.setIdentityNumber(request.getIdentityNumber());
-//        administrator.setAddress(request.getAddress());
-//        administrator.setEmail(request.getEmail());
-//        administrator.setPhoneNumber(request.getPhoneNumber());
-//        administrator.setStatus(request.getStatus());
-//
-//        Set<Role> roleSet = new HashSet<>();
-//        Set<String> roles = request.getRoles();
-//        for (String role : roles){
-//            Role role1 = roleService.create(role);
-//            roleSet.add(role1);
-//        }
-//
-//        AdministratorResponse administratorResponse = administratorService.create(administrator, roleSet);
-//        Response<?> response = new Response<>("New Administrator Created", administratorResponse);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-//    }
-
     @PostMapping("/userlogin")
     public ResponseEntity<Response<?>> userlogin(@RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -125,27 +101,4 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
-//    @PostMapping("/adminlogin")
-//    public ResponseEntity<Response<?>> adminlogin(@RequestBody LoginRequest request) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getUsername(),
-//                        request.getPassword()
-//                )
-//        );
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        String jwt = jwtUtils.generateJwtToken(authentication);
-//
-//        AdministratorDetailImpl administratorDetail = (AdministratorDetailImpl) authentication.getPrincipal();
-//        Set<String> roles = new HashSet<>();
-//        for (GrantedAuthority authority : administratorDetail.getAuthorities()){
-//            roles.add(authority.getAuthority());
-//        }
-//        LoginResponse loginResponse = new LoginResponse(jwt, roles);
-//
-//        Response<?> response = new Response<>("Login success", loginResponse);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(response);
-//    }
 }

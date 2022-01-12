@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 
 @RestController
-@RequestMapping("/api/v7/plans")
+@RequestMapping("/api/v1/plans")
 public class PlanController {
 
     @Autowired

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 
 @RestController
-@RequestMapping("/api/v6/reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
 
     @Autowired

@@ -2,16 +2,14 @@ package com.project.app.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.project.app.dto.LoanDTO;
 import com.project.app.entity.Book;
 import com.project.app.entity.Loan;
 import com.project.app.entity.LoanDetail;
 import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.LoanService;
-import com.project.app.utils.DefaultLocalDateTimeDeserializer;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -100,7 +99,7 @@ class LoanControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Loan> response = objectMapper.readValue(responseJson, WebResponse.class);
+        Response<Loan> response = objectMapper.readValue(responseJson, Response.class);
         assertNull(response.getData());
     }
 
@@ -131,16 +130,10 @@ class LoanControllerTest {
                 .queryParam("status", "false");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
-
-        PageResponse<Loan> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Loan>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(outputLoan.getId())));
     }
 
     // transaction testing

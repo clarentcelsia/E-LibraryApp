@@ -11,9 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
+import static com.project.app.utils.Utility.RESPONSE_NOT_FOUND;
 
 
 @Service
@@ -25,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review createReview(Review review) {
         if(review == null) return null;
-        if(review.getBook().getBookId() == null)
+        if(review.getBook().getId() == null)
             System.out.println("which book you want to make a review");
         return repository.save(review);
     }

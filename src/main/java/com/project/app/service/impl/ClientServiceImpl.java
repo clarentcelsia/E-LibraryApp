@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
+import static com.project.app.utils.Utility.RESPONSE_NOT_FOUND;
 
 @Service
 @Transactional

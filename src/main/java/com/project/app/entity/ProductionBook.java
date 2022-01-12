@@ -33,8 +33,10 @@ public class ProductionBook {
     private Boolean onSale;
     private Boolean availableForBookPhysic;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER,
+    cascade = {
+            CascadeType.REFRESH
+    })
     @JoinColumn(name = "user_id")
     private User user;
 

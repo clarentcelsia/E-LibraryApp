@@ -47,9 +47,12 @@ class ReviewServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        Book book = new Book();
+        book.setId("b01");
+        book.setTitle("title");
         review = new Review();
         review.setReviewId("r01");
-        review.setBook(new Book("b01", "title"));
+        review.setBook(book);
         review.setUsers(new User("u01", "name"));
         review.setTitle("comment title");
         review.setContent("content");

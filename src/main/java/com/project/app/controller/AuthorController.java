@@ -2,8 +2,8 @@ package com.project.app.controller;
 
 import com.project.app.dto.AuthorDTO;
 import com.project.app.entity.library.Author;
+import com.project.app.response.Response;
 import com.project.app.service.AuthorService;
-import com.project.app.utils.WebResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,16 +22,16 @@ public class AuthorController {
     }
 
     @GetMapping("/{authorId}")
-    public ResponseEntity<WebResponse<Author>> getById(@PathVariable("authorId") String id) {
+    public ResponseEntity<Response<Author>> getById(@PathVariable("authorId") String id) {
         Author author = authorService.getById(id);
-        WebResponse<Author> response = new WebResponse<>(String.format("Author with id %s found", id), author);
+        Response<Author> response = new Response<>(String.format("Author with id %s found", id), author);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<WebResponse<Page<Author>>> listWithPage(
+    public ResponseEntity<Response<Page<Author>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "name", required = false) String name
@@ -39,7 +39,7 @@ public class AuthorController {
         Pageable pageable = PageRequest.of(page, size);
         AuthorDTO authorDTO = new AuthorDTO(name);
         Page<Author> authors = authorService.listWithPage(pageable, authorDTO);
-        WebResponse<Page<Author>> response = new WebResponse<>("Success", authors);
+        Response<Page<Author>> response = new Response<>("Success", authors);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -47,9 +47,9 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{authorId}")
-    public ResponseEntity<WebResponse<String>> deleteById(@PathVariable("authorId") String id) {
+    public ResponseEntity<Response<String>> deleteById(@PathVariable("authorId") String id) {
         String delete = authorService.delete(id);
-        WebResponse<String> responseDelete = new WebResponse<>("Deleted", delete);
+        Response<String> responseDelete = new Response<>("Deleted", delete);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);

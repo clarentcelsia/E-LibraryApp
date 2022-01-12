@@ -2,8 +2,8 @@ package com.project.app.controller;
 
 import com.project.app.dto.CategoryDTO;
 import com.project.app.entity.library.Category;
+import com.project.app.response.Response;
 import com.project.app.service.CategoryService;
-import com.project.app.utils.WebResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,24 +19,24 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<WebResponse<Category>> create(@RequestBody Category category) {
+    public ResponseEntity<Response<Category>> create(@RequestBody Category category) {
         Category createCategory = categoryService.createCategory(category);
-        WebResponse<Category> response = new WebResponse<>("Data Category Has Been Created", createCategory);
+        Response<Category> response = new Response<>("Data Category Has Been Created", createCategory);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<WebResponse<Category>> getById(@PathVariable("categoryId") String id) {
+    public ResponseEntity<Response<Category>> getById(@PathVariable("categoryId") String id) {
         Category category = categoryService.getById(id);
-        WebResponse<Category> response = new WebResponse<>(String.format("Category with id %s found", id), category);
+        Response<Category> response = new Response<>(String.format("Category with id %s found", id), category);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
     @GetMapping
-    public ResponseEntity<WebResponse<Page<Category>>> listWithPage(
+    public ResponseEntity<Response<Page<Category>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "categoryName", required = false) String categoryName
@@ -44,7 +44,7 @@ public class CategoryController {
         Pageable pageable = PageRequest.of(page, size);
         CategoryDTO categoryDTO = new CategoryDTO(categoryName);
         Page<Category> categories = categoryService.listWithPage(pageable, categoryDTO);
-        WebResponse<Page<Category>> response = new WebResponse<>("Success", categories);
+        Response<Page<Category>> response = new Response<>("Success", categories);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -52,19 +52,18 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<WebResponse<String>> deleteById(@PathVariable("categoryId") String id) {
+    public ResponseEntity<Response<String>> deleteById(@PathVariable("categoryId") String id) {
         String delete = categoryService.deleteCategory(id);
-        WebResponse<String> responseDelete = new WebResponse<>("Deleted", delete);
+        Response<String> responseDelete = new Response<>("Deleted", delete);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);
-//        return customerService.deleteCustomer(id);
     }
 
     @PutMapping
-    public ResponseEntity<WebResponse<Category>> updateById(@RequestBody Category category) {
+    public ResponseEntity<Response<Category>> updateById(@RequestBody Category category) {
         Category updateCategory = categoryService.updateCategory(category);
-        WebResponse<Category> response = new WebResponse<>("Data Has Been Updated", updateCategory);
+        Response<Category> response = new Response<>("Data Has Been Updated", updateCategory);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

@@ -2,10 +2,10 @@ package com.project.app.service.impl;
 
 import com.project.app.dto.JournalDTO;
 import com.project.app.entity.library.Author;
-import com.project.app.entity.library.Files;
 import com.project.app.entity.library.Journal;
 import com.project.app.entity.library.Writer;
-import com.project.app.exception.NotFoundException;
+import com.project.app.exception.ResourceNotFoundException;
+import com.project.app.files.Files;
 import com.project.app.repository.JournalRepository;
 import com.project.app.request.JournalRequest;
 import com.project.app.response.JournalResponse;
@@ -56,7 +56,7 @@ public class JournalServiceImpl implements JournalService {
         if (journal.isPresent()) {
             return journal.get();
         } else {
-            throw new NotFoundException(String.format("Journal with id %s not found", id));
+            throw new ResourceNotFoundException(String.format("Journal with id %s not found", id));
         }
     }
 

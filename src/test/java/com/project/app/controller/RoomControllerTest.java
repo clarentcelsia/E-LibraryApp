@@ -1,6 +1,5 @@
 package com.project.app.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.app.dto.RoomDTO;
@@ -9,16 +8,13 @@ import com.project.app.entity.RoomMember;
 import com.project.app.entity.RoomMessage;
 import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.RoomService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,14 +23,13 @@ import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.*;
-import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc // Untuk pengetesan layer controller sebagai Client(Postman)
@@ -117,7 +112,7 @@ class RoomControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Room> response = objectMapper.readValue(responseJson, WebResponse.class);
+        Response<Room> response = objectMapper.readValue(responseJson, Response.class);
         assertNull(response.getData());
     }
 
@@ -147,7 +142,7 @@ class RoomControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<WebResponse<Room>>() {});
+        Response<Room> response = objectMapper.readValue(responseJson, new TypeReference<Response<Room>>() {});
         assertNotNull(response.getData());
         assertEquals(response.getData().getRoomMember().size(), 1);
     }
@@ -174,7 +169,7 @@ class RoomControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<WebResponse<Room>>() {});
+        Response<Room> response = objectMapper.readValue(responseJson, new TypeReference<Response<Room>>() {});
         assertEquals(response.getData().getRoomMember().size(), 0);
     }
 
@@ -202,7 +197,7 @@ class RoomControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<WebResponse<Room>>() {});
+        Response<Room> response = objectMapper.readValue(responseJson, new TypeReference<Response<Room>>() {});
         assertNotNull(response.getData());
         assertEquals(response.getData().getRoomMessage().size(), 1);
     }
@@ -235,16 +230,11 @@ class RoomControllerTest {
                 .queryParam("topic", "mtk");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(roomOne.getId())));
 
-        PageResponse<Room> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Room>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
     }
 
 }

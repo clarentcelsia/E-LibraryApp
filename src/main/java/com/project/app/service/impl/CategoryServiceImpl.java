@@ -2,7 +2,7 @@ package com.project.app.service.impl;
 
 import com.project.app.dto.CategoryDTO;
 import com.project.app.entity.library.Category;
-import com.project.app.exception.NotFoundException;
+import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.CategoryRepository;
 import com.project.app.service.CategoryService;
 import com.project.app.specification.CategorySpecification;
@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isPresent()) {
             return category.get();
         }else {
-            throw new NotFoundException(String.format("Category with id %s not found", id));
+            throw new ResourceNotFoundException(String.format("Category with id %s not found", id));
         }
     }
 

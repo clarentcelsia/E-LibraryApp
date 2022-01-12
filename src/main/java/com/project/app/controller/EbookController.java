@@ -21,10 +21,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Properties;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 
 @RestController
-@RequestMapping("/api/v5/ebooks")
+@RequestMapping("/ebooks")
 public class EbookController {
 
     private final String BASE_URL = "https://www.googleapis.com/books/v1/volumes";

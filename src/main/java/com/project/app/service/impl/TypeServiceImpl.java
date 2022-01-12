@@ -2,7 +2,7 @@ package com.project.app.service.impl;
 
 import com.project.app.dto.TypeDTO;
 import com.project.app.entity.library.Type;
-import com.project.app.exception.NotFoundException;
+import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.TypeRepository;
 import com.project.app.service.TypeService;
 import com.project.app.specification.TypeSpecification;
@@ -31,7 +31,7 @@ public class TypeServiceImpl implements TypeService {
         if (type.isPresent()) {
             return type.get();
         }else {
-            throw new NotFoundException(String.format("Subject with id %s not found", id));
+            throw new ResourceNotFoundException(String.format("Subject with id %s not found", id));
         }
     }
 

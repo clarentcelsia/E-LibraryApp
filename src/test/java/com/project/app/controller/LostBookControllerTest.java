@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -83,15 +84,10 @@ class LostBookControllerTest {
                 .queryParam("bookId", "book-1");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.message", Matchers.is(message)))
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(outputLost.getId())));
 
-        PageResponse<LostBookReport> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<LostBookReport>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
     }
 }

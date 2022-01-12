@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.project.app.util.Utility.RESPONSE_CREATE_SUCCESS;
-import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
+import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
 
 @RestController
-@RequestMapping("/api/v10/client/transactions")
+@RequestMapping("/api/v1/client/transactions")
 public class TransactionController {
 
     @Autowired

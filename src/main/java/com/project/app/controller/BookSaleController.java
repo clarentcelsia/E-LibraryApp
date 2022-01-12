@@ -22,10 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Book;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 
 @RestController
-@RequestMapping("/api/v11/booksale")
+@RequestMapping("/booksale")
 //@SecurityScheme(
 //        in = SecuritySchemeIn.HEADER,
 //        type = SecuritySchemeType.HTTP,

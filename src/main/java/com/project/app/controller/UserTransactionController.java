@@ -12,12 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.project.app.util.Utility.RESPONSE_CREATE_SUCCESS;
-import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
+import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
 
 
 @RestController
-@RequestMapping("/api/v11/transactions")
+@RequestMapping("/user-transactions")
 public class UserTransactionController {
 
     @Autowired

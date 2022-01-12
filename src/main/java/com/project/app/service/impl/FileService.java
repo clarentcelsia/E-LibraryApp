@@ -1,7 +1,7 @@
 package com.project.app.service.impl;
 
-import com.project.app.entity.library.Files;
-import com.project.app.exception.NotFoundException;
+import com.project.app.exception.ResourceNotFoundException;
+import com.project.app.files.Files;
 import com.project.app.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,10 @@ public class FileService {
     public void saveFile(Files files) {
         fileRepository.save(files);
     }
-//    void saveTwoFile(Files fileOne, Files filesTwo){
-//        fileRepository.save(fileOne,filesTwo);
-//    }
-//
 
     public Files getFileById(String id) {
         return fileRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
+                new ResourceNotFoundException(String.format(RESPONSE_NOT_FOUND, id)));
     }
 
     public void deleteFile(String id) {

@@ -3,12 +3,11 @@ package com.project.app.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.app.dto.PostDTO;
-import com.project.app.dto.TopicDTO;
 import com.project.app.entity.Post;
 import com.project.app.entity.Topic;
 import com.project.app.entity.User;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.PostService;
 //import javafx.geometry.Pos;
 import org.hamcrest.Matchers;
@@ -31,6 +30,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @SpringBootTest
 @AutoConfigureMockMvc // Untuk pengetesan layer controller sebagai Client(Postman)
 class PostControllerTest {
@@ -68,11 +69,10 @@ class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson);
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is("post created")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Matchers.is(outputPost.getId())))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Matchers.is(outputPost.getId())));
     }
 
     @Test
@@ -108,7 +108,7 @@ class PostControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
                 .andReturn().getResponse().getContentAsString();
 
-        WebResponse<Post> response = objectMapper.readValue(responseJson, WebResponse.class);
+        Response<Post> response = objectMapper.readValue(responseJson, Response.class);
         assertNull(response.getData());
     }
 
@@ -139,15 +139,9 @@ class PostControllerTest {
                 .queryParam("title", "title");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
-
-        PageResponse<Post> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<Post>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(outputPost.getId())));
     }
 }

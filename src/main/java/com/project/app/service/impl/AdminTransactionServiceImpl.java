@@ -5,8 +5,6 @@ import com.project.app.entity.AdminTransaction;
 import com.project.app.entity.AdminTransactionDetail;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.AdminTransactionRepository;
-import com.project.app.request.TransactionRequest;
-import com.project.app.response.PageResponse;
 import com.project.app.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static com.project.app.util.Utility.RESPONSE_NOT_FOUND;
+import static com.project.app.utils.Utility.RESPONSE_NOT_FOUND;
 
 @Service
 @Transactional

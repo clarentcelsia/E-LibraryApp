@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -95,16 +96,11 @@ class ReturnTransactionControllerTest {
                 .queryParam("totalQty", "1");
 
 
-        String responseJson = mockMvc.perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.is(message)))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(jsonPath("$.['data'].['content'][0].['id']", Matchers.is(outputReturn.getId())));
 
-        PageResponse<ReturnBook> response = objectMapper.readValue(responseJson, new TypeReference<PageResponse<ReturnBook>>() {});
-
-        assertNotNull(response.getData());
-        assertEquals(response.getData().size(), 1);
-        assertEquals(response.getTotalContent(), 1);
     }
 
     // transaction testing

@@ -1,11 +1,9 @@
 package com.project.app.controller;
 
-import com.project.app.dto.LoanDTO;
 import com.project.app.dto.ReturnDTO;
-import com.project.app.entity.Loan;
 import com.project.app.entity.ReturnBook;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.ReturnBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,14 +21,14 @@ public class ReturnTransactionController {
     private ReturnBookService returnBookService;
 
     @PostMapping
-    public ResponseEntity<WebResponse<ReturnBook>> createTransaction(@RequestBody ReturnBook returnBook){
+    public ResponseEntity<Response<ReturnBook>> createTransaction(@RequestBody ReturnBook returnBook){
         ReturnBook transaction = returnBookService.createTransaction(returnBook);
-        WebResponse<ReturnBook> response = new WebResponse<>("creating transaction", transaction);
+        Response<ReturnBook> response = new Response<>("creating transaction", transaction);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<ReturnBook>> getAllReturnBooks(
+    public ResponseEntity<Response<PageResponse<ReturnBook>>> getAllReturnBooks(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "sortBy", defaultValue = "dateReturn") String sortBy,
@@ -47,10 +45,10 @@ public class ReturnTransactionController {
         Page<ReturnBook> returnBooks = returnBookService.getReturnBooks(dto, pageable);
 
         PageResponse<ReturnBook> response = new PageResponse<>(
-                returnBooks.getContent(), message,
+                returnBooks.getContent(),
                 returnBooks.getTotalElements(), returnBooks.getTotalPages(),
                 page+1 , size
         );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(new Response<>(message, response));
     }
 }

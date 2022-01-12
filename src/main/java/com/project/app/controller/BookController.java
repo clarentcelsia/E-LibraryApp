@@ -3,9 +3,9 @@ package com.project.app.controller;
 import com.project.app.dto.BookDTO;
 import com.project.app.entity.Book;
 import com.project.app.request.BookRequest;
+import com.project.app.response.PageResponse;
+import com.project.app.response.Response;
 import com.project.app.service.BookService;
-import com.project.app.utils.PageResponse;
-import com.project.app.utils.WebResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,20 +34,20 @@ public class BookController {
             },
             produces = "application/json"
     )
-    public ResponseEntity<WebResponse<Book>> create(
+    public ResponseEntity<Response<Book>> create(
             @RequestPart(name = "book") BookRequest request,
             @RequestPart(name = "cover") MultipartFile cover,
             @RequestPart(name = "books") MultipartFile books
     ) {
         Book createBook = bookService.createBook(request,cover,books);
-        WebResponse<Book> response = new WebResponse<>(RESPONSE_CREATE_SUCCESS, createBook);
+        Response<Book> response = new Response<>(RESPONSE_CREATE_SUCCESS, createBook);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<WebResponse<PageResponse<Book>>> getBooks(
+    public ResponseEntity<Response<PageResponse<Book>>> getBooks(
             @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "5") Integer size
@@ -65,36 +65,36 @@ public class BookController {
                 size
         );
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new WebResponse<>(RESPONSE_GET_SUCCESS, response));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
     }
 
     @PutMapping
-    public ResponseEntity<WebResponse<Book>> updateBook(
+    public ResponseEntity<Response<Book>> updateBook(
             @RequestPart(name = "book") BookRequest request,
             @RequestPart(name = "cover") MultipartFile cover,
             @RequestPart(name = "file") MultipartFile file
     ) {
         Book book = bookService.updateBookWithMultipart(request, cover, file);
-        WebResponse<Book> response = new WebResponse<>(RESPONSE_UPDATE_SUCCESS, book);
+        Response<Book> response = new Response<>(RESPONSE_UPDATE_SUCCESS, book);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WebResponse<Book>> getBookById(
+    public ResponseEntity<Response<Book>> getBookById(
             @PathVariable(name = "id") String id
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new WebResponse<>(RESPONSE_GET_SUCCESS, bookService.getBookById(id)));
+                .body(new Response<>(RESPONSE_GET_SUCCESS, bookService.getBookById(id)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> deleteBook(
+    public ResponseEntity<Response<?>> deleteBook(
             @PathVariable(name = "id") String id
     ){
         bookService.deleteBook(id);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new WebResponse<>(RESPONSE_DELETE_SUCCESS, id));
+                .body(new Response<>(RESPONSE_DELETE_SUCCESS, id));
     }
 }

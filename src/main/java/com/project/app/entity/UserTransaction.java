@@ -18,8 +18,10 @@ public class UserTransaction {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String userTransactionId;
 
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.REFRESH
+            })
     @JoinColumn(name = "customer_id")
     private User user;
 
@@ -35,9 +37,9 @@ public class UserTransaction {
     private Boolean isDeleted;
 
     @PrePersist
-    private void prePersist(){
-        if(this.transactionDate == null) this.transactionDate = new Date();
-        if(this.isDeleted == null) this.isDeleted = false;
+    private void prePersist() {
+        if (this.transactionDate == null) this.transactionDate = new Date();
+        if (this.isDeleted == null) this.isDeleted = false;
     }
 
     public UserTransaction() {

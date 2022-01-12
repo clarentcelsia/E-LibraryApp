@@ -31,13 +31,14 @@ public class Topic {
     @Column(nullable = false)
     private String topicSubject;
 
-    @Column(nullable = false)
     private String subTopic;
 
-    @Column(nullable = false)
     private String description;
 
-    @ManyToOne (targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne (targetEntity = User.class, fetch = FetchType.EAGER,
+    cascade = {
+            CascadeType.REFRESH
+    })
     @JoinColumn(name = "user_id",nullable = false,foreignKey = @ForeignKey(name = "fk_user_id"), updatable = false)
     private User user;
 

@@ -3,9 +3,9 @@ package com.project.app.controller;
 import com.project.app.dto.JournalDTO;
 import com.project.app.entity.library.Journal;
 import com.project.app.request.JournalRequest;
+import com.project.app.response.Response;
 import com.project.app.service.JournalService;
 import com.project.app.service.impl.FileService;
-import com.project.app.utils.WebResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,28 +34,28 @@ public class JournalController {
             },
             produces = "application/json"
     )
-    public ResponseEntity<WebResponse<Journal>> create(
+    public ResponseEntity<Response<Journal>> create(
             @RequestPart(name = "journal") JournalRequest journal,
             @RequestPart(name = "files") MultipartFile photo
     ) {
         Journal createJournal = journalService.create(journal,photo);
-        WebResponse<Journal> response = new WebResponse<>("Data Journal Has Been Created", createJournal);
+        Response<Journal> response = new Response<>("Data Journal Has Been Created", createJournal);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @GetMapping("/{journalId}")
-    public ResponseEntity<WebResponse<Journal>> getById(@PathVariable("journalId") String id) {
+    public ResponseEntity<Response<Journal>> getById(@PathVariable("journalId") String id) {
         Journal journal = journalService.getById(id);
-        WebResponse<Journal> response = new WebResponse<>(String.format("Journal with id %s found", id), journal);
+        Response<Journal> response = new Response<>(String.format("Journal with id %s found", id), journal);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<WebResponse<Page<Journal>>> listWithPage(
+    public ResponseEntity<Response<Page<Journal>>> listWithPage(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "title", required = false) String title,
@@ -64,7 +64,7 @@ public class JournalController {
         Pageable pageable = PageRequest.of(page, size);
         JournalDTO journalDTO = new JournalDTO(title,publishDate);
         Page<Journal> journals = journalService.listWithPage(pageable, journalDTO);
-        WebResponse<Page<Journal>> response = new WebResponse<>("Success", journals);
+        Response<Page<Journal>> response = new Response<>("Success", journals);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -72,9 +72,9 @@ public class JournalController {
     }
 
     @DeleteMapping("/{journalId}")
-    public ResponseEntity<WebResponse<String>> deleteJournalById(@PathVariable("journalId") String id) {
+    public ResponseEntity<Response<String>> deleteJournalById(@PathVariable("journalId") String id) {
         String delete = journalService.deleteById(id);
-        WebResponse<String> responseDelete = new WebResponse<>("Deleted", delete);
+        Response<String> responseDelete = new Response<>("Deleted", delete);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(responseDelete);
@@ -88,12 +88,12 @@ public class JournalController {
             },
             produces = "application/json"
     )
-    public ResponseEntity<WebResponse<Journal>> update(
+    public ResponseEntity<Response<Journal>> update(
             @RequestPart(name = "journal") JournalRequest journal,
             @RequestPart(name = "files") MultipartFile photo
     ) {
         Journal updateById = journalService.updateById(journal,photo);
-        WebResponse<Journal> response = new WebResponse<>("Data Journal Has Been Updated", updateById);
+        Response<Journal> response = new Response<>("Data Journal Has Been Updated", updateById);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);

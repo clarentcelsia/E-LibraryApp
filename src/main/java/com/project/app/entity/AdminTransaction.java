@@ -2,6 +2,7 @@ package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -17,7 +18,11 @@ public class AdminTransaction {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String transactionId;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(
+            targetEntity = User.class, fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.REFRESH
+            })
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -33,9 +38,9 @@ public class AdminTransaction {
     private Boolean isDeleted;
 
     @PrePersist
-    private void prePersist(){
-        if(this.transactionDate == null) this.transactionDate = new Date();
-        if(this.isDeleted == null) this.isDeleted = false;
+    private void prePersist() {
+        if (this.transactionDate == null) this.transactionDate = new Date();
+        if (this.isDeleted == null) this.isDeleted = false;
     }
 
     public AdminTransaction() {

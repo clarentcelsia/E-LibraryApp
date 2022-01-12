@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.project.app.util.Utility.*;
+import static com.project.app.utils.Utility.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -39,7 +39,9 @@ class ReviewControllerTest {
 
     @Test
     public void whenReviewCreated_thenReturn201() throws Exception {
-        Book book = new Book("B01", "Finding Nemo");
+        Book book = new Book();
+        book.setId("B01");
+        book.setTitle("Finding Nemo");
         User user = new User("U01", "Moana");
 
         Review review = new Review("R01", book, user, "title", "content", 4, 3);
@@ -53,7 +55,9 @@ class ReviewControllerTest {
 
     @Test
     public void whenGetReviewsByIdSucceed_thenReturn200() throws Exception {
-        Book book = new Book("B01", "Finding Nemo");
+        Book book = new Book();
+        book.setId("B01");
+        book.setTitle("Finding Nemo");
         User user = new User("U01", "Moana");
         Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
@@ -68,7 +72,9 @@ class ReviewControllerTest {
 
     @Test
     public void whenReviewUpdated_thenReturn200() throws Exception {
-        Book book = new Book("B01", "Finding Nemo");
+        Book book = new Book();
+        book.setId("B01");
+        book.setTitle("Finding Nemo");
         User user = new User("U01", "Moana");
         Review review = new Review("R01", book, user, "title", "content", 4, 3);
 
@@ -81,7 +87,9 @@ class ReviewControllerTest {
 
     @Test
     public void whenReviewDeleted_thenReturn200() throws Exception {
-        Book book = new Book("B01", "Finding Nemo");
+        Book book = new Book();
+        book.setId("B01");
+        book.setTitle("Finding Nemo");
         User user = new User("U01", "Moana");
         Review review = new Review("R01", book, user, "title", "content", 4, 3);
 

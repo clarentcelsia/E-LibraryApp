@@ -18,8 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.project.app.util.Utility.RESPONSE_CREATE_SUCCESS;
-import static com.project.app.util.Utility.RESPONSE_GET_SUCCESS;
+import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
+import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -47,7 +47,7 @@ class AdminTransactionControllerTest {
 
         given(service.createTransaction(any(AdminTransaction.class))).willReturn(adminTransaction);
 
-        mockMvc.perform(post("/api/v11/transactions/admin")
+        mockMvc.perform(post("/admin-transactions")
                         .content(mapper.writeValueAsString(adminTransaction))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -58,7 +58,7 @@ class AdminTransactionControllerTest {
     @Test
     public void whenGivenValidUrlAndMethodGetById_thenReturn200() throws Exception {
 
-        mockMvc.perform(get("/api/v11/transactions/admin/{id}", "B01")
+        mockMvc.perform(get("/admin-transactions/{id}", "B01")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS));
@@ -71,7 +71,7 @@ class AdminTransactionControllerTest {
 
         given(service.getTransactionById(id)).willReturn(transaction);
 
-        mockMvc.perform(get("/api/v11/transactions/admin/{id}", id))
+        mockMvc.perform(get("/admin-transactions/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(RESPONSE_GET_SUCCESS))
                 .andExpect(jsonPath("$.data").exists())
@@ -94,7 +94,7 @@ class AdminTransactionControllerTest {
 
         given(service.getTransactions(PageRequest.of(0,5))).willReturn(page);
 
-        mockMvc.perform(get("/api/v11/transactions/admin")
+        mockMvc.perform(get("/admin-transactions")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())

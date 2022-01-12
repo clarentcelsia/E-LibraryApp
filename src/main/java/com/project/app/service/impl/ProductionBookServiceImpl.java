@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import java.util.Set;
 
 
 @Service
+@Transactional
 public class ProductionBookServiceImpl implements ProductionBookService {
 
     @Autowired

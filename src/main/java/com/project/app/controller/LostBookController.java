@@ -3,7 +3,7 @@ package com.project.app.controller;
 import com.project.app.dto.LostBookDTO;
 import com.project.app.entity.LostBookReport;
 import com.project.app.response.PageResponse;
-import com.project.app.response.WebResponse;
+import com.project.app.response.Response;
 import com.project.app.service.LostBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public class LostBookController {
     private LostBookService service;
 
     @GetMapping
-    public ResponseEntity<PageResponse<LostBookReport>> getAllLostBook(
+    public ResponseEntity<Response<PageResponse<LostBookReport>>> getAllLostBook(
             @RequestParam(name = "size", defaultValue = "2") Integer size,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "sortBy", defaultValue = "dateLost") String sortBy,
@@ -37,10 +37,10 @@ public class LostBookController {
         Page<LostBookReport> pagedLost = service.getAll(dto, pageable);
 
         PageResponse<LostBookReport> response = new PageResponse<>(
-                pagedLost.getContent(), message,
+                pagedLost.getContent(),
                 pagedLost.getTotalElements(), pagedLost.getTotalPages(),
-                page+1 , size
+                page , size
         );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(new Response<>(message, response));
     }
 }
