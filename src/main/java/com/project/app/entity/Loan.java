@@ -28,7 +28,6 @@ public class Loan {
     @GeneratedValue(generator = "uuid-generator")
     private String id;
 
-    @Column(nullable = false)
     private Integer totalQty;
 
     @Column(nullable = false)

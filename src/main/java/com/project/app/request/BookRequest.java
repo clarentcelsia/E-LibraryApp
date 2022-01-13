@@ -9,6 +9,7 @@ import java.util.List;
 
 public class BookRequest {
     private String id;
+    private String bookCode;
     private String cover;
     private String title;
     private String description;
@@ -67,6 +68,14 @@ public class BookRequest {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getBookCode() {
+        return bookCode;
+    }
+
+    public void setBookCode(String bookCode) {
+        this.bookCode = bookCode;
     }
 
     public String getCover() {
@@ -165,22 +174,4 @@ public class BookRequest {
         this.totalReview = totalReview;
     }
 
-    @Override
-    public String toString() {
-        return "BookRequest{" +
-                "id='" + id + '\'' +
-                ", cover='" + cover + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", authors=" + authors +
-                ", publisher='" + publisher + '\'' +
-                ", publishedDate=" + publishedDate +
-                ", bookUrl='" + bookUrl + '\'' +
-                ", stock=" + stock +
-                ", category=" + category +
-                ", type=" + type +
-                ", totalRating=" + totalRating +
-                ", totalReview=" + totalReview +
-                '}';
-    }
 }

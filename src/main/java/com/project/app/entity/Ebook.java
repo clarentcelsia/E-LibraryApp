@@ -38,6 +38,16 @@ public class Ebook {
     private String imageLinks;
     private String webReaderLink;
 
+    @JoinTable(
+            name = "user_ebook",
+            joinColumns = @JoinColumn(name = "ebook_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.REFRESH
+    })
+    private List<User> user;
+
     @CreatedDate
     @Column(updatable = false)
     private Date createdAt;
@@ -48,7 +58,7 @@ public class Ebook {
     private void prePersist() {
         if (this.createdAt == null) this.createdAt = new Date();
         if (this.updatedAt == null) this.updatedAt = new Date();
-        authors = new ArrayList<>();
+        user = new ArrayList<>();
     }
 
     @PreUpdate
@@ -169,22 +179,11 @@ public class Ebook {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "Ebook{" +
-                "ebookId='" + ebookId + '\'' +
-                ", ebookCode='" + ebookCode + '\'' +
-                ", title='" + title + '\'' +
-                ", authors=" + authors +
-                ", publishedDate='" + publishedDate + '\'' +
-                ", publisher='" + publisher + '\'' +
-                ", description='" + description + '\'' +
-                ", imageLinks='" + imageLinks + '\'' +
-                ", webReaderLink='" + webReaderLink + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+    public List<User> getUser() {
+        return user;
     }
 
-
+    public void setUser(List<User> user) {
+        this.user = user;
+    }
 }

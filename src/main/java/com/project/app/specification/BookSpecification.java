@@ -24,6 +24,13 @@ public class BookSpecification {
 
                     predicates.add(title);
                 }
+
+                if (bookDTO.getSearchByCode() != null){
+                    Predicate code = criteriaBuilder.like(criteriaBuilder.lower(root.get("bookCode")), "%" +
+                            bookDTO.getSearchByCode().toLowerCase() + "%");
+
+                    predicates.add(code);
+                }
                 Predicate[]arrayPredicates =predicates.toArray(new Predicate[predicates.size()]);
                 return criteriaBuilder.and(arrayPredicates);
             }

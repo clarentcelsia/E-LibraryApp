@@ -19,7 +19,6 @@ import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping({"/authors"})
-@RolesAllowed("admin")
 public class AuthorController {
     @Autowired
     private AuthorService authorService;

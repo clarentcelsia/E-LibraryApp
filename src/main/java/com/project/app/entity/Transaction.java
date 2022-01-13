@@ -23,9 +23,10 @@ public class Transaction {
     @JoinColumn(name = "client_id")
     private Clients client;
 
-    @OneToMany(targetEntity = TransactionDetail.class, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<TransactionDetail> details;
+    @OneToOne(targetEntity = Plan.class, fetch = FetchType.EAGER)
+//    @JsonManagedReference
+    @JoinColumn(name = "plan_id")
+    private Plan plan;
 
     @JsonFormat(
             pattern = "yyyy-MM-dd hh:mm:ss"
@@ -47,10 +48,10 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String transactionId, Clients client, List<TransactionDetail> details, Date transactionDate, Integer grandtotal, Boolean isDeleted) {
+    public Transaction(String transactionId, Clients client, Plan plan, Date transactionDate, Integer grandtotal, Boolean isDeleted) {
         this.transactionId = transactionId;
         this.client = client;
-        this.details = details;
+        this.plan = plan;
         this.transactionDate = transactionDate;
         this.grandtotal = grandtotal;
         this.isDeleted = isDeleted;
@@ -72,12 +73,21 @@ public class Transaction {
         this.client = client;
     }
 
-    public List<TransactionDetail> getDetails() {
-        return details;
+//    public List<TransactionDetail> getDetails() {
+//        return details;
+//    }
+//
+//    public void setDetails(List<TransactionDetail> details) {
+//        this.details = details;
+//    }
+
+
+    public Plan getPlan() {
+        return plan;
     }
 
-    public void setDetails(List<TransactionDetail> details) {
-        this.details = details;
+    public void setPlan(Plan plan) {
+        this.plan = plan;
     }
 
     public Date getTransactionDate() {

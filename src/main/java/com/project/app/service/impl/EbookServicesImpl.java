@@ -5,11 +5,13 @@ import com.project.app.dto.ebook.Item;
 import com.project.app.dto.ebook.Root;
 import com.project.app.entity.Ebook;
 import com.project.app.entity.EbookAuthor;
+import com.project.app.entity.User;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.EbookRepository;
 import com.project.app.request.EbookAPI;
 import com.project.app.service.EbookAuthorService;
 import com.project.app.service.EbookService;
+import com.project.app.service.UserService;
 import com.project.app.specification.EbookSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,9 @@ public class EbookServicesImpl implements EbookService {
     @Autowired
     EbookAuthorService ebookAuthorService;
 
+    @Autowired
+    UserService userService;
+
     @Override
     public Ebook saveEbookToDB(EbookAPI ebookAPI) {
         Ebook ebook = new Ebook(
@@ -47,7 +52,6 @@ public class EbookServicesImpl implements EbookService {
 
         Ebook ebook1 = repository.save(ebook);
 
-        List<EbookAuthor> authorSet = new ArrayList<>();
         for (String strAuthor : ebookAPI.getAuthors()) {
 
             EbookAuthor author = new EbookAuthor(strAuthor);
@@ -55,6 +59,11 @@ public class EbookServicesImpl implements EbookService {
             EbookAuthor ebookAuthor = ebookAuthorService.saveAuthor(author);
 
             ebook1.getAuthors().add(ebookAuthor);
+        }
+
+        for(User user : ebookAPI.getUser()){
+            User service = userService.getById(user.getId());
+            ebook1.getUser().add(service);
         }
 
         Ebook save = repository.save(ebook1);

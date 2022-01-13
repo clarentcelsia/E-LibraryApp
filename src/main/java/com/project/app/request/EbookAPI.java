@@ -1,5 +1,7 @@
 package com.project.app.request;
 
+import com.project.app.entity.User;
+
 import java.util.List;
 
 public class EbookAPI {
@@ -11,6 +13,7 @@ public class EbookAPI {
     private String description;
     private String imageLinks;
     private String webReaderLink;
+    private List<User> user;
 
     public EbookAPI() {
     }
@@ -93,5 +96,13 @@ public class EbookAPI {
 
     public void setWebReaderLink(String webReaderLink) {
         this.webReaderLink = webReaderLink;
+    }
+
+    public List<User> getUser() {
+        return user;
+    }
+
+    public void setUser(List<User> user) {
+        this.user = user;
     }
 }

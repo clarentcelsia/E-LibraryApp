@@ -63,11 +63,12 @@ public class BookController {
     @GetMapping
     public ResponseEntity<Response<PageResponse<Book>>> getBooks(
             @RequestParam(name = "title", required = false) String title,
+            @RequestParam(name = "code", required = false) String code,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "5") Integer size
     ){
         Pageable pageable = PageRequest.of(page, size);
-        BookDTO bookDTO = new BookDTO(title);
+        BookDTO bookDTO = new BookDTO(title, code);
 
         Page<Book> books = bookService.getBooks(bookDTO, pageable);
 

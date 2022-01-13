@@ -1,10 +1,13 @@
 package com.project.app.controller;
 
 import com.project.app.entity.Clients;
+import com.project.app.entity.Slot;
 import com.project.app.entity.Transaction;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
+import com.project.app.service.SlotService;
 import com.project.app.service.TransactionService;
+import com.project.app.service.impl.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +25,10 @@ import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
 public class TransactionController {
 
     @Autowired
-    TransactionService<Transaction> service;
+    TransactionServiceImpl service;
+
+    @Autowired
+    SlotService slotService;
 
     @PostMapping
     public ResponseEntity<Response<Transaction>> createTransaction(
@@ -56,5 +62,30 @@ public class TransactionController {
         );
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new Response<>(RESPONSE_GET_SUCCESS, response));
+    }
+
+    @GetMapping("/slot")
+    public ResponseEntity<Response<PageResponse<Slot>>> getSlot(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "5") Integer size
+    ) {
+        Page<Slot> slots = slotService.getAll(PageRequest.of(page, size));
+        PageResponse<Slot> response = new PageResponse<>(
+                slots.getContent(),
+                slots.getTotalElements(),
+                slots.getTotalPages(),
+                page,
+                size
+        );
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new Response<>(RESPONSE_GET_SUCCESS, response));
+    }
+
+    @PostMapping("/slot")
+    public ResponseEntity<Response<Transaction>> upsertTransaction(
+            @RequestBody Transaction transaction
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new Response<>(RESPONSE_CREATE_SUCCESS, service.update(transaction)));
     }
 }

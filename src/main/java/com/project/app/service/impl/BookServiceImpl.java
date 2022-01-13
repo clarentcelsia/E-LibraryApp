@@ -112,6 +112,7 @@ public class BookServiceImpl implements BookService {
         }
 
         book.setCover(request.getCover());
+        book.setBookCode(request.getBookCode());
         book.setTitle(request.getTitle());
         book.setDescription(request.getDescription());
         book.setPublisher(request.getPublisher());

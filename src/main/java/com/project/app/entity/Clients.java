@@ -23,12 +23,14 @@ public class Clients {
     private String phoneNumber;
     private String email;
 
-//    @OneToOne(fetch = FetchType.EAGER, targetEntity = Plan.class)
-//    @JoinColumn(name = "plan_id")
+//    @OneToOne(fetch = FetchType.EAGER, targetEntity = Plan.class, cascade = CascadeType.REMOVE, orphanRemoval = true)
 //    private Plan plan;
 
     //active/inactive
     private Integer status;
+
+//    @OneToOne(fetch = FetchType.EAGER, targetEntity = Slot.class, cascade = CascadeType.REMOVE)
+//    private Slot slot;
 
     @CreatedDate
     @Column(updatable = false)
@@ -145,5 +147,13 @@ public class Clients {
 //
 //    public void setPlan(Plan plan) {
 //        this.plan = plan;
+//    }
+
+//    public Slot getSlot() {
+//        return slot;
+//    }
+//
+//    public void setSlot(Slot slot) {
+//        this.slot = slot;
 //    }
 }
