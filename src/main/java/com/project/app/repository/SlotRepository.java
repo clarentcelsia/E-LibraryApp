@@ -1,6 +1,5 @@
 package com.project.app.repository;
 
-import com.project.app.entity.Slot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -30,20 +30,21 @@ public class UserTransactionServiceImpl implements TransactionService<UserTransa
 
     @Override
     public UserTransaction createTransaction(UserTransaction request) {
-        UserTransaction userTransaction = repository.save(request);
 
-        for (UserTransactionDetail detail : userTransaction.getTransactionDetails()) {
+        for (UserTransactionDetail detail : request.getTransactionDetails()) {
             ProductionBook book = bookService.getById(detail.getBook().getProductionBookId());
-            book.setStock(book.getStock() - detail.getQty());
-            bookService.update(book);
+            if(!(book.getStock() - detail.getQty() < 0)) {
+                book.setStock(book.getStock() - detail.getQty());
+                bookService.update(book);
 
-            detail.setPrice(book.getPrice());
-            detail.setSubtotal(detail.getPrice() * detail.getQty());
-            UserTransactionDetail save = userTransactionDetailService.save(detail);
-
+                detail.setPrice(book.getPrice());
+                detail.setSubtotal(detail.getPrice() * detail.getQty());
+                userTransactionDetailService.save(detail);
+            }else {
+                return null;
+            }
         }
-
-        return repository.save(userTransaction);
+        return repository.save(request);
     }
 
     @Override

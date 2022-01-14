@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.app.entity.AdminTransaction;
 import com.project.app.response.PageResponse;
 import com.project.app.service.TransactionService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,9 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.test.context.support.WithAnonymousUser;
+//import org.springframework.security.test.context.support.WithMockUser;
+//import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,7 @@ import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+//import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,15 +50,14 @@ class AdminTransactionControllerTest {
     TransactionService<AdminTransaction> service;
 
     @Test
-//    @WithMockUser(username = "test", password = "test12", roles = {"admin"})
+//    @WithMockUser(authorities = {"ROLE_ADMIN"},username = "iliana123", password = "iliana12")
     public void whenGivenValidUrlAndMethodAndInput_thenReturn201() throws Exception {
-
         AdminTransaction adminTransaction = new AdminTransaction("TRX01");
 
         given(service.createTransaction(any(AdminTransaction.class))).willReturn(adminTransaction);
 
         mockMvc.perform(post("/admin-transactions")
-                        .with(SecurityMockMvcRequestPostProcessors.user("adm12").roles("admin"))
+//                        .with(SecurityMockMvcRequestPostProcessors.user("iliana123").roles("admin"))
                         .content(mapper.writeValueAsString(adminTransaction))
                         .contentType("application/json"))
                 .andExpect(status().isCreated())

@@ -34,18 +34,15 @@ public class ProductionBookServiceImpl implements ProductionBookService {
 
     @Override
     public ProductionBook save(ProductionBook productionBook, MultipartFile... multipartFiles) {
-//        Set<Files> filesSet = new HashSet<>();
         List<String> strings = new ArrayList<>();
         for (MultipartFile file : multipartFiles) {
             Files files = service.saveMultipartFile(file);
-//            filesSet.add(files);
 
             String url = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/files/" + files.getFileId())
                     .toUriString();
             strings.add(url);
         }
-//        productionBook.setUserFiles(filesSet);
 
         if (strings.size() == 2) {
             productionBook.setImageUrl(strings.get(0));

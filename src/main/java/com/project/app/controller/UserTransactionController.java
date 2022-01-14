@@ -1,5 +1,7 @@
 package com.project.app.controller;
 
+import com.project.app.entity.AdminTransaction;
+import com.project.app.entity.User;
 import com.project.app.entity.UserTransaction;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
@@ -17,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 
-import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
-import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
+import static com.project.app.utils.Utility.*;
+import static com.project.app.utils.Utility.OUT_OF_STOCK;
 
 
 @RestController
@@ -41,10 +43,16 @@ public class UserTransactionController {
     public ResponseEntity<Response<UserTransaction>> createTransactions(
             @RequestBody UserTransaction request
     ){
+        UserTransaction transaction = transactionService.createTransaction(request);
+
+        Response<UserTransaction> response;
+        if(transaction == null) {
+            response = new Response<>(String.format(INVALID, OUT_OF_STOCK), null);
+        }else {
+            response = new Response<>(RESPONSE_CREATE_SUCCESS, transaction);
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new Response<>(
-                        RESPONSE_CREATE_SUCCESS,
-                        transactionService.createTransaction(request)));
+                .body(response);
     }
 
     @GetMapping("/user/{id}")

@@ -1,7 +1,6 @@
 package com.project.app.service.impl;
 
 import com.project.app.entity.Plan;
-import com.project.app.entity.Slot;
 import com.project.app.entity.Transaction;
 //import com.project.app.entity.TransactionDetail;
 import com.project.app.exception.ResourceNotFoundException;

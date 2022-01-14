@@ -1,11 +1,13 @@
 package com.project.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.app.entity.library.Author;
@@ -17,9 +19,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -43,13 +43,6 @@ public class Book {
 
     private String description;
 
-//    @ManyToMany(
-//            fetch = FetchType.EAGER, cascade = {
-//            CascadeType.ALL
-//    }, mappedBy = "books")
-////    @JsonBackReference
-//    List<Author> authors = new ArrayList<>();
-
     @Column(nullable = false)
     private String publisher;
 
@@ -71,6 +64,22 @@ public class Book {
     @ManyToOne(targetEntity = Type.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     private Type type;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade =
+                    {
+                            CascadeType.MERGE,
+                            CascadeType.PERSIST
+                    })
+    @JoinTable(name = "tb_book_author",
+            joinColumns = @JoinColumn(name = "author_id",
+                    nullable = false,
+                    updatable = false),
+            inverseJoinColumns = @JoinColumn(name = "book_id",
+                    nullable = false,
+                    updatable = false))
+    private List<Author> authors = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)

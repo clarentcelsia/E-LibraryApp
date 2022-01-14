@@ -49,7 +49,7 @@ public class BookController {
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Book>> create(
-            @RequestPart(name = "book") BookRequest request,
+            @RequestPart(name = "request") BookRequest request,
             @RequestPart(name = "cover") MultipartFile cover,
             @RequestPart(name = "books") MultipartFile books
     ) {
@@ -94,7 +94,7 @@ public class BookController {
     @PutMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<Book>> updateBook(
-            @RequestPart(name = "book") BookRequest request,
+            @RequestPart(name = "request") BookRequest request,
             @RequestPart(name = "cover") MultipartFile cover,
             @RequestPart(name = "file") MultipartFile file
     ) {

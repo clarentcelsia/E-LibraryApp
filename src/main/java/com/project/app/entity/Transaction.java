@@ -24,7 +24,6 @@ public class Transaction {
     private Clients client;
 
     @OneToOne(targetEntity = Plan.class, fetch = FetchType.EAGER)
-//    @JsonManagedReference
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
@@ -72,15 +71,6 @@ public class Transaction {
     public void setClient(Clients client) {
         this.client = client;
     }
-
-//    public List<TransactionDetail> getDetails() {
-//        return details;
-//    }
-//
-//    public void setDetails(List<TransactionDetail> details) {
-//        this.details = details;
-//    }
-
 
     public Plan getPlan() {
         return plan;

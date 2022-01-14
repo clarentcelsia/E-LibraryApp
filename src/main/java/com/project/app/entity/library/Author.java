@@ -8,11 +8,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "mst_author")
-@JsonIdentityInfo(generator= ObjectIdGenerators.UUIDGenerator.class, property="id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "id")
 public class Author {
 
     @Id
@@ -22,15 +24,21 @@ public class Author {
 
     private String name;
 
-    @JoinTable(
-            name = "tb_book_author",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {
-            CascadeType.ALL
-    })
+    //    @JoinTable(
+//            name = "tb_book_author",
+//            joinColumns = @JoinColumn(name = "author_id"),
+//            inverseJoinColumns = @JoinColumn(name = "book_id")
+//    )
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+//            CascadeType.ALL
+//    })
 //    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade =
+                    {
+                            CascadeType.MERGE,
+                            CascadeType.PERSIST
+                    })
     List<Book> books = new ArrayList<>();
 
     public Author() {
@@ -60,10 +68,4 @@ public class Author {
         this.books = books;
     }
 
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id='" + id + '\'' +
-                ", name='" + name ;
-    }
 }

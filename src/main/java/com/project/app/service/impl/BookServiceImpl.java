@@ -123,7 +123,6 @@ public class BookServiceImpl implements BookService {
         book.setType(request.getType());
         book.setTotalRating(request.getTotalRating());
         book.setTotalReview(request.getTotalReview());
-
         Book save = bookRepository.save(book);
 
         if(request.getId() == null) {
@@ -132,7 +131,8 @@ public class BookServiceImpl implements BookService {
                 newAuthor.setName(author);
                 Author createdAuthor = authorService.create(newAuthor);
 
-//                save.getAuthors().add(createdAuthor);
+                save.getAuthors().add(createdAuthor);
+
                 createdAuthor.getBooks().add(save);
                 authorService.create(createdAuthor);
             }

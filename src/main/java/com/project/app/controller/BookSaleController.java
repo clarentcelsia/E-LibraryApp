@@ -52,7 +52,7 @@ public class BookSaleController {
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<BookSale>> createItem(
-            @RequestPart(name = "detail") BookSale bookSale,
+            @RequestPart(name = "bookSale") BookSale bookSale,
             @RequestPart(name = "image") MultipartFile image,
             @RequestPart(name = "preview", required = false) MultipartFile preview,
             @RequestPart(name = "download", required = false) MultipartFile download
@@ -123,9 +123,9 @@ public class BookSaleController {
             },
             produces = "application/json"
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Response<BookSale>> updateItem(
-            @RequestPart(name = "detail") BookSale bookSale,
+            @RequestPart(name = "bookSale") BookSale bookSale,
             @RequestPart(name = "image") MultipartFile image,
             @RequestPart(name = "preview", required = false) MultipartFile preview,
             @RequestPart(name = "download", required = false) MultipartFile download

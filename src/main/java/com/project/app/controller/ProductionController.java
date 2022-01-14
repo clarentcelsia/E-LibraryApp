@@ -46,10 +46,10 @@ public class ProductionController {
     )
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<ProductionBook>> saveProductionBook(
-            @RequestPart("book") ProductionBook productionBook,
-            @RequestPart(value = "image") MultipartFile image,
-            @RequestPart(value = "preview", required = false) MultipartFile preview,
-            @RequestPart(value = "download", required = false) MultipartFile download
+            @RequestPart(name = "productionBook") ProductionBook productionBook,
+            @RequestPart(name = "image") MultipartFile image,
+            @RequestPart(name = "preview", required = false) MultipartFile preview,
+            @RequestPart(name = "download", required = false) MultipartFile download
     ) {
         Response<ProductionBook> response;
         if (image == null && preview == null && download == null) {
@@ -115,10 +115,10 @@ public class ProductionController {
     @PutMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Response<ProductionBook>> updateProductionBook(
-            @RequestPart(name = "book") ProductionBook productionBook,
+            @RequestPart(name = "productionBook") ProductionBook productionBook,
             @RequestPart(value = "image") MultipartFile image,
             @RequestPart(value = "preview", required = false) MultipartFile preview,
-            @RequestPart("download") MultipartFile download
+            @RequestPart(value = "download", required = false) MultipartFile download
 
     ) {
         return ResponseEntity.status(HttpStatus.OK)

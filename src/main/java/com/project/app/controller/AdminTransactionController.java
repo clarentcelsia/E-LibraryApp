@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 
-import static com.project.app.utils.Utility.RESPONSE_CREATE_SUCCESS;
-import static com.project.app.utils.Utility.RESPONSE_GET_SUCCESS;
+import static com.project.app.utils.Utility.*;
 
 
 @RestController
@@ -42,10 +41,16 @@ public class AdminTransactionController {
     public ResponseEntity<Response<AdminTransaction>> createTransactions(
             @RequestBody AdminTransaction request
     ){
+        AdminTransaction transaction = transactionService.createTransaction(request);
+
+        Response<AdminTransaction> response;
+        if(transaction == null) {
+            response = new Response<>(String.format(INVALID, OUT_OF_STOCK), null);
+        }else {
+            response = new Response<>(RESPONSE_CREATE_SUCCESS, transaction);
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new Response<>(
-                        RESPONSE_CREATE_SUCCESS,
-                        transactionService.createTransaction(request)));
+                .body(response);
     }
 
     @GetMapping("/admin/{id}")

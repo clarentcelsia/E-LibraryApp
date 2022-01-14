@@ -41,7 +41,7 @@ public class TypeController {
     }
 
     @GetMapping("/{typeId}")
-    public ResponseEntity<Response<Type>> getCustomerById(@PathVariable("typeId") String id) {
+    public ResponseEntity<Response<Type>> getTypeById(@PathVariable("typeId") String id) {
         Type type = typeService.getById(id);
         Response<Type> response = new Response<>(String.format("Type with id %s found", id), type);
         return ResponseEntity

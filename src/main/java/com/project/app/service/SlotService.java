@@ -1,6 +1,5 @@
 package com.project.app.service;
 
-import com.project.app.entity.Slot;
 import com.project.app.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

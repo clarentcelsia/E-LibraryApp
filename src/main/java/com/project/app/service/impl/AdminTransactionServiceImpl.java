@@ -3,6 +3,7 @@ package com.project.app.service.impl;
 import com.project.app.entity.BookSale;
 import com.project.app.entity.AdminTransaction;
 import com.project.app.entity.AdminTransactionDetail;
+import com.project.app.exception.Error;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.AdminTransactionRepository;
 import com.project.app.service.*;
@@ -30,21 +31,25 @@ public class AdminTransactionServiceImpl implements TransactionService<AdminTran
 
     @Override
     public AdminTransaction createTransaction(AdminTransaction request) {
-        AdminTransaction transactions = transactionRepository.save(request);
 
         //response
-        for (AdminTransactionDetail detail : transactions.getTransactionDetails()) {
+        for (AdminTransactionDetail detail : request.getTransactionDetails()) {
             //update book stock
             BookSale book = bookSaleService.getBookSaleById(detail.getBook().getBookSaleId());
-            book.setStock(book.getStock() - detail.getQty());
-            BookSale sale = bookSaleService.updateBookSale(book);
+            if(!(book.getStock() - detail.getQty() < 0)) {
+                book.setStock(book.getStock() - detail.getQty());
+                BookSale sale = bookSaleService.updateBookSale(book);
 
-            //save (admin) transaction detail
-            detail.setBook(sale);
-            detail.setPrice(sale.getPrice());
-            detail.setSubtotal(detail.getPrice() * detail.getQty());
-            transactionDetailService.save(detail);
+                //save (admin) transaction detail
+                detail.setBook(sale);
+                detail.setPrice(sale.getPrice());
+                detail.setSubtotal(detail.getPrice() * detail.getQty());
+                transactionDetailService.save(detail);
+            }else{
+                return null;
+            }
         }
+        AdminTransaction transactions = transactionRepository.save(request);
 
         return transactions;
     }
