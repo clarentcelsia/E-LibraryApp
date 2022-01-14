@@ -3,7 +3,6 @@ package com.project.app.controller;
 import com.project.app.entity.Transaction;
 import com.project.app.response.PageResponse;
 import com.project.app.response.Response;
-import com.project.app.service.SlotService;
 import com.project.app.service.impl.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,9 +20,6 @@ public class TransactionController {
 
     @Autowired
     TransactionServiceImpl service;
-
-    @Autowired
-    SlotService slotService;
 
     @PostMapping
     public ResponseEntity<Response<Transaction>> createTransaction(

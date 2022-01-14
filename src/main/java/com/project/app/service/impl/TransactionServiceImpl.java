@@ -6,7 +6,6 @@ import com.project.app.entity.Transaction;
 import com.project.app.exception.ResourceNotFoundException;
 import com.project.app.repository.TransactionRepository;
 import com.project.app.service.PlanService;
-import com.project.app.service.SlotService;
 import com.project.app.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,8 +28,6 @@ public class TransactionServiceImpl implements TransactionService<Transaction> {
     @Autowired
     PlanService planService;
 
-    @Autowired
-    SlotService slotService;
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
@@ -38,18 +35,6 @@ public class TransactionServiceImpl implements TransactionService<Transaction> {
 
         String planId = save.getPlan().getPlanId();
         Plan planById1 = planService.getPlanById(planId);
-
-        if (planById1.getPlan().equalsIgnoreCase("basic")) {
-            Slot slot = new Slot();
-            slot.setSlot(SLOT);
-            slot.setClients(save.getClient());
-            slotService.saveSlot(slot);
-        }else{
-            Slot slot = new Slot();
-            slot.setSlot(UNLIMITED_SLOT_SIZE);
-            slot.setClients(save.getClient());
-            slotService.saveSlot(slot);
-        }
 
         save.setGrandtotal(planById1.getPrice());
         save.setPlan(planById1);

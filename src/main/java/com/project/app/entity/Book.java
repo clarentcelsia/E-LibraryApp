@@ -65,21 +65,21 @@ public class Book {
     @JoinColumn(name = "type_id")
     private Type type;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade =
-                    {
-                            CascadeType.MERGE,
-                            CascadeType.PERSIST
-                    })
-    @JoinTable(name = "tb_book_author",
-            joinColumns = @JoinColumn(name = "author_id",
-                    nullable = false,
-                    updatable = false),
-            inverseJoinColumns = @JoinColumn(name = "book_id",
-                    nullable = false,
-                    updatable = false))
-    private List<Author> authors = new ArrayList<>();
+//    @JsonIgnore
+//    @ManyToMany(fetch = FetchType.LAZY,
+//            cascade =
+//                    {
+//                            CascadeType.MERGE,
+//                            CascadeType.PERSIST
+//                    })
+//    @JoinTable(name = "tb_book_author",
+//            joinColumns = @JoinColumn(name = "author_id",
+//                    nullable = false,
+//                    updatable = false),
+//            inverseJoinColumns = @JoinColumn(name = "book_id",
+//                    nullable = false,
+//                    updatable = false))
+//    private List<Author> authors = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)

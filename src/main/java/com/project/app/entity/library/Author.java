@@ -24,21 +24,15 @@ public class Author {
 
     private String name;
 
-    //    @JoinTable(
-//            name = "tb_book_author",
-//            joinColumns = @JoinColumn(name = "author_id"),
-//            inverseJoinColumns = @JoinColumn(name = "book_id")
-//    )
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = {
-//            CascadeType.ALL
-//    })
+        @JoinTable(
+            name = "tb_book_author",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.ALL
+    })
 //    @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade =
-                    {
-                            CascadeType.MERGE,
-                            CascadeType.PERSIST
-                    })
     List<Book> books = new ArrayList<>();
 
     public Author() {
