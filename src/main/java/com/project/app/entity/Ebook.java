@@ -1,7 +1,10 @@
 package com.project.app.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,6 +12,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.util.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "mst_ebook")
 public class Ebook {
@@ -64,126 +71,5 @@ public class Ebook {
     @PreUpdate
     private void preUpdate(){
         this.updatedAt = new Date();
-    }
-
-    public Ebook() {
-    }
-
-    public Ebook(String ebookCode, String title, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
-        this.ebookCode = ebookCode;
-        this.title = title;
-        this.publishedDate = publishedDate;
-        this.publisher = publisher;
-        this.description = description;
-        this.imageLinks = imageLinks;
-        this.webReaderLink = webReaderLink;
-    }
-
-    public Ebook(String ebookId, String ebookCode, String title, List<EbookAuthor> authors, String publishedDate, String publisher, String description, String imageLinks, String webReaderLink) {
-        this.ebookId = ebookId;
-        this.ebookCode = ebookCode;
-        this.title = title;
-        this.authors = authors;
-        this.publishedDate = publishedDate;
-        this.publisher = publisher;
-        this.description = description;
-        this.imageLinks = imageLinks;
-        this.webReaderLink = webReaderLink;
-    }
-
-    public String getEbookId() {
-        return ebookId;
-    }
-
-    public void setEbookId(String ebookId) {
-        this.ebookId = ebookId;
-    }
-
-    public String getEbookCode() {
-        return ebookCode;
-    }
-
-    public void setEbookCode(String ebookCode) {
-        this.ebookCode = ebookCode;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<EbookAuthor> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<EbookAuthor> authors) {
-        this.authors = authors;
-    }
-
-    public String getPublishedDate() {
-        return publishedDate;
-    }
-
-    public void setPublishedDate(String publishedDate) {
-        this.publishedDate = publishedDate;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImageLinks() {
-        return imageLinks;
-    }
-
-    public void setImageLinks(String imageLinks) {
-        this.imageLinks = imageLinks;
-    }
-
-    public String getWebReaderLink() {
-        return webReaderLink;
-    }
-
-    public void setWebReaderLink(String webReaderLink) {
-        this.webReaderLink = webReaderLink;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<User> getUser() {
-        return user;
-    }
-
-    public void setUser(List<User> user) {
-        this.user = user;
     }
 }

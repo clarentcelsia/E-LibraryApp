@@ -3,6 +3,7 @@ package com.project.app.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.app.files.Files;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,11 @@ import java.util.List;
 import java.util.Set;
 
 //Self-publish
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "mst_production_book")
 public class ProductionBook {
@@ -63,144 +69,5 @@ public class ProductionBook {
     private void preUpdate() {
         this.updatedAt = new Date();
         if(!this.onSale) this.availableForBookPhysic = false;
-    }
-
-    public ProductionBook() {
-    }
-
-    public ProductionBook(String productionBookId, String title) {
-        this.productionBookId = productionBookId;
-        this.title = title;
-    }
-
-    public String getProductionBookId() {
-        return productionBookId;
-    }
-
-    public void setProductionBookId(String productionBookId) {
-        this.productionBookId = productionBookId;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPreviewLink() {
-        return previewLink;
-    }
-
-    public void setPreviewLink(String previewLink) {
-        this.previewLink = previewLink;
-    }
-
-    public String getDownloadedLink() {
-        return downloadedLink;
-    }
-
-    public void setDownloadedLink(String downloadedLink) {
-        this.downloadedLink = downloadedLink;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public Boolean getOnSale() {
-        return onSale;
-    }
-
-    public void setOnSale(Boolean onSale) {
-        this.onSale = onSale;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Boolean getAvailableForBookPhysic() {
-        return availableForBookPhysic;
-    }
-
-    public void setAvailableForBookPhysic(Boolean availableForBookPhysic) {
-        this.availableForBookPhysic = availableForBookPhysic;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductionBook{" +
-                "productionBookId='" + productionBookId + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", title='" + title + '\'' +
-                ", subtitle='" + subtitle + '\'' +
-                ", description='" + description + '\'' +
-                ", previewLink='" + previewLink + '\'' +
-                ", downloadedLink='" + downloadedLink + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", onSale=" + onSale +
-                ", user=" + user +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }

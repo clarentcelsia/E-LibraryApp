@@ -1,6 +1,10 @@
 package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -8,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "ebook_author")
 public class EbookAuthor {
@@ -24,41 +32,4 @@ public class EbookAuthor {
     })
     @JsonBackReference
     private List<Ebook> ebooks = new ArrayList<>();
-
-    public EbookAuthor() {
-    }
-
-    public EbookAuthor(String ebookAuthorId, String name) {
-        this.ebookAuthorId = ebookAuthorId;
-        this.name = name;
-    }
-
-    public EbookAuthor(String name) {
-        this.name = name;
-    }
-
-    public String getEbookAuthorId() {
-        return ebookAuthorId;
-    }
-
-    public void setEbookAuthorId(String ebookAuthorId) {
-        this.ebookAuthorId = ebookAuthorId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Ebook> getEbooks() {
-        return ebooks;
-    }
-
-    public void setEbooks(List<Ebook> ebooks) {
-        this.ebooks = ebooks;
-    }
-
 }

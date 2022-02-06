@@ -2,7 +2,10 @@ package com.project.app.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.Cascade;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -10,6 +13,10 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "admin_transaction")
 public class AdminTransaction {
@@ -41,52 +48,5 @@ public class AdminTransaction {
     private void prePersist() {
         if (this.transactionDate == null) this.transactionDate = new Date();
         if (this.isDeleted == null) this.isDeleted = false;
-    }
-
-    public AdminTransaction() {
-    }
-
-    public AdminTransaction(String transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Date getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
-    }
-
-    public List<AdminTransactionDetail> getTransactionDetails() {
-        return transactionDetails;
-    }
-
-    public void setTransactionDetails(List<AdminTransactionDetail> transactionDetails) {
-        this.transactionDetails = transactionDetails;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
     }
 }
